@@ -1,0 +1,87 @@
+casino/
+│
+├── cmd/
+│   ├── casino-api/
+│   │   └── main.go
+│   └── casino-admin/
+│       └── main.go
+│
+├── internal/
+│   ├── api/
+│   │   ├── handlers/
+│   │   │   ├── auth_handler.go
+│   │   │   ├── game_handler.go
+│   │   │   └── user_handler.go
+│   │   └── middleware/
+│   │       └── auth_middleware.go
+│   │
+│   ├── admin/
+│   │   ├── handlers/
+│   │   │   ├── game_handler.go
+│   │   │   └── user_handler.go
+│   │   └── middleware/
+│   │       └── admin_auth_middleware.go
+│   │
+│   ├── models/
+│   │   ├── game.go
+│   │   └── user.go
+│   │
+│   ├── services/
+│   │   ├── auth_service.go
+│   │   ├── game_service.go
+│   │   └── user_service.go
+│   │
+│   ├── repositories/
+│   │   ├── game_repository.go
+│   │   └── user_repository.go
+│   │
+│   └── database/
+│       └── db.go
+│
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── script.js
+│   └── img/
+│
+├── templates/
+│   ├── index.html
+│   ├── login.html
+│   └── admin/
+│       ├── dashboard.html
+│       └── manage_games.html
+│
+├── config/
+│   └── config.go
+│
+├── migrations/
+│   └── ...
+│
+├── scripts/
+│   └── ...
+│
+├── tests/
+│   └── ...
+│
+├── .gitignore
+├── go.mod
+├── go.sum
+└── README.md
+
+
+Объяснение структуры:
+
+cmd/: Здесь размещаются точки входа для различных компонентов приложения, таких как API и административный интерфейс.
+internal/: Внутренний пакет приложения, содержащий бизнес-логику, обработчики HTTP, сервисы, репозитории и модели данных.
+static/: Статические файлы, такие как CSS, JavaScript и изображения.
+templates/: HTML-шаблоны для генерации страниц веб-приложения.
+config/: Конфигурационные файлы приложения.
+migrations/: Файлы миграций базы данных.
+scripts/: Вспомогательные скрипты для развертывания, обслуживания и тестирования.
+tests/: Юнит-тесты и тестовые данные.
+.gitignore: Список файлов и директорий, которые Git должен игнорировать.
+go.mod и go.sum: Файлы модуля Go для управления зависимостями.
+README.md: Документация и описание проекта.
+
+(:
