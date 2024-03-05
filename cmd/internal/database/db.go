@@ -1,18 +1,31 @@
 package database
 
 import (
+    "log"
+    "os"
+
+    "github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
 )
 
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
+    // Загрузка переменных окружения из файла .env
+    err := godotenv.Load()
+    if err != nil{
+        log.Fatal("Error loading .env file")
+    }
+
+    dsn := os.Getenv("DB_DSN")
+
+
     // Настройка соединения с базой данных PostgreSQL
     db, err := gorm.Open(postgres.New(postgres.Config{
-        DSN: "user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai",
+        DSN: dsn,
     }), &gorm.Config{})
+    
     if err != nil {
         log.Fatal("failed to connect database")
     }

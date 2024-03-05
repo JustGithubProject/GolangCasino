@@ -15,5 +15,4 @@ type Game struct {
 	BetAmount float64
 	WinAmount float64
 	PlayedAt time.Time
-
 }
