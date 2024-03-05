@@ -4,10 +4,12 @@ import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/handlers"
 	"github.com/gin-gonic/gin"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
+
 )
 
 func main(){
 	db := database.InitDB()
+	// database.MigrateDB(db)
 	
 	// Создание нового маршрутизатора Gin
 	r := gin.Default()
