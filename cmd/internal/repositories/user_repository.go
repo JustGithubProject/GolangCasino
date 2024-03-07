@@ -25,12 +25,12 @@ func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
 	return &user, nil
 }
 
-
+// Method to update user
 func (ur *UserRepository) UpdateUser(user *models.User) error {
     return ur.db.Save(user).Error
 }
 
-// Метод для удаления пользователя
+// Method to delete user
 func (ur *UserRepository) DeleteUser(user *models.User) error {
     return ur.db.Delete(user).Error
 }
