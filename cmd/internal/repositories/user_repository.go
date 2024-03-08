@@ -6,19 +6,19 @@ import (
 )
 
 type UserRepository struct {
-	db *gorm.DB
+	Db *gorm.DB
 }
 
 // Method to create a new user
 func (ur *UserRepository) CreateUser(user *models.User) error{
-	return ur.db.Create(user).Error
+	return ur.Db.Create(user).Error
 }
 
 
 // Method to get user by id
 func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
 	var user models.User
-	err := ur.db.First(&user, id).Error
+	err := ur.Db.First(&user, id).Error
 	if err != nil{
 		return nil, err
 	}
@@ -27,11 +27,11 @@ func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
 
 // Method to update user
 func (ur *UserRepository) UpdateUser(user *models.User) error {
-    return ur.db.Save(user).Error
+    return ur.Db.Save(user).Error
 }
 
 // Method to delete user
 func (ur *UserRepository) DeleteUser(user *models.User) error {
-    return ur.db.Delete(user).Error
+    return ur.Db.Delete(user).Error
 }
 
