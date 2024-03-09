@@ -23,6 +23,7 @@ func main(){
 	// Маршруты
 	r.GET("/", handlers.HomeHandler)
 	r.POST("/create/user/", handlers.CreateUserHandler)
+	r.POST("/create/game/", handlers.CreateGameHandler)
 
 
 	// Запуск веб-сервера

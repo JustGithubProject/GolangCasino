@@ -11,7 +11,7 @@ import (
 
 func CreateUserHandler(
 	c *gin.Context,
-	){
+){
 	var user models.User
 	err_1 := c.BindJSON(&user)
 	if err_1 != nil{
