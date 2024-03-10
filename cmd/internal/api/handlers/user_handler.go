@@ -5,6 +5,7 @@ import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 
@@ -32,4 +33,25 @@ func CreateUserHandler(
 	if err_2 != nil{
 		panic(err_2)
 	}
+}
+
+
+func GetUserByIdHandler(c *gin.Context) (*models.User, error) {
+    userIDStr := c.Param("id")
+
+    userID, err := strconv.Atoi(userIDStr)
+    if err != nil {
+        return nil, err
+    }
+
+    db := database.InitDB()
+
+
+    userRepository := repositories.UserRepository{Db: db}
+    user, err := userRepository.GetUserById(uint(userID))
+    if err != nil {
+        return nil, err
+    }
+
+    return user, nil
 }

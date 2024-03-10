@@ -23,6 +23,7 @@ func main(){
 	// Маршруты
 	r.GET("/", handlers.HomeHandler)
 	r.POST("/create/user/", handlers.CreateUserHandler)
+	r.GET("/user/:id", handlers.GetUserByIdHandler)
 	r.POST("/create/game/", handlers.CreateGameHandler)
 
 
