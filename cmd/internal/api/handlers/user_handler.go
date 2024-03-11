@@ -6,6 +6,7 @@ import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"net/http"
 )
 
 
@@ -36,22 +37,23 @@ func CreateUserHandler(
 }
 
 
-func GetUserByIdHandler(c *gin.Context) (*models.User, error) {
+func GetUserByIdHandler(c *gin.Context) {
     userIDStr := c.Param("id")
 
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
-        return nil, err
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+        return
     }
 
     db := database.InitDB()
 
-
     userRepository := repositories.UserRepository{Db: db}
     user, err := userRepository.GetUserById(uint(userID))
     if err != nil {
-        return nil, err
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+        return
     }
 
-    return user, nil
+    c.JSON(http.StatusOK, user)
 }

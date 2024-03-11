@@ -5,6 +5,8 @@ import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
 	"github.com/gin-gonic/gin"
+	"strconv"
+	"net/http"
 )
 
 
@@ -32,4 +34,25 @@ func CreateGameHandler(c *gin.Context){
 	if err_2 != nil{
 		panic(err_2)
 	}
+}
+
+func GetGameByIdHandler(c *gin.Context){
+	gameIDStr := c.Param("id")
+	gameID, err := strconv.Atoi(gameIDStr)
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+	}
+	db := database.InitDB()
+
+
+	gameRepository := repositories.GameRepository{Db: db}
+	game, err := gameRepository.GetGameById(uint(gameID))
+	if err != nil{
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
+        return
+	}
+
+	c.JSON(http.StatusOK, game)
+
 }
