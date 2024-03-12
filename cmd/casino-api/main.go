@@ -24,6 +24,7 @@ func main(){
 	r.GET("/", handlers.HomeHandler)
 	r.POST("/create/user/", handlers.CreateUserHandler)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)
+	r.PUT("/update/user", handlers.UpdateUserHandler)
 
 	r.POST("/create/game/", handlers.CreateGameHandler)
 	r.GET("/game/:id", handlers.GetGameByIdHandler)
