@@ -56,3 +56,31 @@ func GetGameByIdHandler(c *gin.Context){
 	c.JSON(http.StatusOK, game)
 
 }
+
+
+func UpdateGameHandler(c *gin.Context){
+	gameIDStr := c.Param("id")
+	gameID, err := strconv.Atoi(gameIDStr)
+	
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+	}
+
+	db := database.InitDB()
+	gameRepository := repositories.GameRepository{Db: db}
+	modelGame, err := gameRepository.GetGameById(uint(gameID))
+	if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
+        return
+    }
+
+	// Обновляем данные игры
+	err = gameRepository.UpdateGame(modelGame)
+	if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update game"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "Game updated successfully"})
+}

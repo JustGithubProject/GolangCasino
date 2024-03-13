@@ -28,6 +28,7 @@ func main(){
 
 	r.POST("/create/game/", handlers.CreateGameHandler)
 	r.GET("/game/:id", handlers.GetGameByIdHandler)
+	r.PUT("/update/game", handlers.UpdateGameHandler)
 
 	// Запуск веб-сервера
 	r.Run(":8080")
