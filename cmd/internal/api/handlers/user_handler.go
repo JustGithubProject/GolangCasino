@@ -88,3 +88,28 @@ func UpdateUserHandler(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
+
+func DeleteUserHandler(c *gin.Context){
+    userIDStr := c.Param("id")
+    userID, err := strconv.Atoi(userIDStr)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+        return
+    }
+
+    db := database.InitDB()
+    userRepository := repositories.UserRepository{Db: db}
+
+    modelUser, err := userRepository.GetUserById(uint(userID))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+        return
+    }
+    err = userRepository.DeleteUser(modelUser)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
+        return
+    }
+    c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+}
+

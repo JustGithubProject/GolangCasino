@@ -25,6 +25,7 @@ func main(){
 	r.POST("/create/user/", handlers.CreateUserHandler)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)
 	r.PUT("/update/user", handlers.UpdateUserHandler)
+	r.DELETE("/delete/user/:id", handlers.DeleteUserHandler)
 
 	r.POST("/create/game/", handlers.CreateGameHandler)
 	r.GET("/game/:id", handlers.GetGameByIdHandler)
