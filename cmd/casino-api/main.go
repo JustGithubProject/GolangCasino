@@ -4,6 +4,7 @@ import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/handlers"
 	"github.com/gin-gonic/gin"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/middleware"
 
 )
 
@@ -11,16 +12,16 @@ func main(){
 	db := database.InitDB()
 	// database.MigrateDB(db)
 	
-	// Создание нового маршрутизатора Gin
 	r := gin.Default()
+	r.Use(middleware.LoggerMiddleware())
 
-	// Передача экземпляра базы данных в обработчики запросов
+	// Passing the database instance to query handlers
 	r.Use(func(c *gin.Context) {
 		c.Set("DB", db)
 		c.Next()
 	})
 
-	// Маршруты
+	// Routes
 	r.GET("/", handlers.HomeHandler)
 	r.POST("/create/user/", handlers.CreateUserHandler)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)
@@ -32,6 +33,6 @@ func main(){
 	r.PUT("/update/game", handlers.UpdateGameHandler)
 	r.DELETE("/delete/game/:id", handlers.DeleteGameHandler)
 
-	// Запуск веб-сервера
+	// Start the web server
 	r.Run(":8080")
 }
