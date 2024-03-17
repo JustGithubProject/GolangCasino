@@ -8,14 +8,14 @@ import (
 
 
 func HomeHandler(c *gin.Context) {
-    // Загружаем содержимое HTML файла
+    // Loading the contents of the HTML file
     tmpl, err := template.ParseFiles("D:/Users/Kropi/Desktop/All directory/go/casino/cmd/templates/index.html")
     if err != nil {
         c.String(http.StatusInternalServerError, err.Error())
         return
     }
 
-    // Отправляем HTML страницу в ответе
+    // Send HTML page in response
     err = tmpl.Execute(c.Writer, nil)
     if err != nil {
         c.String(http.StatusInternalServerError, err.Error())

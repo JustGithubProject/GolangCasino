@@ -10,105 +10,131 @@ import (
 )
 
 
-func CreateGameHandler(c *gin.Context){
-	var game models.Game
-	err_1 := c.BindJSON(&game)
-	if err_1 != nil{
-		c.JSON(400, gin.H{"error": err_1.Error()})
-	}
 
-	db := database.InitDB()
-
-	gameRepository := repositories.GameRepository{Db: db}
-
-	game_1 := models.Game{
-		UserID: game.UserID,
-		User: game.User,
-		GameType: game.GameType,
-		BetAmount: game.BetAmount,
-		WinAmount: game.WinAmount,
-		PlayedAt: game.PlayedAt,
-	}
-
-	err_2 := gameRepository.CreateGame(&game_1)
-	if err_2 != nil{
-		panic(err_2)
-	}
-}
-
-func GetGameByIdHandler(c *gin.Context){
-	gameIDStr := c.Param("id")
-	gameID, err := strconv.Atoi(gameIDStr)
-	if err != nil{
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
-        return
-	}
-	db := database.InitDB()
-
-
-	gameRepository := repositories.GameRepository{Db: db}
-	game, err := gameRepository.GetGameById(uint(gameID))
-	if err != nil{
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
-        return
-	}
-
-	c.JSON(http.StatusOK, game)
-
-}
-
-
-func UpdateGameHandler(c *gin.Context){
-	gameIDStr := c.Param("id")
-	gameID, err := strconv.Atoi(gameIDStr)
-	
-	if err != nil{
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
-        return
-	}
-
-	db := database.InitDB()
-	gameRepository := repositories.GameRepository{Db: db}
-	modelGame, err := gameRepository.GetGameById(uint(gameID))
-	if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
+func CreateGameHandler(c *gin.Context) {
+    // Parse the JSON data from the request body into the game model
+    var game models.Game
+    err := c.BindJSON(&game)
+    if err != nil {
+        // If there's an error parsing JSON, return a 400 Bad Request response
+        c.JSON(400, gin.H{"error": err.Error()})
         return
     }
 
-	// Обновляем данные игры
-	err = gameRepository.UpdateGame(modelGame)
-	if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update game"})
-        return
+    // Initialize the database connection
+    db := database.InitDB()
+    gameRepository := repositories.GameRepository{Db: db}
+
+    // Create a new game object with the parsed data
+    game_1 := models.Game{
+        UserID:    game.UserID,
+        User:      game.User,
+        GameType:  game.GameType,
+        BetAmount: game.BetAmount,
+        WinAmount: game.WinAmount,
+        PlayedAt:  game.PlayedAt,
     }
 
-    c.JSON(http.StatusOK, gin.H{"message": "Game updated successfully"})
+    // Call the repository method to create the game in the database
+    err = gameRepository.CreateGame(&game_1)
+    if err != nil {
+        panic(err)
+    }
 }
 
 
-func DeleteGameHandler(c * gin.Context){
-	gameIDStr := c.Param("id")
-	gameID, err := strconv.Atoi(gameIDStr)
-
-	if err != nil {
+func GetGameByIdHandler(c *gin.Context) {
+    // Extract the game ID from the request parameters
+    gameIDStr := c.Param("id")
+    gameID, err := strconv.Atoi(gameIDStr)
+    if err != nil {
+        // If the game ID is not a valid integer, return a 400 Bad Request response
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
         return
     }
 
-	db := database.InitDB()
+    // Initialize the database connection
+    db := database.InitDB()
     gameRepository := repositories.GameRepository{Db: db}
 
-	modelGame, err := gameRepository.GetGameById(uint(gameID))
-
+    // Call the repository method to get the game by its ID
+    game, err := gameRepository.GetGameById(uint(gameID))
     if err != nil {
+        // If there's an error getting the game, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
         return
     }
-	err = gameRepository.DeleteGame(modelGame)
 
-	if err != nil {
+    // Return the game object as JSON
+    c.JSON(http.StatusOK, game)
+}
+
+
+func UpdateGameHandler(c *gin.Context) {
+    // Extract the game ID from the request parameters
+    gameIDStr := c.Param("id")
+    gameID, err := strconv.Atoi(gameIDStr)
+    if err != nil {
+        // If the game ID is not a valid integer, return a 400 Bad Request response
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+    }
+
+    // Initialize the database connection
+    db := database.InitDB()
+    gameRepository := repositories.GameRepository{Db: db}
+
+    // Call the repository method to get the game by its ID
+    modelGame, err := gameRepository.GetGameById(uint(gameID))
+    if err != nil {
+        // If there's an error getting the game, return a 500 Internal Server Error response
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
+        return
+    }
+
+    // Call the repository method to update the game
+    err = gameRepository.UpdateGame(modelGame)
+    if err != nil {
+        // If there's an error updating the game, return a 500 Internal Server Error response
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update game"})
+        return
+    }
+
+    // Return a success message
+    c.JSON(http.StatusOK, gin.H{"message": "Game updated successfully"})
+}
+
+
+func DeleteGameHandler(c *gin.Context) {
+    // Extract the game ID from the request parameters
+    gameIDStr := c.Param("id")
+    gameID, err := strconv.Atoi(gameIDStr)
+    if err != nil {
+        // If the game ID is not a valid integer, return a 400 Bad Request response
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+    }
+
+    // Initialize the database connection
+    db := database.InitDB()
+    gameRepository := repositories.GameRepository{Db: db}
+
+    // Call the repository method to get the game by its ID
+    modelGame, err := gameRepository.GetGameById(uint(gameID))
+    if err != nil {
+        // If there's an error getting the game, return a 500 Internal Server Error response
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game"})
+        return
+    }
+
+    // Call the repository method to delete the game
+    err = gameRepository.DeleteGame(modelGame)
+    if err != nil {
+        // If there's an error deleting the game, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete game"})
         return
     }
-	c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
+
+    // Return a success message
+    c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
 }
