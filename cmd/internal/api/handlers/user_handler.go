@@ -11,105 +11,130 @@ import (
 
 
 
-func CreateUserHandler(
-	c *gin.Context,
-){
-	var user models.User
-	
-	// Этот код выполняет привязку JSON данных из тела HTTP запроса к структуре user.
-	err_1 := c.BindJSON(&user)
-	if err_1 != nil{
-		c.JSON(400, gin.H{"error": err_1.Error()})
-	}
+func CreateUserHandler(c *gin.Context) {
+    // Parse the JSON data from the request body into the user model
+    var user models.User
+    err := c.BindJSON(&user)
+    if err != nil {
+        // If there's an error parsing JSON, return a 400 Bad Request response
+        c.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
 
-	db := database.InitDB()
+    // Initialize the database connection
+    db := database.InitDB()
+    userRepository := repositories.UserRepository{Db: db}
 
-	userRepository := repositories.UserRepository{Db: db}
+    // Create a new user object with the parsed data
+    user_1 := models.User{
+        Name:     user.Name,
+        Email:    user.Email,
+        Password: user.Password,
+        Balance:  user.Balance,
+    }
 
-	user_1 := models.User{
-		Name: user.Name,
-		Email: user.Email,
-		Password: user.Password,
-		Balance: user.Balance,
-	}
-	err_2 := userRepository.CreateUser(&user_1)
-	if err_2 != nil{
-		panic(err_2)
-	}
+    // Call the repository method to create the user in the database
+    err = userRepository.CreateUser(&user_1)
+    if err != nil {
+        // If there's an error creating the user, panic
+        panic(err)
+    }
 }
+
 
 
 func GetUserByIdHandler(c *gin.Context) {
+    // Extract the user ID from the request parameters
     userIDStr := c.Param("id")
-
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
+        // If the user ID is not a valid integer, return a 400 Bad Request response
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
         return
     }
 
+    // Initialize the database connection
     db := database.InitDB()
-
     userRepository := repositories.UserRepository{Db: db}
+
+    // Call the repository method to get the user by their ID
     user, err := userRepository.GetUserById(uint(userID))
     if err != nil {
+        // If there's an error getting the user, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
         return
     }
 
+    // Return the user object as JSON
     c.JSON(http.StatusOK, user)
 }
 
-func UpdateUserHandler(c *gin.Context) {
-    userIDStr := c.Param("id")
 
+func UpdateUserHandler(c *gin.Context) {
+    // Extract the user ID from the request parameters
+    userIDStr := c.Param("id")
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
+        // If the user ID is not a valid integer, return a 400 Bad Request response
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
         return
     }
 
+    // Initialize the database connection
     db := database.InitDB()
     userRepository := repositories.UserRepository{Db: db}
 
+    // Call the repository method to get the user by their ID
     modelUser, err := userRepository.GetUserById(uint(userID))
     if err != nil {
+        // If there's an error getting the user, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
         return
     }
 
-    // Обновляем данные пользователя
+    // Call the repository method to update the user
     err = userRepository.UpdateUser(modelUser)
     if err != nil {
+        // If there's an error updating the user, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
         return
     }
 
+    // Return a success message
     c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
 
-func DeleteUserHandler(c *gin.Context){
+func DeleteUserHandler(c *gin.Context) {
+    // Extract the user ID from the request parameters
     userIDStr := c.Param("id")
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
+        // If the user ID is not a valid integer, return a 400 Bad Request response
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
         return
     }
 
+    // Initialize the database connection
     db := database.InitDB()
     userRepository := repositories.UserRepository{Db: db}
 
+    // Call the repository method to get the user by their ID
     modelUser, err := userRepository.GetUserById(uint(userID))
     if err != nil {
+        // If there's an error getting the user, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
         return
     }
+
+    // Call the repository method to delete the user
     err = userRepository.DeleteUser(modelUser)
     if err != nil {
+        // If there's an error deleting the user, return a 500 Internal Server Error response
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
         return
     }
+
+    // Return a success message
     c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
-
