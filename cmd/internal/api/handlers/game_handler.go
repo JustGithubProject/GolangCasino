@@ -4,10 +4,50 @@ import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
+    "github.com/JustGithubProject/GolangCasino/cmd/internal/services"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"net/http"
 )
+
+
+func SpinRouletteHandler(c *gin.Context){
+    userIDStr := c.Param("id")
+    userID, err := strconv.Atoi(userIDStr)
+    if err != nil{
+        // If the game ID is not a valid integer, return a 400 Bad Request response
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+    }
+
+
+    db := database.InitDB()
+    user_repository := repositories.UserRepository{Db: db}
+
+    user, err := user_repository.GetUserById(uint(userID))
+
+    user_player := services.UserPlayer{}
+    user_player.Balance = user.Balance
+
+    guess_number := c.PostForm("guess_number")
+    guessNumberToInt, err := strconv.Atoi(guess_number)
+    if err != nil{
+        // If the game ID is not a valid integer, return a 400 Bad Request response
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+    }
+
+    bet := c.PostForm("bet")
+    betToInt, err := strconv.Atoi(bet)
+    if err != nil{
+        // If the game ID is not a valid integer, return a 400 Bad Request response
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+        return
+    }
+    gameName := c.PostForm("gameName")
+    user_player.Play(guessNumberToInt, betToInt, gameName)
+}
+
 
 
 

@@ -6,7 +6,7 @@ import (
 
 type UserPlayer struct {
 	TypeOfGame services.GameRoulette
-	Balance    int
+	Balance		float64
 }
 
 func (user *UserPlayer) Play(guess_number int, bet int, gameName string) int {
