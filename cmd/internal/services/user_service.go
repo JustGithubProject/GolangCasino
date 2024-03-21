@@ -9,16 +9,13 @@ type UserPlayer struct {
 	Balance		float64
 }
 
-func (user *UserPlayer) Play(guess_number int, bet int, gameName string) int {
+func (user *UserPlayer) Play(guess_number int, bet int, gameName string) float64 {
 	user.TypeOfGame.GameName = gameName
-	// user.TypeOfGame.Numbers = []int{0, 3, 6, 9, 12, 2, 5, 8, 11, 1, 4, 7, 10, 15, 18, 21, 24, 14, 17, 20, 23, 13, 16, 19, 22}
-	currentNumber := 0
 
-	for i := 0; i < 36; i++{
-		user.TypeOfGame.Numbers[i] = currentNumber
-		currentNumber += 3
+	for i := 0; i < 37; i++{
+		user.TypeOfGame.Numbers[i] = i
 	}
-	
+
 	money, err := user.TypeOfGame.SpinRoulette(guess_number, bet)
 	if money > bet {
 		user.Balance += money
@@ -27,3 +24,6 @@ func (user *UserPlayer) Play(guess_number int, bet int, gameName string) int {
 	}
 	return user.Balance
 }
+
+
+
