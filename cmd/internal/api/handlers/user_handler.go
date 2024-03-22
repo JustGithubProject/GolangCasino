@@ -11,6 +11,7 @@ import (
 
 
 
+
 func CreateUserHandler(c *gin.Context) {
     // Parse the JSON data from the request body into the user model
     var user models.User
