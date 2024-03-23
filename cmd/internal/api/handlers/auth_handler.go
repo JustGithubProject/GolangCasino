@@ -8,6 +8,33 @@ import (
 )
 
 
+type RegisterInput struct{
+	Name string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Email string `json:"email" binding:"required"`
+	Balance float64 `json:"balance" binding:"required"`
+}
+
+
+func RegisterHandler(c *gin.Context){
+	var input RegisterInput
+	err := c.ShouldBindJSON(&input)
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	u := models.User{}
+	u.Name = input.Name
+	u.Password = input.Password
+	u.Email = input.Email
+	u.Balance = input.Balance
+
+	///ПРОДОЛЖУ С ЭТОГО МОМЕНТА
+
+}
+
+
 func LoginHandler(c *gin.Context) {
 	var u models.User
 	if err := c.BindJSON(&u); err != nil {
