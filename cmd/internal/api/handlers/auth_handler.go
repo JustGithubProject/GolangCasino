@@ -3,6 +3,8 @@ package handlers
 import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/services"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
 	"net/http"
 	"github.com/gin-gonic/gin"
 )
@@ -24,13 +26,20 @@ func RegisterHandler(c *gin.Context){
 		return
 	}
 
+	db := database.InitDB()
+    userRepository := repositories.UserRepository{Db: db}
+
 	u := models.User{}
 	u.Name = input.Name
 	u.Password = input.Password
 	u.Email = input.Email
 	u.Balance = input.Balance
 
-	///ПРОДОЛЖУ С ЭТОГО МОМЕНТА
+	err = userRepository.CreateUser(&u)
+    if err != nil {
+        // If there's an error creating the user, panic
+        panic(err)
+    }
 
 }
 
