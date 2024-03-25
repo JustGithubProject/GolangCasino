@@ -17,6 +17,12 @@ type RegisterInput struct{
 	Balance float64 `json:"balance" binding:"required"`
 }
 
+type UserInput struct {
+	Name string `json:"username" binding:"required"`
+	Email string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 
 func RegisterHandler(c *gin.Context){
 	var input RegisterInput
@@ -29,9 +35,15 @@ func RegisterHandler(c *gin.Context){
 	db := database.InitDB()
     userRepository := repositories.UserRepository{Db: db}
 
+	hashed_password, err := services.HashPassword(input.Password)
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	u := models.User{}
 	u.Name = input.Name
-	u.Password = input.Password
+	u.Password = hashed_password
 	u.Email = input.Email
 	u.Balance = input.Balance
 
@@ -45,14 +57,20 @@ func RegisterHandler(c *gin.Context){
 
 
 func LoginHandler(c *gin.Context) {
-	var u models.User
-	if err := c.BindJSON(&u); err != nil {
+	var userInput UserInput
+	if err := c.BindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
-
-	if u.Name == "Chek" && u.Password == "123456" {
-		tokenString, err := services.CreateToken(u.Name)
+	db := database.InitDB()
+    userRepository := repositories.UserRepository{Db: db}
+	user, err := userRepository.GetUserByEmail(userInput.Email)
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		return
+	}
+	if services.CheckPasswordHash(userInput.Password, user.Password){
+		tokenString, err := services.CreateToken(userInput.Name)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 			return

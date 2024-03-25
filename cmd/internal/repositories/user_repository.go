@@ -25,6 +25,17 @@ func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
 	return &user, nil
 }
 
+
+// Method to get user by id
+func (ur *UserRepository) GetUserByEmail(email string) (*models.User, error){
+	var user models.User
+	err := ur.Db.First(&user, email).Error
+	if err != nil{
+		return nil, err
+	}
+	return &user, nil
+}
+
 // Method to update user
 func (ur *UserRepository) UpdateUser(user *models.User) error {
     return ur.Db.Save(user).Error
