@@ -85,7 +85,7 @@ func LoginHandler(c *gin.Context) {
 			return
 		}
 		// Устанавливаем заголовок Authorization
-		c.Header("Authorization", "Bearer "+tokenString)
+		c.Header("Authorization", "Bearer " + tokenString)
 		c.JSON(http.StatusOK, gin.H{"token": tokenString})
 		return
 	}

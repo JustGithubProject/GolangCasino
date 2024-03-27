@@ -1,49 +1,80 @@
 package handlers
 
 import (
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
-    "github.com/JustGithubProject/GolangCasino/cmd/internal/services"
-	"github.com/gin-gonic/gin"
-	"strconv"
 	"net/http"
+	"strconv"
+	"strings"
+
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/services"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 
-func SpinRouletteHandler(c *gin.Context){
-    userIDStr := c.Param("id")
-    userID, err := strconv.Atoi(userIDStr)
-    if err != nil{
-        // If the game ID is not a valid integer, return a 400 Bad Request response
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+func SpinRouletteHandler(c *gin.Context) {
+    // Получаем JWT токен из заголовка запроса
+    authHeader := c.GetHeader("Authorization")
+    if authHeader == "" {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
         return
     }
 
+    // Извлекаем токен из заголовка, пропуская префикс "Bearer "
+    tokenString := strings.Split(authHeader, " ")[1]
 
+    // Проверяем и парсим токен
+    token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+        // Здесь нужно вернуть ключ подписи токена, используемый при подписи JWT
+        return []byte("your_secret_key"), nil
+    })
+    if err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+        return
+    }
+
+    // Извлекаем идентификатор пользователя из токена
+    claims, ok := token.Claims.(jwt.MapClaims)
+    if !ok || !token.Valid {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+        return
+    }
+    userIDFloat, ok := claims["user_id"].(float64)
+    if !ok {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID in token"})
+        return
+    }
+    userID := uint(userIDFloat)
+
+    // Продолжаем обработку запроса, используя полученного пользователя
     db := database.InitDB()
     user_repository := repositories.UserRepository{Db: db}
 
-    user, err := user_repository.GetUserById(uint(userID))
+    user, err := user_repository.GetUserById(userID)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
 
     user_player := services.UserPlayer{}
     user_player.Balance = user.Balance
 
     guess_number := c.PostForm("guess_number")
     guessNumberToInt, err := strconv.Atoi(guess_number)
-    if err != nil{
-        // If the game ID is not a valid integer, return a 400 Bad Request response
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid guess number"})
         return
     }
 
     bet := c.PostForm("bet")
     betToInt, err := strconv.Atoi(bet)
-    if err != nil{
-        // If the game ID is not a valid integer, return a 400 Bad Request response
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid game ID"})
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid bet"})
         return
     }
+
     gameName := c.PostForm("gameName")
     user_player.Play(guessNumberToInt, betToInt, gameName)
 }
