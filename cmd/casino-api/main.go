@@ -33,6 +33,11 @@ func main(){
 	r.PUT("/update/game", handlers.UpdateGameHandler)
 	r.DELETE("/delete/game/:id", handlers.DeleteGameHandler)
 
+
+	// auth_handlers
+	r.POST("/register/user/", handlers.RegisterHandler)
+	r.POST("/login/user/",  handlers.LoginHandler)
+
 	// Start the web server
 	r.Run(":8080")
 }

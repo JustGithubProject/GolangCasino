@@ -12,6 +12,47 @@ type GameRoulette struct{
 	Sectors []string
 }
 
+
+func (game *GameRoulette) ChooseRandomNumberByWeight(numbers []int, weights []int) int {
+    totalWeight := 0
+    for _, weight := range weights {
+        totalWeight += weight
+    }
+
+    r := rand.Intn(totalWeight)
+
+    cumulativeWeight := 0
+    for i, weight := range weights {
+        cumulativeWeight += weight
+        if r < cumulativeWeight {
+            return numbers[i]
+        }
+    }
+
+    // This should never happen if weights are correctly provided
+    return numbers[len(numbers)-1]
+}
+
+func (game *GameRoulette) ChooseRandomSectorByWeight(sectors []string, weights []int) string {
+    totalWeight := 0
+    for _, weight := range weights {
+        totalWeight += weight
+    }
+
+    r := rand.Intn(totalWeight)
+
+    cumulativeWeight := 0
+    for i, weight := range weights {
+        cumulativeWeight += weight
+        if r < cumulativeWeight {
+            return sectors[i]
+        }
+    }
+
+    // This should never happen if weights are correctly provided
+    return sectors[len(sectors)-1]
+}
+
 func (game *GameRoulette) ChooseRandomNumber(array []int) int {
     // Generate a random index within the range of the array length
     randomIndex := rand.Intn(len(array))
@@ -19,7 +60,7 @@ func (game *GameRoulette) ChooseRandomNumber(array []int) int {
 }
 
 func (game *GameRoulette) ChooseRandomSector(sectors []string) string{
-	randomIndex := rand.Intn(len(sectors))
+	randomIndex := rand.Intn(len(sectors)) // [0, len(sectors))
 	return sectors[randomIndex]
 }
 
