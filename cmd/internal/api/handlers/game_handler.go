@@ -76,8 +76,11 @@ func SpinRouletteHandler(c *gin.Context) {
     }
 
     gameName := c.PostForm("gameName")
-    user_player.Play(guessNumberToInt, betToInt, gameName)
+    user_player.NormalPlay(guessNumberToInt, betToInt, gameName)
 }
+
+
+
 
 
 
