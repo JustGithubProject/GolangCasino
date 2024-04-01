@@ -22,3 +22,10 @@ func InitWeights(arr []int, length int){
 		counter_weight += 100
 	}
 }
+
+
+func InitNumbersArray(arr []int, length int){
+	for i := 0; i < 37; i++{
+		arr[i] = i
+	}
+}

@@ -14,35 +14,23 @@ type UserPlayer struct {
 func (user *UserPlayer) NormalPlay(guess_number int, bet int, gameName string) float64 {
 	user.TypeOfGame.GameName = gameName
 
-	for i := 0; i < 37; i++{
-		user.TypeOfGame.Numbers[i] = i
-	}
-
+	services.InitNumbersArray(user.TypeOfGame.Numbers)
 	money, err := user.TypeOfGame.NormalSpinRoulette(guess_number, bet)
-	if money > bet {
-		user.Balance += money
-	} else {
-		user.Balance -= money
-	}
+	user.updateBalance(money, bet)
 	return user.Balance
 }
 
 
-func (user *UserPlayer) UnFairPlay(guess_number int, bet int, gameName string) float64{
+func (user *UserPlayer) updateBalance(money float64, bet float64){
+	if money > bet{
+		user.Balance += money
+	}else{
+		user.Balance -= money
+	}
+}
+
+func (user *UserPlayer) UnFairPlay(guess_number int, bet float64, gameName string) float64{
 	user.TypeOfGame.GameName = gameName
-	// counter_number_weight := 10
-	// counter_sector_weight := 10
-
-	// for i := 0; i < 37; i++{
-	// 	user.TypeOfGame.WeightsForNumbers[i] = counter_number_weight
-	// 	counter_number_weight += 100
-	// }
-	
-	// for i := 0; i < len(user.TypeOfGame.Sectors); i++{
-	// 	user.TypeOfGame.WeightsForSectors[i] = counter_sector_weight
-	// 	counter_sector_weight += 100
-	// }
-
 	services.InitWeights(user.TypeOfGame.WeightsForNumbers, 37)
 	services.InitWeights(user.TypeOfGame.WeightsForSectors, len(user.TypeOfGame.Sectors))
 
@@ -51,15 +39,9 @@ func (user *UserPlayer) UnFairPlay(guess_number int, bet int, gameName string) f
 	services.ShuffleWeights(user.TypeOfGame.WeightsForSectors)
 
 
-	for i := 0; i < 37; i++{
-		user.TypeOfGame.Numbers[i] = i
-	}
+	services.InitNumbersArray(user.TypeOfGame.Numbers)
 	money, err := user.TypeOfGame.UnfairSpinRoulette(guess_number, bet)
-	if money > bet {
-		user.Balance += money
-	} else {
-		user.Balance -= money
-	}
+	user.updateBalance(money, bet)
 	return user.Balance
 }
 

@@ -68,7 +68,7 @@ func (game *GameRoulette) GenerateRandomSectorByWeight(sectors []string, weights
     return game.ChooseRandomSectorByWeight(sectors, weights)
 }
 
-func (game *GameRoulette) UnfairSpinRoulette(sector string, guess_number int, bet int) (int, error){
+func (game *GameRoulette) UnfairSpinRoulette(sector string, guess_number int, bet float64) (float64, error){
 	if sector != nil{
 		dropped_sector := game.GenerateRandomSectorByWeight(game.Sectors, game.WeightsForSectors)
 		if dropped_sector == sector{
@@ -113,7 +113,7 @@ func (game *GameRoulette) GenerateRandomSectorFromArray(sectors []string) string
 }
 
 
-func (game *GameRoulette) NormalSpinRoulette(sector string, guess_number int, bet int) (int, error){
+func (game *GameRoulette) NormalSpinRoulette(sector string, guess_number int, bet float64) (float64, error){
 	if sector != nil{
 		dropped_sector := game.GenerateRandomSectorFromArray(game.Sectors)
 		if dropped_sector == sector{
