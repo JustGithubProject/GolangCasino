@@ -13,32 +13,13 @@ import (
 
 
 func SpinRouletteHandler(c *gin.Context) {
-    // // Получаем JWT токен из заголовка запроса
-    userID, err := services.ValidateToken(c)
-
-    // Продолжаем обработку запроса, используя полученного пользователя
-    db := database.InitDB()
-    user_repository := repositories.UserRepository{Db: db}
-
-    user, err := user_repository.GetUserById(userID)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
-        return
-    }
-
-    user_player := services.UserPlayer{}
-    user_player.Balance = user.Balance
-
-    guessSector, guessNumberInt, betFloat, gameName, err := services.GetGameParams(c)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to do"})
-        return
-    }
-    user_player.NormalPlay(guessSector, guessNumberInt, betFloat, gameName)
+    services.HandleGameRequest(c, true)
 }
 
 
-
+func UnfairSpinRoulette(c *gin.Context){
+    services.HandleGameRequest(c, false)
+}
 
 
 

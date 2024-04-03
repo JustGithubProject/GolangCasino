@@ -6,9 +6,13 @@ import (
 	"math/rand"
 	"time"
 	"strconv"
+    "net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+    "github.com/JustGithubProject/GolangCasino/cmd/internal/database"
+	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
+    
 )
 
 func ShuffleWeights(arr []int) {
@@ -84,4 +88,38 @@ func GetGameParams(c *gin.Context) (string, int, float64, string, error) {
     }
 
     return guessSector, guessNumberInt, betFloat, gameName, nil
+}
+
+
+func HandleGameRequest(c *gin.Context, fairPlay bool) {
+    // Получаем JWT токен из заголовка запроса
+    userID, err := ValidateToken(c)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+
+    db := database.InitDB()
+    user_repository := repositories.UserRepository{Db: db}
+
+    user, err := user_repository.GetUserById(userID)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+
+    user_player := services.UserPlayer{}
+    user_player.Balance = user.Balance
+
+    guessSector, guessNumberInt, betFloat, gameName, err := GetGameParams(c)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game parameters"})
+        return
+    }
+
+    if fairPlay {
+        user_player.NormalPlay(guessSector, guessNumberInt, betFloat, gameName)
+    } else {
+        user_player.UnFairPlay(guessSector, guessNumberInt, betFloat, gameName)
+    }
 }
