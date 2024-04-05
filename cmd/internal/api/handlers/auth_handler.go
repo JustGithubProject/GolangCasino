@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/services"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
@@ -11,54 +10,15 @@ import (
 )
 
 
-type RegisterInput struct{
-	Name string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-	Email string `json:"email" binding:"required"`
-	Balance float64 `json:"balance" binding:"required"`
-}
-
-type UserInput struct {
-	Name string `json:"username" binding:"required"`
-	Email string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
 
 
-func RegisterHandler(c *gin.Context){
-	var input RegisterInput
-	err := c.ShouldBindJSON(&input)
-	if err != nil{
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	db := database.InitDB()
-    userRepository := repositories.UserRepository{Db: db}
-
-	hashed_password, err := services.HashPassword(input.Password)
-	if err != nil{
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	u := models.User{}
-	u.Name = input.Name
-	u.Password = hashed_password
-	u.Email = input.Email
-	u.Balance = input.Balance
-
-	err = userRepository.CreateUser(&u)
-    if err != nil {
-        // If there's an error creating the user, panic
-        panic(err)
-    }
-
+func RegisterHandler(c *gin.Context) {
+	services.HandleUserRegister(c)
 }
 
 
 func LoginHandler(c *gin.Context) {
-	var userInput UserInput
+	var userInput services.UserInput
 	if err := c.BindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return

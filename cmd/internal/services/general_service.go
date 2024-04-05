@@ -252,3 +252,19 @@ func HandleDeleteGame(c *gin.Context){
     // Return a success message
     c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
 }
+
+
+func HandleUserRegister(c *gin.Context){
+    var input RegisterInput
+    if err := c.ShouldBindJSON(&input); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    if err := CreateUser(input); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+        return
+    }
+
+    c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
+}
