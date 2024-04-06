@@ -1,23 +1,22 @@
 package services
 
-import (
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/services"
-	"math/rand"
-	"time"
-)
+
 
 type UserPlayer struct {
-	TypeOfGame services.GameRoulette
+	TypeOfGame GameRoulette
 	Balance		float64
 }
 
-func (user *UserPlayer) NormalPlay(guess_sector string, guess_number int, bet float64, gameName string) float64 {
+func (user *UserPlayer) NormalPlay(guess_sector string, guess_number int, bet float64, gameName string) (float64, error) {
 	user.TypeOfGame.GameName = gameName
 
-	services.InitNumbersArray(user.TypeOfGame.Numbers)
+	InitNumbersArray(user.TypeOfGame.Numbers)
 	money, err := user.TypeOfGame.NormalSpinRoulette(guess_sector, guess_number, bet)
+	if err != nil{
+		return 0, &GameError{Message: "Game play error: " + err.Error()}
+	}
 	user.updateBalance(money, bet)
-	return user.Balance
+	return user.Balance, nil
 }
 
 
@@ -29,20 +28,23 @@ func (user *UserPlayer) updateBalance(money float64, bet float64){
 	}
 }
 
-func (user *UserPlayer) UnFairPlay(guess_sector string, guess_number int, bet float64, gameName string) float64{
+func (user *UserPlayer) UnFairPlay(guess_sector string, guess_number int, bet float64, gameName string) (float64, error){
 	user.TypeOfGame.GameName = gameName
-	services.InitWeights(user.TypeOfGame.WeightsForNumbers, 37)
-	services.InitWeights(user.TypeOfGame.WeightsForSectors, len(user.TypeOfGame.Sectors))
+	InitWeights(user.TypeOfGame.WeightsForNumbers, 37)
+	InitWeights(user.TypeOfGame.WeightsForSectors, len(user.TypeOfGame.Sectors))
 
 
-	services.ShuffleWeights(user.TypeOfGame.WeightsForNumbers)
-	services.ShuffleWeights(user.TypeOfGame.WeightsForSectors)
+	ShuffleWeights(user.TypeOfGame.WeightsForNumbers)
+	ShuffleWeights(user.TypeOfGame.WeightsForSectors)
 
 
-	services.InitNumbersArray(user.TypeOfGame.Numbers)
+	InitNumbersArray(user.TypeOfGame.Numbers)
 	money, err := user.TypeOfGame.UnfairSpinRoulette(guess_sector, guess_number, bet)
+	if err != nil{
+		return 0, &GameError{Message: "Game play error: " + err.Error()}
+	}
 	user.updateBalance(money, bet)
-	return user.Balance
+	return user.Balance, nil
 }
 
 

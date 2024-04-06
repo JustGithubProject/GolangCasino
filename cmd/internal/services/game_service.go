@@ -6,6 +6,7 @@ import (
     "math/rand"
 )
 
+
 type GameRoulette struct{
 	GameName string
 	Numbers []int
@@ -69,7 +70,7 @@ func (game *GameRoulette) GenerateRandomSectorByWeight(sectors []string, weights
 }
 
 func (game *GameRoulette) UnfairSpinRoulette(sector string, guess_number int, bet float64) (float64, error){
-	if sector != nil{
+	if sector != ""{
 		dropped_sector := game.GenerateRandomSectorByWeight(game.Sectors, game.WeightsForSectors)
 		if dropped_sector == sector{
 			prize := bet * 3
@@ -114,7 +115,7 @@ func (game *GameRoulette) GenerateRandomSectorFromArray(sectors []string) string
 
 
 func (game *GameRoulette) NormalSpinRoulette(sector string, guess_number int, bet float64) (float64, error){
-	if sector != nil{
+	if sector != ""{
 		dropped_sector := game.GenerateRandomSectorFromArray(game.Sectors)
 		if dropped_sector == sector{
 			prize := bet * 3

@@ -33,7 +33,7 @@ func InitWeights(arr []int, length int){
 }
 
 
-func InitNumbersArray(arr []int, length int){
+func InitNumbersArray(arr []int){
 	for i := 0; i < 37; i++{
 		arr[i] = i
 	}
