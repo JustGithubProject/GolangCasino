@@ -50,5 +50,5 @@ func TestCreateUserHandler(t *testing.T) {
         t.Errorf("expected status %d; got %d", http.StatusOK, recorder.Code)
     }
 
-    // Теперь вы можете добавить дополнительные проверки, если это необходимо.
+ 
 }
