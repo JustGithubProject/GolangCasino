@@ -92,6 +92,18 @@ func GetGameParams(c *gin.Context) (string, int, float64, string, error) {
     return guessSector, guessNumberInt, betFloat, gameName, nil
 }
 
+func InitializeUserRepository() (repositories.UserRepository, error){
+    db := database.InitDB()
+    user_repository := repositories.UserRepository{Db: db}
+    return user_repository, nil
+}
+
+func InitializeGameRepository() (repositories.GameRepository, error){
+    db := database.InitDB()
+    game_repository := repositories.GameRepository{Db: db}
+    return game_repository, nil
+}
+
 
 func HandleGameRequest(c *gin.Context, fairPlay bool) {
     // Получаем JWT токен из заголовка запроса
@@ -101,8 +113,11 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
         return
     }
 
-    db := database.InitDB()
-    user_repository := repositories.UserRepository{Db: db}
+    user_repository, err := InitializeUserRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
 
     user, err := user_repository.GetUserById(userID)
     if err != nil {
@@ -138,8 +153,11 @@ func HandleCreateGame(c *gin.Context){
     }
 
     // Initialize the database connection
-    db := database.InitDB()
-    gameRepository := repositories.GameRepository{Db: db}
+    gameRepository, err := InitializeGameRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
 
     // Create a new game object with the parsed data
     game_1 := models.Game{
@@ -170,8 +188,11 @@ func HandleGetGameByID(c *gin.Context){
     }
 
     // Initialize the database connection
-    db := database.InitDB()
-    gameRepository := repositories.GameRepository{Db: db}
+    gameRepository, err := InitializeGameRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
 
     // Call the repository method to get the game by its ID
     game, err := gameRepository.GetGameById(uint(gameID))
@@ -197,8 +218,11 @@ func HandleUpdateGame(c *gin.Context){
     }
 
     // Initialize the database connection
-    db := database.InitDB()
-    gameRepository := repositories.GameRepository{Db: db}
+    gameRepository, err := InitializeGameRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
 
     // Call the repository method to get the game by its ID
     modelGame, err := gameRepository.GetGameById(uint(gameID))
@@ -232,8 +256,11 @@ func HandleDeleteGame(c *gin.Context){
     }
 
     // Initialize the database connection
-    db := database.InitDB()
-    gameRepository := repositories.GameRepository{Db: db}
+    gameRepository, err := InitializeGameRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
 
     // Call the repository method to get the game by its ID
     modelGame, err := gameRepository.GetGameById(uint(gameID))
@@ -272,13 +299,17 @@ func HandleUserRegister(c *gin.Context){
 }
 
 func HandleUserLogin(c *gin.Context){
-    var userInput services.UserInput
+    var userInput UserInput
 	if err := c.BindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
-	db := database.InitDB()
-    userRepository := repositories.UserRepository{Db: db}
+
+    userRepository, err := InitializeUserRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
 	user, err := userRepository.GetUserByEmail(userInput.Email)
 
 	if err != nil {
