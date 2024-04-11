@@ -21,6 +21,25 @@ func main(){
 		c.Next()
 	})
 
+	// CORS middleware with specific origins
+	r.Use(func(c *gin.Context) {
+		allowedOrigins := []string{"localhost:3000", "127.0.0.1:3000"}
+		origin := c.Request.Header.Get("Origin")
+		for _, allowedOrigin := range allowedOrigins {
+			if allowedOrigin == origin {
+				c.Writer.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
+				c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+				c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+				if c.Request.Method == "OPTIONS" {
+					c.AbortWithStatus(200)
+					return
+				}
+				break
+			}
+		}
+		c.Next()
+	})
+
 	// Routes
 	r.GET("/", handlers.HomeHandler)
 	r.POST("/create/user/", handlers.CreateUserHandler)
