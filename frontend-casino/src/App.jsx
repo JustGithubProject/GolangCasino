@@ -1,9 +1,11 @@
+import RouletteCard from "./components/RouletteCard.jsx"
+
 function App() {
 
   return (
-    <>
-      <h1>Hello World</h1>
-    </>
+    <div>
+      <RouletteCard/>
+    </div>
   )
 }
 
