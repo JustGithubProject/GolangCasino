@@ -1,15 +1,29 @@
-import Display from "./Display"
-import { Card, Input } from 'antd';
+import React, { useState } from 'react'; // Импорт useState из библиотеки React
+import { Card, Input, Button } from 'antd';
+import Display from './Display';
 
-const gridStyle = {
-    width: '10%',
-    textAlign: 'center',
-};
 
 function RouletteCard() {
+    const [selectedNumbers, setSelectedNumbers] = useState([]);
+
+    const handleNumberClick = (number) => {
+        // Проверяем, есть ли уже это число в списке выбранных чисел
+        const index = selectedNumbers.indexOf(number);
+
+        if (index === -1) {
+            // Число еще не выбран, добавляем его в массив выбранных чисел
+            setSelectedNumbers([...selectedNumbers, number]);
+        } else {
+            // Число уже выбран, удаляем его из массива выбранных чисел
+            const updatedNumbers = [...selectedNumbers];
+            updatedNumbers.splice(index, 1);
+            setSelectedNumbers(updatedNumbers);
+        }
+    };
+
     // Создаем массив чисел от 0 до 37
     const numbers = Array.from(Array(38).keys());
-    
+
     return (
         <div style={styles.container}>
             <Card style={styles.card}>
@@ -17,8 +31,8 @@ function RouletteCard() {
                     Рулетка
                 </div>
                 <div style={styles.displayContainer}>
-                    <Display />
-                </div>
+                    <Display selectedNumbers={selectedNumbers} />
+                </div>          
                 <div style={styles.inputContainer}>
                     <Input
                         style={styles.input}
@@ -29,23 +43,29 @@ function RouletteCard() {
                 </div>
                 <div style={styles.cardBody}>
                     {numbers.map((number) => (
-                        <Card.Grid
+                        <Button
                             key={number}
                             style={{
                                 ...gridStyle,
                                 backgroundColor: getColorForNumber(number),
                                 color: getTextColorForNumber(number),
+                                marginBottom: '10px', // Добавляем отступ между кнопками
                             }}
+                            onClick={() => handleNumberClick(number)} // Обработчик клика по кнопке
                         >
                             {number}
-                        </Card.Grid>
+                        </Button>
                     ))}
                 </div>
-    
             </Card>
         </div>
     );
 }
+
+const gridStyle = {
+    width: '15%',
+    textAlign: 'center',
+};
 
 const styles = {
     container: {
@@ -89,7 +109,6 @@ const styles = {
     },
 };
 
-// Функция для определения цвета фона в зависимости от числа
 function getColorForNumber(number) {
     if (number === 0) {
         return 'green'; // Зеленый цвет для числа 0
@@ -100,7 +119,6 @@ function getColorForNumber(number) {
     }
 }
 
-// Функция для определения цвета текста в зависимости от фона
 function getTextColorForNumber(number) {
     if (number === 0) {
         return 'white'; // Белый цвет текста для числа 0
