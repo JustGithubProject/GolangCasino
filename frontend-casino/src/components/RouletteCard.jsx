@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; // Импорт useState из библиотеки React
 import { Card, Input, Button } from 'antd';
 import Display from './Display';
+import SimpleButton from './SimpleButton';
 
 
 function RouletteCard() {
@@ -40,6 +41,7 @@ function RouletteCard() {
                         size="large"
                         prefix="₽"
                     />
+                    <SimpleButton/>
                 </div>
                 <div style={styles.cardBody}>
                     {numbers.map((number) => (
