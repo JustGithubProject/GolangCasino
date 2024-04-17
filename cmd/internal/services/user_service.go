@@ -7,11 +7,11 @@ type UserPlayer struct {
 	Balance		float64
 }
 
-func (user *UserPlayer) NormalPlay(guess_sector string, guess_number int, bet float64, gameName string) (float64, error) {
+func (user *UserPlayer) NormalPlay(guess_sectors []string, guess_numbers []int, bet float64, gameName string) (float64, error) {
 	user.TypeOfGame.GameName = gameName
 
 	InitNumbersArray(user.TypeOfGame.Numbers)
-	money, err := user.TypeOfGame.NormalSpinRoulette(guess_sector, guess_number, bet)
+	money, err := user.TypeOfGame.NormalSpinRoulette(guess_sectors, guess_numbers, bet)
 	if err != nil{
 		return 0, &GameError{Message: "Game play error: " + err.Error()}
 	}

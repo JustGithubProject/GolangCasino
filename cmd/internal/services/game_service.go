@@ -114,13 +114,16 @@ func (game *GameRoulette) GenerateRandomSectorFromArray(sectors []string) string
 }
 
 
-func (game *GameRoulette) NormalSpinRoulette(sector string, guess_number int, bet float64) (float64, error){
-	if sector != ""{
+func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, NumbersToBets map[int]float64) (float64, error){
+	lengthOfBetsToSectors := len(sectorsToBets)
+	prize := float64(0)
+	if lengthOfBetsToSectors > 0{
 		dropped_sector := game.GenerateRandomSectorFromArray(game.Sectors)
-		if dropped_sector == sector{
-			prize := bet * 3
-			fmt.Printf("You won %d\n", prize)
-			return prize, nil
+		for i := 0; i < lengthOfBetsToSectors; i++{
+			if _, ok := sectorsToBets[dropped_sector]; ok{
+				intermediateValue := sectorsToBets[dropped_sector] * 3
+				prize += intermediateValue
+			}
 		}
 	}
 	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
