@@ -69,24 +69,25 @@ func (game *GameRoulette) GenerateRandomSectorByWeight(sectors []string, weights
     return game.ChooseRandomSectorByWeight(sectors, weights)
 }
 
-func (game *GameRoulette) UnfairSpinRoulette(sector string, guess_number int, bet float64) (float64, error){
-	if sector != ""{
+func (game *GameRoulette) UnfairSpinRoulette(sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
+	lengthOfBetsToSectors := len(sectorsToBets)
+	prize := float64(0)
+	if lengthOfBetsToSectors > 0{
 		dropped_sector := game.GenerateRandomSectorByWeight(game.Sectors, game.WeightsForSectors)
-		if dropped_sector == sector{
-			prize := bet * 3
-			fmt.Printf("You won %d\n", prize)
-			return prize, nil
+		if _, ok := sectorsToBets[dropped_sector]; ok{
+			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
+			prize += intermediateValue
 		}
 	}
-	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
-	if dropped_number == guess_number{
-		prize := bet * 2
-		fmt.Printf("You won %d\n", prize)
-		return prize, nil
-	}else{
-		fmt.Printf("You lose %d\n", bet)
-		return bet, nil
+	lengthOfBetsToNumbers := len(numbersToBets)
+	if lengthOfBetsToNumbers > 0{
+		dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
+		if _, ok := numbersToBets[dropped_number]; ok{
+			intermediateValue := numbersToBets[dropped_number] * float64(35)
+			prize += intermediateValue
+		}
 	}
+	return prize, nil
 }
 
 
@@ -120,7 +121,7 @@ func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, n
 	if lengthOfBetsToSectors > 0{
 		dropped_sector := game.GenerateRandomSectorFromArray(game.Sectors)
 		if _, ok := sectorsToBets[dropped_sector]; ok{
-			intermediateValue := sectorsToBets[dropped_sector] * 3
+			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
 			prize += intermediateValue
 		}
 	}
@@ -128,7 +129,7 @@ func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, n
 	if lengthOfBetsToNumbers > 0{
 		dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
 		if _, ok := numbersToBets[dropped_number]; ok{
-			intermediateValue := numbersToBets[dropped_number] * 35
+			intermediateValue := numbersToBets[dropped_number] * float64(35)
 			prize += intermediateValue
 		}
 	}
