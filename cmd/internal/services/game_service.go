@@ -114,27 +114,25 @@ func (game *GameRoulette) GenerateRandomSectorFromArray(sectors []string) string
 }
 
 
-func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, NumbersToBets map[int]float64) (float64, error){
+func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
 	lengthOfBetsToSectors := len(sectorsToBets)
 	prize := float64(0)
 	if lengthOfBetsToSectors > 0{
 		dropped_sector := game.GenerateRandomSectorFromArray(game.Sectors)
-		for i := 0; i < lengthOfBetsToSectors; i++{
-			if _, ok := sectorsToBets[dropped_sector]; ok{
-				intermediateValue := sectorsToBets[dropped_sector] * 3
-				prize += intermediateValue
-			}
+		if _, ok := sectorsToBets[dropped_sector]; ok{
+			intermediateValue := sectorsToBets[dropped_sector] * 3
+			prize += intermediateValue
 		}
 	}
-	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
-	if dropped_number == guess_number{
-		prize := bet * 2
-		fmt.Printf("You won %d\n", prize)
-		return prize, nil
-	}else{
-		fmt.Printf("You lose %d\n", bet)
-		return bet, nil
+	lengthOfBetsToNumbers := len(numbersToBets)
+	if lengthOfBetsToNumbers > 0{
+		dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
+		if _, ok := numbersToBets[dropped_number]; ok{
+			intermediateValue := numbersToBets[dropped_number] * 35
+			prize += intermediateValue
+		}
 	}
+	return prize, nil
 }
 
 
