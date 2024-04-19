@@ -119,10 +119,15 @@ func (game *GameRoulette) GenerateRandomSectorFromArray(number int) string{
 }
 
 
-func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
+func (game *GameRoulette) NormalSpinRoulette(redToBets map[string]float64, blackToBets map[string]float64, sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
 	lengthOfBetsToSectors := len(sectorsToBets)
 	lengthOfBetsToNumbers := len(numbersToBets)
+	lengthOfBetsToRed := len(redToBets)
+	lengthOfBetsToBlack := len(blackToBets)
+
 	prize := float64(0)
+
+
 	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
 	if lengthOfBetsToNumbers > 0{
 		if _, ok := numbersToBets[dropped_number]; ok{
@@ -137,6 +142,22 @@ func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, n
 			prize += intermediateValue
 		}
 	}
+	color := game.CheckColor(dropped_number)
+	if color != "green"{
+		if lengthOfBetsToRed > 0{
+			if _, ok := redToBets[color]; ok{
+				intermediateValue := redToBets[color] * float64(2)
+				prize += intermediateValue
+			}
+		}
+		if lengthOfBetsToBlack > 0{
+			if _, ok := blackToBets[color]; ok{
+				intermediateValue := blackToBets[color] * float64(2)
+				prize += intermediateValue
+			}
+		}
+	}
+
 	return prize, nil
 }
 
