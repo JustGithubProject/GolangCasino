@@ -2,7 +2,6 @@ package services
 
 
 import (
-    "fmt"
     "math/rand"
 )
 
@@ -39,25 +38,6 @@ func (game *GameRoulette) ChooseRandomNumberByWeight(numbers []int, weights []in
     return numbers[len(numbers)-1]
 }
 
-func (game *GameRoulette) ChooseRandomSectorByWeight(sectors []string, weights []int) string {
-    totalWeight := 0
-    for _, weight := range weights {
-        totalWeight += weight
-    }
-
-    r := rand.Intn(totalWeight)
-
-    cumulativeWeight := 0
-    for i, weight := range weights {
-        cumulativeWeight += weight
-        if r < cumulativeWeight {
-            return sectors[i]
-        }
-    }
-
-    // This should never happen if weights are correctly provided
-    return sectors[len(sectors)-1]
-}
 
 
 func (game *GameRoulette) GenerateRandomNumberByWeight(numbers []int, weights []int) int{
@@ -65,28 +45,26 @@ func (game *GameRoulette) GenerateRandomNumberByWeight(numbers []int, weights []
 }
 
 
-func (game *GameRoulette) GenerateRandomSectorByWeight(sectors []string, weights []int) string{
-    return game.ChooseRandomSectorByWeight(sectors, weights)
-}
-
 func (game *GameRoulette) UnfairSpinRoulette(sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
 	lengthOfBetsToSectors := len(sectorsToBets)
-	prize := float64(0)
-	if lengthOfBetsToSectors > 0{
-		dropped_sector := game.GenerateRandomSectorByWeight(game.Sectors, game.WeightsForSectors)
-		if _, ok := sectorsToBets[dropped_sector]; ok{
-			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
-			prize += intermediateValue
-		}
-	}
 	lengthOfBetsToNumbers := len(numbersToBets)
+	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
+	prize := float64(0)
+	
 	if lengthOfBetsToNumbers > 0{
-		dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
 		if _, ok := numbersToBets[dropped_number]; ok{
 			intermediateValue := numbersToBets[dropped_number] * float64(35)
 			prize += intermediateValue
 		}
 	}
+	if lengthOfBetsToSectors > 0{
+		dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
+		if _, ok := sectorsToBets[dropped_sector]; ok{
+			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
+			prize += intermediateValue
+		}
+	}
+
 	return prize, nil
 }
 
@@ -101,35 +79,40 @@ func (game *GameRoulette) ChooseRandomNumber(array []int) int {
     return array[randomIndex]
 }
 
-func (game *GameRoulette) ChooseRandomSector(sectors []string) string{
-	randomIndex := rand.Intn(len(sectors)) // [0, len(sectors))
-	return sectors[randomIndex]
-}
 
 func (game *GameRoulette) GenerateRandomNumberFromArray(numbers []int) int {
     return game.ChooseRandomNumber(numbers)
 }
 
-func (game *GameRoulette) GenerateRandomSectorFromArray(sectors []string) string{
-	return game.ChooseRandomSector(sectors)
+func (game *GameRoulette) GenerateRandomSectorFromArray(number int) string{
+	if number >= 1 && number <= 12{
+		return "1 st 12"
+	}
+	if number >= 13 && number <= 24{
+		return "2 nd 12"
+	}
+	if number >= 25 && number <= 36{
+		return "3 rd 12"
+	}
+	return "zero"
 }
 
 
 func (game *GameRoulette) NormalSpinRoulette(sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
 	lengthOfBetsToSectors := len(sectorsToBets)
+	lengthOfBetsToNumbers := len(numbersToBets)
 	prize := float64(0)
-	if lengthOfBetsToSectors > 0{
-		dropped_sector := game.GenerateRandomSectorFromArray(game.Sectors)
-		if _, ok := sectorsToBets[dropped_sector]; ok{
-			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
+	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
+	if lengthOfBetsToNumbers > 0{
+		if _, ok := numbersToBets[dropped_number]; ok{
+			intermediateValue := numbersToBets[dropped_number] * float64(35)
 			prize += intermediateValue
 		}
 	}
-	lengthOfBetsToNumbers := len(numbersToBets)
-	if lengthOfBetsToNumbers > 0{
-		dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
-		if _, ok := numbersToBets[dropped_number]; ok{
-			intermediateValue := numbersToBets[dropped_number] * float64(35)
+	if lengthOfBetsToSectors > 0{
+		dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
+		if _, ok := sectorsToBets[dropped_sector]; ok{
+			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
 			prize += intermediateValue
 		}
 	}
