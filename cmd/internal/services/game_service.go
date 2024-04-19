@@ -12,12 +12,33 @@ type GameRoulette struct{
 	Sectors []string
 
     WeightsForNumbers []int
-    WeightsForSectors []int
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-//              METHODS FOR UNFAIRSPINROULETTE   (LOOK DOWN)                                //
+//              UNFAIRSPINROULETTE   (LOOK DOWN)                                			//
 //////////////////////////////////////////////////////////////////////////////////////////////
+
+func (game *GameRoulette) CheckColor(number int) string{
+	redArray := [18]int{1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36}
+	blackArray := [18]int{2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35}
+	
+	// Is red?
+	for i := 0; i < len(redArray); i++{
+		if number == redArray[i]{
+			return "red"
+		}
+	}
+	// Is black?
+	for i := 0; i < len(blackArray); i++{
+		if number == blackArray[i]{
+			return "black"
+		}
+	}
+	// Else dropped 0 that means green
+	return "green"
+}
+
+
 func (game *GameRoulette) ChooseRandomNumberByWeight(numbers []int, weights []int) int {
     totalWeight := 0
     for _, weight := range weights {
@@ -50,7 +71,7 @@ func (game *GameRoulette) UnfairSpinRoulette(sectorsToBets map[string]float64, n
 	lengthOfBetsToNumbers := len(numbersToBets)
 	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
 	prize := float64(0)
-	
+
 	if lengthOfBetsToNumbers > 0{
 		if _, ok := numbersToBets[dropped_number]; ok{
 			intermediateValue := numbersToBets[dropped_number] * float64(35)
@@ -70,7 +91,7 @@ func (game *GameRoulette) UnfairSpinRoulette(sectorsToBets map[string]float64, n
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-//              METHODS FOR NORMALSPINROULETTE (LOOK DOWN)                                  //
+//              NORMALSPINROULETTE (LOOK DOWN)                                  			//
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 func (game *GameRoulette) ChooseRandomNumber(array []int) int {
