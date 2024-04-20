@@ -38,6 +38,13 @@ func (game *GameRoulette) CheckColor(number int) string{
 	return "green"
 }
 
+func (game *GameRoulette) IsEvenOrOdd(number int) string {
+	if number % 2 == 0{
+		return "even"
+	}
+	return "odd"
+}
+
 
 func (game *GameRoulette) ChooseRandomNumberByWeight(numbers []int, weights []int) int {
     totalWeight := 0
@@ -66,11 +73,13 @@ func (game *GameRoulette) GenerateRandomNumberByWeight(numbers []int, weights []
 }
 
 
-func (game *GameRoulette) UnfairSpinRoulette(redToBets map[string]float64, blackToBets map[string]float64, sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
+func (game *GameRoulette) UnfairSpinRoulette(evenToBets map[string]float64, oddToBets map[string]float64, redToBets map[string]float64, blackToBets map[string]float64, sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
 	lengthOfBetsToSectors := len(sectorsToBets)
 	lengthOfBetsToNumbers := len(numbersToBets)
 	lengthOfBetsToRed := len(redToBets)
 	lengthOfBetsToBlack := len(blackToBets)
+	lengthOfBetsToEven := len(evenToBets)
+	lengthOfBetsToOdd := len(oddToBets)
 
 
 	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
@@ -98,6 +107,17 @@ func (game *GameRoulette) UnfairSpinRoulette(redToBets map[string]float64, black
 			if _, ok := blackToBets[color]; ok{
 				prize += blackToBets[color] * float64(2)
 			}
+		}
+	}
+	parity := game.IsEvenOrOdd(dropped_number)
+	if lengthOfBetsToEven > 0{
+		if _, ok := evenToBets[parity]; ok{
+			prize += evenToBets[parity] * float64(2)
+		}
+	}
+	if lengthOfBetsToOdd > 0{
+		if _, ok := oddToBets[parity]; ok{
+			prize += oddToBets[parity] * float64(2)
 		}
 	}
 	return prize, nil
