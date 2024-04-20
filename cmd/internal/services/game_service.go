@@ -66,26 +66,40 @@ func (game *GameRoulette) GenerateRandomNumberByWeight(numbers []int, weights []
 }
 
 
-func (game *GameRoulette) UnfairSpinRoulette(sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
+func (game *GameRoulette) UnfairSpinRoulette(redToBets map[string]float64, blackToBets map[string]float64, sectorsToBets map[string]float64, numbersToBets map[int]float64) (float64, error){
 	lengthOfBetsToSectors := len(sectorsToBets)
 	lengthOfBetsToNumbers := len(numbersToBets)
+	lengthOfBetsToRed := len(redToBets)
+	lengthOfBetsToBlack := len(blackToBets)
+
+
 	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
 	prize := float64(0)
 
 	if lengthOfBetsToNumbers > 0{
 		if _, ok := numbersToBets[dropped_number]; ok{
-			intermediateValue := numbersToBets[dropped_number] * float64(35)
-			prize += intermediateValue
+			prize += numbersToBets[dropped_number] * float64(35)
 		}
 	}
 	if lengthOfBetsToSectors > 0{
 		dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
 		if _, ok := sectorsToBets[dropped_sector]; ok{
-			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
-			prize += intermediateValue
+			prize += sectorsToBets[dropped_sector] * float64(3)
 		}
 	}
-
+	color := game.CheckColor(dropped_number)
+	if color != "green"{
+		if lengthOfBetsToRed > 0{
+			if _, ok := redToBets[color]; ok{
+				prize += redToBets[color] * float64(2)
+			}
+		}
+		if lengthOfBetsToBlack > 0{
+			if _, ok := blackToBets[color]; ok{
+				prize += blackToBets[color] * float64(2)
+			}
+		}
+	}
 	return prize, nil
 }
 
@@ -131,29 +145,25 @@ func (game *GameRoulette) NormalSpinRoulette(redToBets map[string]float64, black
 	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
 	if lengthOfBetsToNumbers > 0{
 		if _, ok := numbersToBets[dropped_number]; ok{
-			intermediateValue := numbersToBets[dropped_number] * float64(35)
-			prize += intermediateValue
+			prize += numbersToBets[dropped_number] * float64(35)
 		}
 	}
 	if lengthOfBetsToSectors > 0{
 		dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
 		if _, ok := sectorsToBets[dropped_sector]; ok{
-			intermediateValue := sectorsToBets[dropped_sector] * float64(3)
-			prize += intermediateValue
+			prize += sectorsToBets[dropped_sector] * float64(3)
 		}
 	}
 	color := game.CheckColor(dropped_number)
 	if color != "green"{
 		if lengthOfBetsToRed > 0{
 			if _, ok := redToBets[color]; ok{
-				intermediateValue := redToBets[color] * float64(2)
-				prize += intermediateValue
+				prize += redToBets[color] * float64(2)
 			}
 		}
 		if lengthOfBetsToBlack > 0{
 			if _, ok := blackToBets[color]; ok{
-				intermediateValue := blackToBets[color] * float64(2)
-				prize += intermediateValue
+				prize += blackToBets[color] * float64(2)
 			}
 		}
 	}
