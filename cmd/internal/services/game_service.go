@@ -134,6 +134,46 @@ func (game *GameRoulette) Check19To36Bet(
 }
 
 
+func (game *GameRoulette) CheckFirst2to1Bet(
+
+) float64{
+	// Инициализация массива 1, 4, 7 ... первый подсектор 
+	var first2To1Array[12]int
+	j := 1
+	for i := 0; i < 12; i++{
+		first2To1Array[i] = j
+		j += 3
+	}
+	return 0.0
+	// ...
+}
+
+func (game *GameRoulette) CheckSecond2to1Bet() float64{
+	var second2To1Array[12]int
+	// Инициализация массива 2, 5, 8 ... второй подсектор
+	j := 2
+	for i := 0; i < 12; i++{
+		second2To1Array[i] = j
+		j += 3
+	}
+	return 0.0
+	// ...
+	
+}
+
+func (game *GameRoulette) CheckThird2to1Bet() float64{
+	var third2To1Array[12]int
+	// Инициализация массива 3, 6, 9 ... третий подсектор
+	j := 3
+	for i := 0; i < 12; i++{
+		third2To1Array[i] = j
+		j += 3
+	}
+	return 0.0
+	/// ...
+}
+
+
 func (game *GameRoulette) ChooseRandomNumberByWeight(numbers []int, weights []int) int {
     totalWeight := 0
     for _, weight := range weights {
@@ -232,6 +272,8 @@ func (game *GameRoulette) NormalSpinRoulette(
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
 	numbersToBets map[int]float64,
+	oneToEighteenBets map[string]float64,
+	nineteenToThirtySixBets map[string]float64,
 	) (float64, error){
 
 	lengthOfBetsToSectors := len(sectorsToBets)
@@ -240,6 +282,8 @@ func (game *GameRoulette) NormalSpinRoulette(
 	lengthOfBetsToBlack := len(blackToBets)
 	lengthOfBetsToEven := len(evenToBets)
 	lengthOfBetsToOdd := len(oddToBets)
+	lengthOfBetsOneToEighteen := len(oneToEighteenBets)
+	lengthOfBetsNineteenToThirtySix := len(nineteenToThirtySixBets)
 
 	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
 	dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
@@ -249,6 +293,8 @@ func (game *GameRoulette) NormalSpinRoulette(
 	prize += game.CheckSectorBet(lengthOfBetsToSectors, sectorsToBets, dropped_sector)
 	prize += game.CheckColorBet(lengthOfBetsToBlack, lengthOfBetsToRed, blackToBets, redToBets, dropped_number)
 	prize += game.CheckParityBet(lengthOfBetsToEven, lengthOfBetsToOdd, evenToBets, oddToBets, dropped_number)
+	prize += game.Check1To18Bet(lengthOfBetsOneToEighteen, oneToEighteenBets, dropped_number)
+	prize += game.Check19To36Bet(lengthOfBetsNineteenToThirtySix, nineteenToThirtySixBets, dropped_number)
 
 	return prize, nil
 }
