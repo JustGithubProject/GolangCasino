@@ -135,7 +135,9 @@ func (game *GameRoulette) Check19To36Bet(
 
 
 func (game *GameRoulette) CheckFirst2to1Bet(
-
+	lengthOfBetsFirst2to1 int,
+	first2to1Bets map[string]float64,
+	dropped_number int,
 ) float64{
 	// Инициализация массива 1, 4, 7 ... первый подсектор 
 	var first2To1Array[12]int
@@ -144,11 +146,23 @@ func (game *GameRoulette) CheckFirst2to1Bet(
 		first2To1Array[i] = j
 		j += 3
 	}
+	if lengthOfBetsFirst2to1 > 0{
+		for i := 0; i < 12; i++{
+			if dropped_number == first2To1Array[i]{
+				return first2to1Bets["2to1"] * float64(3)
+			}
+		}
+	}
+
 	return 0.0
-	// ...
+
 }
 
-func (game *GameRoulette) CheckSecond2to1Bet() float64{
+func (game *GameRoulette) CheckSecond2to1Bet(
+	lengthOfBetsSecond2to1 int,
+	second2to1Bets map[string]float64,
+	dropped_number int,
+) float64{
 	var second2To1Array[12]int
 	// Инициализация массива 2, 5, 8 ... второй подсектор
 	j := 2
@@ -156,12 +170,24 @@ func (game *GameRoulette) CheckSecond2to1Bet() float64{
 		second2To1Array[i] = j
 		j += 3
 	}
+
+	if lengthOfBetsSecond2to1 > 0{
+		for i := 0; i < 12; i++{
+			if dropped_number == second2To1Array[i]{
+				return second2to1Bets["2to1"] * float64(3)
+			}
+		}
+	}
 	return 0.0
-	// ...
+
 	
 }
 
-func (game *GameRoulette) CheckThird2to1Bet() float64{
+func (game *GameRoulette) CheckThird2to1Bet(
+	lengthOfBetsThird2to1 int,
+	third2to1Bets map[string]float64,
+	dropped_number int,
+) float64{
 	var third2To1Array[12]int
 	// Инициализация массива 3, 6, 9 ... третий подсектор
 	j := 3
@@ -169,8 +195,15 @@ func (game *GameRoulette) CheckThird2to1Bet() float64{
 		third2To1Array[i] = j
 		j += 3
 	}
+
+	if lengthOfBetsThird2to1 > 0{
+		for i := 0; i < 12; i++{
+			if dropped_number == third2To1Array[i]{
+				return third2to1Bets["2to1"] * float64(3)
+			}
+		}
+	}
 	return 0.0
-	/// ...
 }
 
 
@@ -210,6 +243,9 @@ func (game *GameRoulette) UnfairSpinRoulette(
 	numbersToBets map[int]float64,
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
+	first2To1Bets map[string]float64,
+	second2To1Bets map[string]float64,
+	third2To1Bets map[string]float64,
 	) (float64, error){
 
 	lengthOfBetsToSectors := len(sectorsToBets)
@@ -220,6 +256,9 @@ func (game *GameRoulette) UnfairSpinRoulette(
 	lengthOfBetsToOdd := len(oddToBets)
 	lengthOfBetsOneToEighteen := len(oneToEighteenBets)
 	lengthOfBetsNineteenToThirtySix := len(nineteenToThirtySixBets)
+	lengthOfBetsFirst2To1 := len(first2To1Bets)
+	lengthOfBetsSecond2To1 := len(second2To1Bets)
+	lengthofBetsThird2To1 := len(third2To1Bets)
 
 
 	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
@@ -232,6 +271,10 @@ func (game *GameRoulette) UnfairSpinRoulette(
 	prize += game.CheckParityBet(lengthOfBetsToEven, lengthOfBetsToOdd, evenToBets, oddToBets, dropped_number)
 	prize += game.Check1To18Bet(lengthOfBetsOneToEighteen, oneToEighteenBets, dropped_number)
 	prize += game.Check19To36Bet(lengthOfBetsNineteenToThirtySix, nineteenToThirtySixBets, dropped_number)
+	prize += game.CheckFirst2to1Bet(lengthOfBetsFirst2To1, first2To1Bets, dropped_number)
+	prize += game.CheckSecond2to1Bet(lengthOfBetsSecond2To1, second2To1Bets, dropped_number)
+	prize += game.CheckThird2to1Bet(lengthofBetsThird2To1, third2To1Bets, dropped_number)
+
 	return prize, nil
 }
 
