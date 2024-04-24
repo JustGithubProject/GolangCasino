@@ -7,7 +7,6 @@ import (
 
 
 type GameRoulette struct{
-	GameName string
 	Numbers []int
 	Sectors []string
 
