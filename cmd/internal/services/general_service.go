@@ -1,6 +1,7 @@
 package services
 
 import (
+    "fmt"
 	"database/sql"
 	"errors"
 	"html/template"
@@ -70,26 +71,89 @@ func ValidateToken(c *gin.Context) (uint, error) {
     return userID, nil
 }
 
+func convertStringToFloat64(rouletteElement string) (float64, error){
+    convertedString, err := strconv.ParseFloat(rouletteElement, 64)
+    if err != nil{
+        fmt.Println("Failure to convert string to float64", err)
+        return 0.0, err
+    }
+    return convertedString, nil
+
+}
 
 
 // Функция для получения параметров игры из запроса
-func GetGameParams(c *gin.Context) (string, int, float64, string, error) {
-    guessSector := c.PostForm("guess_sector")
-    guessNumber := c.PostForm("guess_number")
-    bet := c.PostForm("bet")
-    gameName := c.PostForm("gameName")
+func GetGameParams(c *gin.Context) (
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    float64,
+    error) {
+    guessEvenBet := c.PostForm("even")
+    guessOddBet := c.PostForm("odd")
+    guessRedBet := c.PostForm("red")
+    guessBlackBet := c.PostForm("black")
+    guessSectorBet := c.PostForm("sector")
+    guessNumberBet := c.PostForm("number")
+    guessOneToEighteenBet := c.PostForm("1To18")
+    guessNineteenToThirtySixBet := c.PostForm("19To36")
+    guessFirst2To1Bet := c.PostForm("First2To1")
+    guessSecond2To1Bet := c.PostForm("Second2To1")
+    guessThird2To1Bet := c.PostForm("Third2To1")
 
-    guessNumberInt, err := strconv.Atoi(guessNumber)
+    guessEvenBet, err := convertStringToFloat64(guessEvenBetStr)
     if err != nil {
-        return "", 0, 0, "", errors.New("Invalid guess number")
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessOddBet, err := convertStringToFloat64(guessOddBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessRedBet, err := convertStringToFloat64(guessRedBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessBlackBet, err := convertStringToFloat64(guessBlackBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessSectorBet, err := convertStringToFloat64(guessSectorBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessNumberBet, err := convertStringToFloat64(guessNumberBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessOneToEighteenBet, err := convertStringToFloat64(guessOneToEighteenBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessNineteenToThirtySixBet, err := convertStringToFloat64(guessNineteenToThirtySixBetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessFirst2To1Bet, err := convertStringToFloat64(guessFirst2To1BetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessSecond2To1Bet, err := convertStringToFloat64(guessSecond2To1BetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
+    }
+    guessThird2To1Bet, err := convertStringToFloat64(guessThird2To1BetStr)
+    if err != nil {
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, err
     }
 
-    betFloat, err := strconv.ParseFloat(bet, 64)
-    if err != nil {
-        return "", 0, 0, "", errors.New("Invalid bet")
-    }
-
-    return guessSector, guessNumberInt, betFloat, gameName, nil
+    return guessEvenBet, guessOddBet, guessRedBet, guessBlackBet, guessSectorBet, guessNumberBet, guessOneToEighteenBet, guessNineteenToThirtySixBet, guessFirst2To1Bet, guessSecond2To1Bet, guessThird2To1Bet
 }
 
 func InitializeUserRepository() (repositories.UserRepository, error){
