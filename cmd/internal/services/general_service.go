@@ -86,7 +86,9 @@ type GameParams struct {
     GuessOddBet              float64
     GuessRedBet              float64
     GuessBlackBet            float64
-    GuessSectorBet           float64
+    GuessSector1st12Bet      float64
+    GuessSector2nd12Bet      float64
+    GuessSector3rd12Bet      float64
     GuessNumberBet           float64
     GuessOneToEighteenBet    float64
     GuessNineteenToThirtySix float64
@@ -99,11 +101,29 @@ type GameParams struct {
 
 // Функция для получения параметров игры из запроса
 func GetGameParams(c *gin.Context) GameParams {
+    var (
+        guessEvenBet             float64
+        guessOddBet              float64
+        guessRedBet              float64
+        guessBlackBet            float64
+        guessSector1st12Bet      float64
+        guessSector2nd12Bet      float64
+        guessSector3rd12Bet      float64
+        guessNumberBet           float64
+        guessOneToEighteenBet    float64
+        guessNineteenToThirtySix float64
+        guessFirst2To1Bet        float64
+        guessSecond2To1Bet       float64
+        guessThird2To1Bet        float64
+        err                      error
+    )
     guessEvenBetStr := c.PostForm("even")
     guessOddBetStr := c.PostForm("odd")
     guessRedBetStr := c.PostForm("red")
     guessBlackBetStr := c.PostForm("black")
-    guessSectorBetStr := c.PostForm("sector")
+    guessSector1st12BetStr := c.PostForm("1 st 12")
+    guessSector2nd12BetStr := c.PostForm("2 nd 12")
+    guessSector3rd12BetStr := c.PostForm("3 rd 12")
     guessNumberBetStr := c.PostForm("number")
     guessOneToEighteenBetStr := c.PostForm("1To18")
     guessNineteenToThirtySixBetStr := c.PostForm("19To36")
@@ -111,57 +131,105 @@ func GetGameParams(c *gin.Context) GameParams {
     guessSecond2To1BetStr := c.PostForm("Second2To1")
     guessThird2To1BetStr := c.PostForm("Third2To1")
 
-    guessEvenBet, err := convertStringToFloat64(guessEvenBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+    if guessEvenBetStr != ""{
+        guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessOddBet, err := convertStringToFloat64(guessOddBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+    if guessOddBetStr != ""{
+        guessOddBet, err = convertStringToFloat64(guessOddBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessRedBet, err := convertStringToFloat64(guessRedBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessRedBetStr != ""{
+        guessRedBet, err = convertStringToFloat64(guessRedBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessBlackBet, err := convertStringToFloat64(guessBlackBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessBlackBetStr != ""{
+        guessBlackBet, err = convertStringToFloat64(guessBlackBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessSectorBet, err := convertStringToFloat64(guessSectorBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessSector1st12BetStr != ""{
+        guessSector1st12Bet, err = convertStringToFloat64(guessSector1st12BetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessNumberBet, err := convertStringToFloat64(guessNumberBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessSector2nd12BetStr != ""{
+        guessSector2nd12Bet, err = convertStringToFloat64(guessSector2nd12BetStr)
+        if err != nil{
+            return GameParams{Err: err}
+        }
     }
-    guessOneToEighteenBet, err := convertStringToFloat64(guessOneToEighteenBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessSector3rd12BetStr != ""{
+        guessSector3rd12Bet, err = convertStringToFloat64(guessSector3rd12BetStr)
+        if err != nil{
+            return GameParams{Err: err}
+        }
     }
-    guessNineteenToThirtySixBet, err := convertStringToFloat64(guessNineteenToThirtySixBetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessNumberBetStr != "" {
+        guessNumberBet, err = convertStringToFloat64(guessNumberBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessFirst2To1Bet, err := convertStringToFloat64(guessFirst2To1BetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessOneToEighteenBetStr != ""{
+        guessOneToEighteenBet, err = convertStringToFloat64(guessOneToEighteenBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessSecond2To1Bet, err := convertStringToFloat64(guessSecond2To1BetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessNineteenToThirtySixBetStr != ""{
+        guessNineteenToThirtySixBet, err = convertStringToFloat64(guessNineteenToThirtySixBetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
-    guessThird2To1Bet, err := convertStringToFloat64(guessThird2To1BetStr)
-    if err != nil {
-        return GameParams{Err: err}
+
+    if guessFirst2To1BetStr != ""{
+        guessFirst2To1Bet, err = convertStringToFloat64(guessFirst2To1BetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
     }
+
+    if guessSecond2To1BetStr != ""{
+        guessSecond2To1Bet, err = convertStringToFloat64(guessSecond2To1BetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
+    }
+
+    if guessThird2To1BetStr != ""{
+        guessThird2To1Bet, err := convertStringToFloat64(guessThird2To1BetStr)
+        if err != nil {
+            return GameParams{Err: err}
+        }
+    }
+
 
     return GameParams{
         GuessEvenBet:             guessEvenBet,
         GuessOddBet:              guessOddBet,
         GuessRedBet:              guessRedBet,
         GuessBlackBet:            guessBlackBet,
-        GuessSectorBet:           guessSectorBet,
+        GuessSector1st12Bet:      guessSector1st12Bet,
+        GuessSector2nd12Bet:      guessSector2nd12Bet,
+        GuessSector3rd12Bet:      guessSector3rd12Bet,
         GuessNumberBet:           guessNumberBet,
         GuessOneToEighteenBet:    guessOneToEighteenBet,
         GuessNineteenToThirtySix: guessNineteenToThirtySixBet,
