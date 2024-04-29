@@ -71,15 +71,6 @@ func ValidateToken(c *gin.Context) (uint, error) {
     return userID, nil
 }
 
-func convertStringToFloat64(rouletteElement string) (float64, error){
-    convertedString, err := strconv.ParseFloat(rouletteElement, 64)
-    if err != nil{
-        fmt.Println("Failure to convert string to float64", err)
-        return 0.0, err
-    }
-    return convertedString, nil
-
-}
 
 type GameParams struct {
     GuessEvenBet             float64
@@ -111,7 +102,7 @@ func GetGameParams(c *gin.Context) GameParams {
         guessSector3rd12Bet      float64
         guessNumberBet           float64
         guessOneToEighteenBet    float64
-        guessNineteenToThirtySix float64
+        guessNineteenToThirtySixBet float64
         guessFirst2To1Bet        float64
         guessSecond2To1Bet       float64
         guessThird2To1Bet        float64
@@ -131,97 +122,69 @@ func GetGameParams(c *gin.Context) GameParams {
     guessSecond2To1BetStr := c.PostForm("Second2To1")
     guessThird2To1BetStr := c.PostForm("Third2To1")
 
-    if guessEvenBetStr != ""{
-        guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
-        if err != nil {
-            return GameParams{Err: err}
+    // Функция для преобразования строки в float64
+    convertStringToFloat64 := func(str string) (float64, error) {
+        if str == "" {
+            return 0, nil // Возвращаем 0, если строка пустая
         }
-    }
-    if guessOddBetStr != ""{
-        guessOddBet, err = convertStringToFloat64(guessOddBetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
+        return strconv.ParseFloat(str, 64)
     }
 
-    if guessRedBetStr != ""{
-        guessRedBet, err = convertStringToFloat64(guessRedBetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
+    // Преобразование и обработка значений
+    guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessOddBet, err = convertStringToFloat64(guessOddBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessRedBet, err = convertStringToFloat64(guessRedBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessBlackBet, err = convertStringToFloat64(guessBlackBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessSector1st12Bet, err = convertStringToFloat64(guessSector1st12BetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessSector2nd12Bet, err = convertStringToFloat64(guessSector2nd12BetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessSector3rd12Bet, err = convertStringToFloat64(guessSector3rd12BetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessNumberBet, err = convertStringToFloat64(guessNumberBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessOneToEighteenBet, err = convertStringToFloat64(guessOneToEighteenBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessNineteenToThirtySixBet, err = convertStringToFloat64(guessNineteenToThirtySixBetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessFirst2To1Bet, err = convertStringToFloat64(guessFirst2To1BetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessSecond2To1Bet, err = convertStringToFloat64(guessSecond2To1BetStr)
+    if err != nil {
+        return GameParams{Err: err}
+    }
+    guessThird2To1Bet, err = convertStringToFloat64(guessThird2To1BetStr)
+    if err != nil {
+        return GameParams{Err: err}
     }
 
-    if guessBlackBetStr != ""{
-        guessBlackBet, err = convertStringToFloat64(guessBlackBetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessSector1st12BetStr != ""{
-        guessSector1st12Bet, err = convertStringToFloat64(guessSector1st12BetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessSector2nd12BetStr != ""{
-        guessSector2nd12Bet, err = convertStringToFloat64(guessSector2nd12BetStr)
-        if err != nil{
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessSector3rd12BetStr != ""{
-        guessSector3rd12Bet, err = convertStringToFloat64(guessSector3rd12BetStr)
-        if err != nil{
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessNumberBetStr != "" {
-        guessNumberBet, err = convertStringToFloat64(guessNumberBetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessOneToEighteenBetStr != ""{
-        guessOneToEighteenBet, err = convertStringToFloat64(guessOneToEighteenBetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessNineteenToThirtySixBetStr != ""{
-        guessNineteenToThirtySixBet, err = convertStringToFloat64(guessNineteenToThirtySixBetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessFirst2To1BetStr != ""{
-        guessFirst2To1Bet, err = convertStringToFloat64(guessFirst2To1BetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessSecond2To1BetStr != ""{
-        guessSecond2To1Bet, err = convertStringToFloat64(guessSecond2To1BetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-    if guessThird2To1BetStr != ""{
-        guessThird2To1Bet, err := convertStringToFloat64(guessThird2To1BetStr)
-        if err != nil {
-            return GameParams{Err: err}
-        }
-    }
-
-
+    // Возвращаем структуру GameParams с заполненными значениями
     return GameParams{
         GuessEvenBet:             guessEvenBet,
         GuessOddBet:              guessOddBet,
@@ -291,10 +254,15 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     redToBets["red"] = gameParams.GuessRedBet
     blackToBets["black"] = gameParams.GuessBlackBet
     
-    // Здесь не так (ПЕРЕДЕЛАТЬ)
-    sectorsToBets["1 st 12"] = gameParams.GuessSectorBet
-    sectorsToBets["2 nd 12"] = gameParams.GuessSectorBet
-    sectorsToBets["3 rd 12"] = gameParams.GuessSectorBet
+    if gameParams.GuessSector1st12Bet > 0{
+        sectorsToBets["1 st 12"] = gameParams.GuessSector1st12Bet
+    }
+    if gameParams.GuessSector2nd12Bet > 0{
+        sectorsToBets["2 nd 12"] = gameParams.GuessSector2nd12Bet
+    }
+    if gameParams.GuessSector3rd12Bet > 0{
+        sectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
+    }
 
     
     if err != nil {
