@@ -81,6 +81,7 @@ type GameParams struct {
     GuessSector2nd12Bet      float64
     GuessSector3rd12Bet      float64
     GuessNumberBet           float64
+    GuessNumber              int
     GuessOneToEighteenBet    float64
     GuessNineteenToThirtySix float64
     GuessFirst2To1Bet        float64
@@ -116,6 +117,7 @@ func GetGameParams(c *gin.Context) GameParams {
     guessSector2nd12BetStr := c.PostForm("2 nd 12")
     guessSector3rd12BetStr := c.PostForm("3 rd 12")
     guessNumberBetStr := c.PostForm("number")
+    guessNumberStr := c.PostForm("num")
     guessOneToEighteenBetStr := c.PostForm("1To18")
     guessNineteenToThirtySixBetStr := c.PostForm("19To36")
     guessFirst2To1BetStr := c.PostForm("First2To1")
@@ -131,6 +133,9 @@ func GetGameParams(c *gin.Context) GameParams {
     }
 
     // Преобразование и обработка значений
+
+    guessNumberInt, err := strconv.Atoi(guessNumberStr)
+
     guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
     if err != nil {
         return GameParams{Err: err}
@@ -194,6 +199,7 @@ func GetGameParams(c *gin.Context) GameParams {
         GuessSector2nd12Bet:      guessSector2nd12Bet,
         GuessSector3rd12Bet:      guessSector3rd12Bet,
         GuessNumberBet:           guessNumberBet,
+        GuessNumber:              guessNumberInt,  
         GuessOneToEighteenBet:    guessOneToEighteenBet,
         GuessNineteenToThirtySix: guessNineteenToThirtySixBet,
         GuessFirst2To1Bet:        guessFirst2To1Bet,
@@ -248,12 +254,20 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     redToBets := make(map[string]float64)
     blackToBets := make(map[string]float64)
     sectorsToBets := make(map[string]float64)
+    numberToBets := make(map[int]float64)
+    oneToEighteenBets := make(map[string]float64)
+    nineteenToThirtySixBets := make(map[string]float64)
+    first2To1Bets := make(map[string]float64)
+    second2To1Bets := make(map[string]float64)
+    third2To1Bets := make(map[string]float64)
+
 
     evenToBets["even"] = gameParams.GuessEvenBet
     oddToBets["odd"] = gameParams.GuessOddBet
     redToBets["red"] = gameParams.GuessRedBet
     blackToBets["black"] = gameParams.GuessBlackBet
     
+    // Sectors (1 st 12, 2 nd 12, 3 rd 12. КОСТЫЛЬ)
     if gameParams.GuessSector1st12Bet > 0{
         sectorsToBets["1 st 12"] = gameParams.GuessSector1st12Bet
     }
@@ -264,6 +278,12 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
         sectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
     }
 
+    numberToBets[gameParams.GuessNumber] = gameParams.GuessNumberBet 
+    oneToEighteenBets["1to18"] = gameParams.GuessOneToEighteenBet
+    nineteenToThirtySixBets["19to36"] = gameParams.GuessNineteenToThirtySix
+    first2To1Bets["2to1"] = gameParams.GuessFirst2To1Bet
+    second2To1Bets["2to1"] = gameParams.GuessSecond2To1Bet
+    third2To1Bets["2to1"] = gameParams.GuessThird2To1Bet
     
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game parameters"})
@@ -271,9 +291,33 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     }
 
     if fairPlay {
-        user_player.NormalPlay(evenToBets, guessNumberInt, betFloat, gameName)
+        user_player.NormalPlay(
+            evenToBets,
+            oddToBets,
+            redToBets,
+            blackToBets,
+            sectorsToBets,
+            numberToBets,
+            oneToEighteenBets,
+            nineteenToThirtySixBets,
+            first2To1Bets,
+            second2To1Bets,
+            third2To1Bets,
+        )
     } else {
-        user_player.UnFairPlay(evenToBets, guessNumberInt, betFloat, gameName)
+        user_player.UnFairPlay(
+            evenToBets,
+            oddToBets,
+            redToBets,
+            blackToBets,
+            sectorsToBets,
+            numberToBets,
+            oneToEighteenBets,
+            nineteenToThirtySixBets,
+            first2To1Bets,
+            second2To1Bets,
+            third2To1Bets,
+        )
     }
 }
 
