@@ -113,10 +113,12 @@ const styles = {
 function getColorForNumber(number) {
     if (number === 0) {
         return 'green';
-    } else if (number % 2 === 0) {
-        return 'black';
-    } else {
+    } else if (
+        [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number)
+    ) {
         return 'red';
+    } else {
+        return 'black';
     }
 }
 
