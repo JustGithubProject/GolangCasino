@@ -41,7 +41,6 @@ func main(){
 	})
 
 	// Routes
-	r.GET("/", handlers.HomeHandler)
 	r.POST("/create/user/", handlers.CreateUserHandler)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)
 	r.PUT("/update/user", handlers.UpdateUserHandler)

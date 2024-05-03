@@ -3,7 +3,6 @@ package services
 import (
 	"database/sql"
 
-	"html/template"
 	"net/http"
 	"strconv"
 
@@ -41,41 +40,7 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     gameParams := GetGameParams(c)
 
     // Делаем ключи и прокидываем ставку для того чтобы передать в NormalPlay и UnFairPlay
-    evenToBets := make(map[string]float64)
-    oddToBets := make(map[string]float64)
-    redToBets := make(map[string]float64)
-    blackToBets := make(map[string]float64)
-    sectorsToBets := make(map[string]float64)
-    numberToBets := make(map[int]float64)
-    oneToEighteenBets := make(map[string]float64)
-    nineteenToThirtySixBets := make(map[string]float64)
-    first2To1Bets := make(map[string]float64)
-    second2To1Bets := make(map[string]float64)
-    third2To1Bets := make(map[string]float64)
-
-
-    evenToBets["even"] = gameParams.GuessEvenBet
-    oddToBets["odd"] = gameParams.GuessOddBet
-    redToBets["red"] = gameParams.GuessRedBet
-    blackToBets["black"] = gameParams.GuessBlackBet
-    
-    // Sectors (1 st 12, 2 nd 12, 3 rd 12. КОСТЫЛЬ)
-    if gameParams.GuessSector1st12Bet > 0{
-        sectorsToBets["1 st 12"] = gameParams.GuessSector1st12Bet
-    }
-    if gameParams.GuessSector2nd12Bet > 0{
-        sectorsToBets["2 nd 12"] = gameParams.GuessSector2nd12Bet
-    }
-    if gameParams.GuessSector3rd12Bet > 0{
-        sectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
-    }
-
-    numberToBets[gameParams.GuessNumber] = gameParams.GuessNumberBet 
-    oneToEighteenBets["1to18"] = gameParams.GuessOneToEighteenBet
-    nineteenToThirtySixBets["19to36"] = gameParams.GuessNineteenToThirtySix
-    first2To1Bets["2to1"] = gameParams.GuessFirst2To1Bet
-    second2To1Bets["2to1"] = gameParams.GuessSecond2To1Bet
-    third2To1Bets["2to1"] = gameParams.GuessThird2To1Bet
+    betMaps := InitBetsMap(gameParams)
     
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game parameters"})
@@ -84,31 +49,31 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
 
     if fairPlay {
         user_player.NormalPlay(
-            evenToBets,
-            oddToBets,
-            redToBets,
-            blackToBets,
-            sectorsToBets,
-            numberToBets,
-            oneToEighteenBets,
-            nineteenToThirtySixBets,
-            first2To1Bets,
-            second2To1Bets,
-            third2To1Bets,
+            betMaps.EvenToBets,
+            betMaps.OddToBets,
+            betMaps.RedToBets,
+            betMaps.BlackToBets,
+            betMaps.SectorsToBets,
+            betMaps.NumberToBets,
+            betMaps.OneToEighteenBets,
+            betMaps.NineteenToThirtySixBets,
+            betMaps.First2To1Bets,
+            betMaps.Second2To1Bets,
+            betMaps.Third2To1Bets,
         )
     } else {
         user_player.UnFairPlay(
-            evenToBets,
-            oddToBets,
-            redToBets,
-            blackToBets,
-            sectorsToBets,
-            numberToBets,
-            oneToEighteenBets,
-            nineteenToThirtySixBets,
-            first2To1Bets,
-            second2To1Bets,
-            third2To1Bets,
+            betMaps.EvenToBets,
+            betMaps.OddToBets,
+            betMaps.RedToBets,
+            betMaps.BlackToBets,
+            betMaps.SectorsToBets,
+            betMaps.NumberToBets,
+            betMaps.OneToEighteenBets,
+            betMaps.NineteenToThirtySixBets,
+            betMaps.First2To1Bets,
+            betMaps.Second2To1Bets,
+            betMaps.Third2To1Bets,
         )
     }
 }
@@ -310,18 +275,3 @@ func HandleUserLogin(c *gin.Context){
 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 }
 
-func HandleTemplate(c *gin.Context){
-    // Loading the contents of the HTML file
-    tmpl, err := template.ParseFiles("D:/Users/Kropi/Desktop/All directory/go/casino/cmd/templates/index.html")
-    if err != nil {
-        c.String(http.StatusInternalServerError, err.Error())
-        return
-    }
-    
-    // Send HTML page in response
-    err = tmpl.Execute(c.Writer, nil)
-    if err != nil {
-        c.String(http.StatusInternalServerError, err.Error())
-        return
-    }
-}
