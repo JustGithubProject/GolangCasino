@@ -226,6 +226,12 @@ func HandleUserRegister(c *gin.Context){
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+    hashedPassword, err := HashPassword(input.Password)
+    if err != nil{
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    input.Password = hashedPassword
 
     if err := CreateUser(input); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
