@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+	"fmt"
 
 	"net/http"
 	"strconv"
@@ -226,11 +227,7 @@ func HandleUserRegister(c *gin.Context){
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    hashedPassword, err := HashPassword(input.Password)
-    if err != nil{
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-        return
-    }
+    hashedPassword := HashPassword(input.Password)
     input.Password = hashedPassword
 
     if err := CreateUser(input); err != nil {
@@ -244,7 +241,7 @@ func HandleUserRegister(c *gin.Context){
 func HandleUserLogin(c *gin.Context){
     var userInput UserInput
 	if err := c.BindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "(Bind)Invalid JSON"})
 		return
 	}
 
@@ -253,7 +250,7 @@ func HandleUserLogin(c *gin.Context){
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
         return
     }
-	user, err := userRepository.GetUserByEmail(userInput.Email)
+	user, err := userRepository.GetUserByUsername(userInput.Name)
 
 	if err != nil {
         // Проверяем, что ошибка не связана с отсутствием пользователя
@@ -262,12 +259,15 @@ func HandleUserLogin(c *gin.Context){
             c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
             return
         }
+        fmt.Println("second invalid json")
         // Если возникла другая ошибка, возвращаем ошибку 400
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid3131 JSON"})
         return
     }
+    fmt.Println("Password: " + userInput.Password)
+    fmt.Println("Hashed password: " + user.Password)
 	if CheckPasswordHash(userInput.Password, user.Password){
-		tokenString, err := CreateToken(userInput.Name)
+		tokenString, err := CreateToken(user.Name)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 			return

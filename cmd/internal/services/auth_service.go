@@ -1,14 +1,16 @@
 package services
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"time"
+    "encoding/hex"
 
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
 	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
+
 )
 
 
@@ -47,16 +49,17 @@ func VerifyToken(tokenString string) error {
  }
 
 
- func HashPassword(password string) (string, error) {
-    bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-    return string(bytes), err
+ func HashPassword(password string) string {
+    hasher := sha256.New()
+    hasher.Write([]byte(password))
+    hash := hasher.Sum(nil)
+    return hex.EncodeToString(hash)
 }
 
 func CheckPasswordHash(password, hash string) bool {
-    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-    return err == nil
+    inputHash := HashPassword(password)
+    return inputHash == hash
 }
-
 type RegisterInput struct{
 	Name string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -66,7 +69,6 @@ type RegisterInput struct{
 
 type UserInput struct {
 	Name string `json:"username" binding:"required"`
-	Email string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
@@ -77,10 +79,7 @@ func CreateUser(input RegisterInput) error {
 
     userRepository := repositories.UserRepository{Db: db}
 
-    hashedPassword, err := HashPassword(input.Password)
-    if err != nil {
-        return err
-    }
+    hashedPassword := HashPassword(input.Password)
 
     u := models.User{
         Name:     input.Name,

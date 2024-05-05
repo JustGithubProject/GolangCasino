@@ -27,9 +27,9 @@ func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
 
 
 // Method to get user by id
-func (ur *UserRepository) GetUserByEmail(email string) (*models.User, error){
+func (ur *UserRepository) GetUserByUsername(username string) (*models.User, error){
 	var user models.User
-	err := ur.Db.First(&user, email).Error
+	err := ur.Db.First(&user, "Name = ?", username).Error
 	if err != nil{
 		return nil, err
 	}
