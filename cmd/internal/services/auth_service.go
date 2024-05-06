@@ -57,7 +57,12 @@ func VerifyToken(tokenString string) error {
 }
 
 func CheckPasswordHash(password, hash string) bool {
+    fmt.Println(password)
     inputHash := HashPassword(password)
+    inputHash2 := HashPassword(password)
+    fmt.Println(inputHash == inputHash2)
+    fmt.Println(hash)
+    fmt.Println(inputHash)
     return inputHash == hash
 }
 type RegisterInput struct{
@@ -79,11 +84,9 @@ func CreateUser(input RegisterInput) error {
 
     userRepository := repositories.UserRepository{Db: db}
 
-    hashedPassword := HashPassword(input.Password)
-
     u := models.User{
         Name:     input.Name,
-        Password: hashedPassword,
+        Password: input.Password,
         Email:    input.Email,
         Balance:  input.Balance,
     }

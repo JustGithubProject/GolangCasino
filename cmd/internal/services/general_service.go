@@ -3,6 +3,7 @@ package services
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	"net/http"
 	"strconv"
@@ -227,9 +228,15 @@ func HandleUserRegister(c *gin.Context){
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+    // Удаляем начальные и конечные пробелы из пароля
+    fmt.Println(input.Password)
+    input.Password = strings.TrimSpace(input.Password)
+    fmt.Println(input.Password)
     hashedPassword := HashPassword(input.Password)
+    fmt.Println(hashedPassword)
+    fmt.Println(HashPassword("12345678"))
     input.Password = hashedPassword
-
+    fmt.Println(input.Password)
     if err := CreateUser(input); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
         return
@@ -251,7 +258,8 @@ func HandleUserLogin(c *gin.Context){
         return
     }
 	user, err := userRepository.GetUserByUsername(userInput.Name)
-
+    fmt.Println(user.Name)
+    fmt.Println(user.Balance)
 	if err != nil {
         // Проверяем, что ошибка не связана с отсутствием пользователя
         if err == sql.ErrNoRows {
@@ -264,9 +272,15 @@ func HandleUserLogin(c *gin.Context){
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid3131 JSON"})
         return
     }
-    fmt.Println("Password: " + userInput.Password)
+    fmt.Println("Password: ", len(userInput.Password))
     fmt.Println("Hashed password: " + user.Password)
+    hashed_password := HashPassword(userInput.Password)
+    fmt.Println(hashed_password)
+    fmt.Println(HashPassword("12345678"))
+
+    // Условие не проходит
 	if CheckPasswordHash(userInput.Password, user.Password){
+        fmt.Println("Here")
 		tokenString, err := CreateToken(user.Name)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
