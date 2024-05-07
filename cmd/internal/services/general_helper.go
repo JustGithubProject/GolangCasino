@@ -58,6 +58,7 @@ func ValidateToken(c *gin.Context) (uint, error) {
         return []byte("your_secret_key"), nil
     })
     fmt.Println("Dropped 60")
+    // Тут дропается код
     if err != nil || !token.Valid {
         return 0, errors.New("Invalid token")
     }
@@ -66,10 +67,12 @@ func ValidateToken(c *gin.Context) (uint, error) {
     if !ok {
         return 0, errors.New("Invalid token claims")
     }
+    fmt.Println("Dropped 69")
     userIDFloat, ok := claims["user_id"].(float64)
     if !ok {
         return 0, errors.New("Invalid user ID in token")
     }
+    fmt.Println("Dropped 74")
     userID := uint(userIDFloat)
 
     return userID, nil
