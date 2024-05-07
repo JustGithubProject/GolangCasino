@@ -56,6 +56,10 @@ func main(){
 	r.POST("/register/user/", handlers.RegisterHandler)
 	r.POST("/login/user/",  handlers.LoginHandler)
 
+	// common handlers(authenticated user)
+	r.POST("/spin-roulette-v1/", handlers.SpinRouletteHandler)
+	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler)
+
 	// Start the web server
 	r.Run(":8081")
 }

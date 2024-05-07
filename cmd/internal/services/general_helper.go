@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -45,15 +46,22 @@ func ValidateToken(c *gin.Context) (uint, error) {
     if authHeader == "" {
         return 0, errors.New("Authorization header is missing")
     }
-
-    tokenString := strings.Split(authHeader, " ")[1]
+    
+    tokenParts := strings.Split(authHeader, " ")
+    if len(tokenParts) < 2 {
+        return 0, errors.New("Invalid Authorization header format")
+    }
+    
+    tokenString := tokenParts[1]
+    fmt.Println("Dropped 55")
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         return []byte("your_secret_key"), nil
     })
+    fmt.Println("Dropped 60")
     if err != nil || !token.Valid {
         return 0, errors.New("Invalid token")
     }
-
+    fmt.Println("Dropped 64")
     claims, ok := token.Claims.(jwt.MapClaims)
     if !ok {
         return 0, errors.New("Invalid token claims")
