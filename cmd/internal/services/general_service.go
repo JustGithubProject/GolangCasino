@@ -245,53 +245,54 @@ func HandleUserRegister(c *gin.Context){
     c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
 }
 
-func HandleUserLogin(c *gin.Context){
+func HandleUserLogin(c *gin.Context) {
     var userInput UserInput
-	if err := c.BindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "(Bind)Invalid JSON"})
-		return
-	}
+    if err := c.BindJSON(&userInput); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "(Bind)Invalid JSON"})
+        return
+    }
 
     userRepository, err := InitializeUserRepository()
-    if err != nil{
+    if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
         return
     }
-	user, err := userRepository.GetUserByUsername(userInput.Name)
-    fmt.Println(user.Name)
-    fmt.Println(user.Balance)
-	if err != nil {
-        // Проверяем, что ошибка не связана с отсутствием пользователя
+
+    user, err := userRepository.GetUserByUsername(userInput.Name)
+    if err != nil {
         if err == sql.ErrNoRows {
-            // Если пользователь не найден, возвращаем ошибку 404
             c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
             return
         }
-        fmt.Println("second invalid json")
-        // Если возникла другая ошибка, возвращаем ошибку 400
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid3131 JSON"})
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
         return
     }
-    fmt.Println("Password: ", len(userInput.Password))
-    fmt.Println("Hashed password: " + user.Password)
-    hashed_password := HashPassword(userInput.Password)
-    fmt.Println(hashed_password)
-    fmt.Println(HashPassword("12345678"))
 
-    // Условие не проходит
-	if CheckPasswordHash(userInput.Password, user.Password){
-        fmt.Println("Here")
-		tokenString, err := CreateToken(user.Name)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-			return
-		}
-		// Устанавливаем заголовок Authorization
-		c.Header("Authorization", "Bearer " + tokenString)
-		c.JSON(http.StatusOK, gin.H{"token": tokenString})
-		return
-	}
+    if CheckPasswordHash(userInput.Password, user.Password) {
+        // Check if user has a valid token
+        existingToken := c.Request.Header.Get("Authorization")
+        if existingToken != "" {
+            token, err := ParseToken(existingToken)
+            if err == nil && token.Valid {
+                // If the existing token is valid, return it
+                c.JSON(http.StatusOK, gin.H{"token": existingToken})
+                return
+            }
+        }
 
-	c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+        // Generate a new token
+        tokenString, err := CreateToken(user.Name)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+            return
+        }
+
+        // Set the Authorization header with the new token
+        c.Header("Authorization", "Bearer "+tokenString)
+        c.JSON(http.StatusOK, gin.H{"token": tokenString})
+        return
+    }
+
+    c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 }
 

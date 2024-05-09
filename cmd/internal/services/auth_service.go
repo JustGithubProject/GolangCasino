@@ -16,6 +16,16 @@ import (
 
 var secretKey = []byte("secret-key")
 
+func ParseToken(tokenString string) (*jwt.Token, error) {
+    token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+        return secretKey, nil
+    })
+    if err != nil {
+        return nil, err
+    }
+    return token, nil
+}
+
 func CreateToken(username string) (string, error) {
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, 
         jwt.MapClaims{ 

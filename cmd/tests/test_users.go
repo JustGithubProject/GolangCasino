@@ -49,6 +49,23 @@ func TestCreateUserHandler(t *testing.T) {
     if recorder.Code != http.StatusOK {
         t.Errorf("expected status %d; got %d", http.StatusOK, recorder.Code)
     }
+}
 
- 
+
+func TestUpdateUserHandler(t *testing.T){
+
+}
+
+
+func TestDeleteUserHandler(t *testing.T){
+
+}
+
+func TestRegisterUserHandler(t *testing.T){
+
+}
+
+
+func TestLoginUserHandler(t *testing.T){
+    
 }
