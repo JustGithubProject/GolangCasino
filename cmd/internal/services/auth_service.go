@@ -20,13 +20,21 @@ func ParseToken(tokenString string) (*jwt.Token, error) {
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         return secretKey, nil
     })
+
     if err != nil {
-        return nil, err
+        fmt.Println("Тут ?")
+        return nil, fmt.Errorf("ошибка при парсинге токена: %v", err)
     }
+
+    if !token.Valid {
+        return nil, fmt.Errorf("недействительный токен")
+    }
+
     return token, nil
 }
 
 func CreateToken(username string) (string, error) {
+    fmt.Println("Создаем")
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, 
         jwt.MapClaims{ 
         "username": username, 

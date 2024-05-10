@@ -17,19 +17,19 @@ import (
 
 func HandleGameRequest(c *gin.Context, fairPlay bool) {
     // Получаем JWT токен из заголовка запроса
-    userID, err := ValidateToken(c)
+    username, err := ValidateToken(c)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
         return
     }
-
+    
     user_repository, err := InitializeUserRepository()
     if err != nil{
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
         return
     }
 
-    user, err := user_repository.GetUserById(userID)
+    user, err := user_repository.GetUserByUsername(username)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
         return
@@ -271,16 +271,18 @@ func HandleUserLogin(c *gin.Context) {
     if CheckPasswordHash(userInput.Password, user.Password) {
         // Check if user has a valid token
         existingToken := c.Request.Header.Get("Authorization")
+        fmt.Println("existingToken: " + existingToken)
         if existingToken != "" {
-            token, err := ParseToken(existingToken)
+            token, err:= ParseToken(existingToken[7:])
             if err == nil && token.Valid {
-                // If the existing token is valid, return it
+                fmt.Println("Валидный?")
                 c.JSON(http.StatusOK, gin.H{"token": existingToken})
                 return
             }
         }
 
         // Generate a new token
+        fmt.Println("Создаем токен ?")
         tokenString, err := CreateToken(user.Name)
         if err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})

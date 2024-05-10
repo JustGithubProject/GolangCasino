@@ -41,41 +41,41 @@ func InitNumbersArray(arr []int){
 
 
 
-func ValidateToken(c *gin.Context) (uint, error) {
+func ValidateToken(c *gin.Context) (string, error) {
     authHeader := c.GetHeader("Authorization")
     if authHeader == "" {
-        return 0, errors.New("Authorization header is missing")
+        return "", errors.New("Authorization header is missing")
     }
     
     tokenParts := strings.Split(authHeader, " ")
     if len(tokenParts) < 2 {
-        return 0, errors.New("Invalid Authorization header format")
+        return "", errors.New("Invalid Authorization header format")
     }
     
     tokenString := tokenParts[1]
     fmt.Println("Dropped 55")
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-        return []byte("your_secret_key"), nil
+        return []byte("secret-key"), nil
     })
     fmt.Println("Dropped 60")
     // Тут дропается код
     if err != nil || !token.Valid {
-        return 0, errors.New("Invalid token")
+        return "", errors.New("Invalid token")
     }
     fmt.Println("Dropped 64")
     claims, ok := token.Claims.(jwt.MapClaims)
     if !ok {
-        return 0, errors.New("Invalid token claims")
+        return "", errors.New("Invalid token claims")
     }
     fmt.Println("Dropped 69")
-    userIDFloat, ok := claims["user_id"].(float64)
+    username, ok := claims["username"].(string)
+    fmt.Println(username)
     if !ok {
-        return 0, errors.New("Invalid user ID in token")
+        return "", errors.New("Invalid user ID in token")
     }
     fmt.Println("Dropped 74")
-    userID := uint(userIDFloat)
 
-    return userID, nil
+    return username, nil
 }
 
 
