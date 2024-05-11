@@ -19,17 +19,20 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     // Получаем JWT токен из заголовка запроса
     username, err := ValidateToken(c)
     if err != nil {
+        fmt.Println("С токеном проблемы?")
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
         return
     }
     
     user_repository, err := InitializeUserRepository()
     if err != nil{
+        fmt.Println("С репозиторием ?")
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
         return
     }
 
     user, err := user_repository.GetUserByUsername(username)
+    fmt.Printf("User=%v+\n", user)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
         return
@@ -40,15 +43,16 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
 
     // Получаем структуру с игровыми параметрами
     gameParams := GetGameParams(c)
-
+    fmt.Printf("GameParams: %v+\n", gameParams)
     // Делаем ключи и прокидываем ставку для того чтобы передать в NormalPlay и UnFairPlay
     betMaps := InitBetsMap(gameParams)
-    
+    fmt.Printf("BetMaps: %v+\n", betMaps)
     if err != nil {
+        fmt.Println("Failure to get game parameters")
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game parameters"})
         return
     }
-
+    fmt.Printf("fairPlay: %t", fairPlay)
     if fairPlay {
         user_player.NormalPlay(
             betMaps.EvenToBets,

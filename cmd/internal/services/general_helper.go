@@ -33,10 +33,14 @@ func InitWeights(arr []int, length int){
 }
 
 
-func InitNumbersArray(arr []int){
-	for i := 0; i < 37; i++{
-		arr[i] = i
-	}
+func InitNumbersArray(arr []int) {
+    // Ensure the array has the correct length
+    if len(arr) != 37 {
+        arr = make([]int, 37) // Initialize the array with length 37
+    }
+    for i := 0; i < 37; i++ {
+        arr[i] = i
+    }
 }
 
 
@@ -97,20 +101,21 @@ func GetGameParams(c *gin.Context) GameParams {
         guessThird2To1Bet        float64
         err                      error
     )
-    guessEvenBetStr := c.PostForm("even")
-    guessOddBetStr := c.PostForm("odd")
-    guessRedBetStr := c.PostForm("red")
-    guessBlackBetStr := c.PostForm("black")
-    guessSector1st12BetStr := c.PostForm("1 st 12")
-    guessSector2nd12BetStr := c.PostForm("2 nd 12")
-    guessSector3rd12BetStr := c.PostForm("3 rd 12")
-    guessNumberBetStr := c.PostForm("number")
-    guessNumberStr := c.PostForm("num")
-    guessOneToEighteenBetStr := c.PostForm("1To18")
-    guessNineteenToThirtySixBetStr := c.PostForm("19To36")
-    guessFirst2To1BetStr := c.PostForm("First2To1")
-    guessSecond2To1BetStr := c.PostForm("Second2To1")
-    guessThird2To1BetStr := c.PostForm("Third2To1")
+    guessEvenBetStr := c.Query("even")
+    guessOddBetStr := c.Query("odd")
+    guessRedBetStr := c.Query("red")
+    guessBlackBetStr := c.Query("black")
+    guessSector1st12BetStr := c.Query("1st12")
+    guessSector2nd12BetStr := c.Query("2nd12")
+    guessSector3rd12BetStr := c.Query("3rd12")
+    guessNumberBetStr := c.Query("number")
+    guessNumberStr := c.Query("num")
+    guessOneToEighteenBetStr := c.Query("1To18")
+    guessNineteenToThirtySixBetStr := c.Query("19To36")
+    guessFirst2To1BetStr := c.Query("First2To1")
+    guessSecond2To1BetStr := c.Query("Second2To1")
+    guessThird2To1BetStr := c.Query("Third2To1")
+
 
     // Функция для преобразования строки в float64
     convertStringToFloat64 := func(str string) (float64, error) {
@@ -122,7 +127,7 @@ func GetGameParams(c *gin.Context) GameParams {
 
     // Преобразование и обработка значений
 
-    guessNumberInt, err := strconv.Atoi(guessNumberStr)
+    guessNumberInt, _ := strconv.Atoi(guessNumberStr)
 
     guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
     if err != nil {

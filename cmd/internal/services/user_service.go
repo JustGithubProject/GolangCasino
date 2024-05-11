@@ -1,10 +1,10 @@
 package services
 
-
+import "fmt"
 
 type UserPlayer struct {
 	TypeOfGame GameRoulette
-	Balance		float64
+	Balance    float64
 }
 
 func (user *UserPlayer) NormalPlay(
@@ -20,7 +20,10 @@ func (user *UserPlayer) NormalPlay(
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
 ) (float64, error) {
+	fmt.Println("Зашел в Normal Play")
+	// Падает
 	InitNumbersArray(user.TypeOfGame.Numbers)
+	fmt.Println(user.TypeOfGame.Numbers)
 	prize, err := user.TypeOfGame.NormalSpinRoulette(
 		evenToBets,
 		oddToBets,
@@ -34,7 +37,7 @@ func (user *UserPlayer) NormalPlay(
 		second2To1Bets,
 		third2To1Bets,
 	)
-	if err != nil{
+	if err != nil {
 		return 0, &GameError{Message: "Game play error: " + err.Error()}
 	}
 	totalBet := user.getTotalBet(evenToBets, oddToBets,
@@ -52,29 +55,28 @@ func (user *UserPlayer) NormalPlay(
 	return user.Balance, nil
 }
 
-
-func (user *UserPlayer) updateBalance(prize float64, bet float64){
-	if prize > bet{
+func (user *UserPlayer) updateBalance(prize float64, bet float64) {
+	if prize > bet {
 		user.Balance += prize
-	if prize == bet{
-		user.Balance += 0
-	}
-	}else{
+		if prize == bet {
+			user.Balance += 0
+		}
+	} else {
 		user.Balance -= bet
 	}
 }
 
 func (user *UserPlayer) sumMapValues(bets map[string]float64) float64 {
-    sum := 0.0
-    for _, value := range bets {
-        sum += value
-    }
-    return sum
+	sum := 0.0
+	for _, value := range bets {
+		sum += value
+	}
+	return sum
 }
 
-func (user *UserPlayer) sumMapValuesForNumbers(bets map[int]float64) float64{
+func (user *UserPlayer) sumMapValuesForNumbers(bets map[int]float64) float64 {
 	sum := 0.0
-	for _, value := range bets{
+	for _, value := range bets {
 		sum += value
 	}
 	return sum
@@ -117,7 +119,7 @@ func (user *UserPlayer) UnFairPlay(
 	first2To1Bets map[string]float64,
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
-) (float64, error){
+) (float64, error) {
 	InitWeights(user.TypeOfGame.WeightsForNumbers, 37)
 	ShuffleWeights(user.TypeOfGame.WeightsForNumbers)
 	InitNumbersArray(user.TypeOfGame.Numbers)
@@ -135,7 +137,7 @@ func (user *UserPlayer) UnFairPlay(
 		second2To1Bets,
 		third2To1Bets,
 	)
-	if err != nil{
+	if err != nil {
 		return 0, &GameError{Message: "Game play error: " + err.Error()}
 	}
 	totalBet := user.getTotalBet(evenToBets, oddToBets,
@@ -152,5 +154,3 @@ func (user *UserPlayer) UnFairPlay(
 	user.updateBalance(prize, totalBet)
 	return user.Balance, nil
 }
-
-
