@@ -22,7 +22,8 @@ func (user *UserPlayer) NormalPlay(
 ) (float64, error) {
 	fmt.Println("Зашел в Normal Play")
 	// Падает
-	InitNumbersArray(user.TypeOfGame.Numbers)
+	numbers := InitNumbersArray()
+	user.TypeOfGame.Numbers = numbers
 	fmt.Println(user.TypeOfGame.Numbers)
 	prize, err := user.TypeOfGame.NormalSpinRoulette(
 		evenToBets,
@@ -122,7 +123,8 @@ func (user *UserPlayer) UnFairPlay(
 ) (float64, error) {
 	InitWeights(user.TypeOfGame.WeightsForNumbers, 37)
 	ShuffleWeights(user.TypeOfGame.WeightsForNumbers)
-	InitNumbersArray(user.TypeOfGame.Numbers)
+	numbers := InitNumbersArray()
+	user.TypeOfGame.Numbers = numbers
 
 	prize, err := user.TypeOfGame.UnfairSpinRoulette(
 		evenToBets,

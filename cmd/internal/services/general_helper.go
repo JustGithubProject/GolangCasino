@@ -33,14 +33,12 @@ func InitWeights(arr []int, length int){
 }
 
 
-func InitNumbersArray(arr []int) {
-    // Ensure the array has the correct length
-    if len(arr) != 37 {
-        arr = make([]int, 37) // Initialize the array with length 37
-    }
+func InitNumbersArray() []int{
+    arr := make([]int, 37)
     for i := 0; i < 37; i++ {
         arr[i] = i
     }
+    return arr
 }
 
 
