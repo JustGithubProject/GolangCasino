@@ -46,3 +46,6 @@ func (ur *UserRepository) DeleteUser(user *models.User) error {
     return ur.Db.Delete(user).Error
 }
 
+func (ur *UserRepository) UpdateBalanceUser(user *models.User) error {
+    return ur.Db.Model(user).Update("balance", user.Balance).Error
+}
