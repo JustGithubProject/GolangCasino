@@ -1,8 +1,8 @@
 package services
 
-
 import (
-    "math/rand"
+	"fmt"
+	"math/rand"
 )
 
 
@@ -264,6 +264,7 @@ func (game *GameRoulette) UnfairSpinRoulette(
 
 
 	dropped_number := game.GenerateRandomNumberByWeight(game.Numbers, game.WeightsForNumbers)
+	fmt.Printf("DROPPED_NUMBER: %d\n", dropped_number)
 	dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
 	prize := 0.0
 

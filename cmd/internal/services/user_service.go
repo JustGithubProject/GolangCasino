@@ -125,7 +125,8 @@ func (user *UserPlayer) UnFairPlay(
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
 ) (float64, error) {
-	InitWeights(user.TypeOfGame.WeightsForNumbers, 37)
+	weights_arr := InitWeights(37)
+	user.TypeOfGame.WeightsForNumbers = weights_arr
 	ShuffleWeights(user.TypeOfGame.WeightsForNumbers)
 	numbers := InitNumbersArray()
 	user.TypeOfGame.Numbers = numbers
@@ -157,6 +158,9 @@ func (user *UserPlayer) UnFairPlay(
 		second2To1Bets,
 		third2To1Bets,
 	)
+	fmt.Printf("User balance: %.2f\n", user.Balance)
+	fmt.Printf("UnfairPrize: %.2f\n", prize)
 	user.updateBalance(prize, totalBet)
+	fmt.Printf("UnfairBalance after update: %.2f\n", user.Balance)
 	return user.Balance, nil
 }

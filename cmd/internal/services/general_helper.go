@@ -23,13 +23,15 @@ func ShuffleWeights(arr []int) {
 }
 
 
-func InitWeights(arr []int, length int){
+func InitWeights(length int) []int{
+    weights_arr := make([]int, 37)
 	counter_weight := 10
 
 	for i := 0; i < length; i++{
-		arr[i] = counter_weight
+		weights_arr[i] = counter_weight
 		counter_weight += 100
 	}
+    return weights_arr
 }
 
 
