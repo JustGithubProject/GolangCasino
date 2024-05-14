@@ -5,6 +5,9 @@ import SimpleButton from './SimpleButton';
 
 function RouletteCard() {
     const [selectedNumbers, setSelectedNumbers] = useState([]);
+    const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedBlack, setSelectedBlack] = useState(false);
+    const [selectedRed, setSelectedRed] = useState(false);
 
     const handleNumberClick = (number) => {
         const index = selectedNumbers.indexOf(number);
@@ -18,6 +21,38 @@ function RouletteCard() {
         }
     };
 
+    const handleColorClick = (color) => {
+        setSelectedColor(color);
+        if (color === 'black') {
+            setSelectedBlack(!selectedBlack);
+            setSelectedRed(false); // Resetting selectedRed if black is selected
+        } else if (color === 'red') {
+            setSelectedRed(!selectedRed);
+            setSelectedBlack(false); // Resetting selectedBlack if red is selected
+        }
+    };
+    const generateBackendURL = () => {
+        const params = new URLSearchParams();
+        selectedNumbers.forEach(number => params.append('selectedNumbers', number));
+        if (selectedColor) params.append('selectedColor', selectedColor);
+        if (selectedBlack) params.append('selectedBlack', true);
+        if (selectedRed) params.append('selectedRed', true);
+        const queryString = params.toString();
+        return `http://localhost:8080/spin-roulette-v1/?${queryString}`;
+    };
+
+    // Обработчик для отправки запроса на бекенд
+    const sendRequestToBackend = () => {
+        const backendURL = generateBackendURL();
+        fetch(backendURL)
+            .then(response => {
+                // Handle response
+            })
+            .catch(error => {
+                // Handle error
+            });
+    };
+
     const numbers = Array.from(Array(38).keys());
 
     return (
@@ -25,7 +60,7 @@ function RouletteCard() {
             <Card style={styles.card}>
                 <div style={styles.cardHeader}>Рулетка</div>
                 <div style={styles.displayContainer}>
-                    <Display selectedNumbers={selectedNumbers} />
+                    <Display selectedNumbers={selectedNumbers} selectedColor={selectedColor} selectedBlack={selectedBlack} selectedRed={selectedRed} />
                 </div>
                 <div style={styles.inputContainer}>
                     <Input
@@ -49,11 +84,25 @@ function RouletteCard() {
                             onClick={() => handleNumberClick(number)}
                         >
                             {number}
-                            {selectedNumbers.includes(number) && ( // Проверяем, выбрано ли число
+                            {selectedNumbers.includes(number) && (
                                 <span style={styles.coinIcon}>💰</span>
                             )}
                         </Button>
                     ))}
+                </div>
+                <div style={styles.colorButtons}>
+                    <Button
+                        style={{ marginRight: '10px', backgroundColor: 'black', color: 'white', opacity: selectedBlack ? '0.5' : '1' }}
+                        onClick={() => handleColorClick('black')}
+                    >
+                        Черное
+                    </Button>
+                    <Button
+                        style={{ backgroundColor: 'red', color: 'white', opacity: selectedRed ? '0.5' : '1' }}
+                        onClick={() => handleColorClick('red')}
+                    >
+                        Красное
+                    </Button>
                 </div>
             </Card>
         </div>
@@ -106,7 +155,12 @@ const styles = {
         height: '200px',
     },
     coinIcon: {
-        marginLeft: '4px', // Отступ для разделения числа и монетки
+        marginLeft: '4px',
+    },
+    colorButtons: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: '10px',
     },
 };
 
