@@ -1,28 +1,60 @@
 import { Card, Typography, Space } from 'antd';
 import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
 
 const { Text } = Typography;
 
-function Display({ selectedNumbers, selectedColor }) {
+function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
+    const [displayedNumber, setDisplayedNumber] = useState(null);
+
+    useEffect(() => {
+        if (isSpinning) {
+            let timeout;
+            let currentNumber = 0;
+            const spinInterval = setInterval(() => {
+                setDisplayedNumber(currentNumber);
+                currentNumber = (currentNumber + 1) % 37; // Ограничить числа до 36
+            }, 100);
+
+            timeout = setTimeout(() => {
+                clearInterval(spinInterval);
+                setDisplayedNumber(spinResult);
+            }, 5000);
+
+            return () => {
+                clearInterval(spinInterval);
+                clearTimeout(timeout);
+            };
+        }
+    }, [isSpinning, spinResult]);
+
     return (
         <div style={styles.displayContainer}>
             <Card style={styles.card}>
                 <Space direction="vertical" align="center">
-                    {selectedNumbers.length > 0 ? (
+                    {isSpinning ? (
                         <Text strong style={styles.numberText}>
-                            <CheckCircleTwoTone twoToneColor="#52c41a" /> Выбранные числа: {selectedNumbers.join(', ')}
+                            {displayedNumber !== null && <span>{displayedNumber}</span>}
                         </Text>
                     ) : (
-                        <Text strong style={styles.numberText}>
-                            <CloseCircleTwoTone twoToneColor="#eb2f96" /> Выберите числа от 0 до 37
-                        </Text>
-                    )}
-                    {selectedColor && (
-                        <Text style={styles.colorText}>
-                            <span style={{ color: selectedColor === 'red' ? '#ff4d4f' : '#595959' }}>
-                                {selectedColor === 'red' ? '🔴 Красный' : '⚫ Черный'}
-                            </span>
-                        </Text>
+                        <>
+                            {selectedNumbers.length > 0 ? (
+                                <Text strong style={styles.numberText}>
+                                    <CheckCircleTwoTone twoToneColor="#52c41a" /> Выбранные числа: {selectedNumbers.join(', ')}
+                                </Text>
+                            ) : (
+                                <Text strong style={styles.numberText}>
+                                    <CloseCircleTwoTone twoToneColor="#eb2f96" /> Выберите числа от 0 до 36
+                                </Text>
+                            )}
+                            {selectedColor && (
+                                <Text style={styles.colorText}>
+                                    <span style={{ color: selectedColor === 'red' ? '#ff4d4f' : '#595959' }}>
+                                        {selectedColor === 'red' ? '🔴 Красный' : '⚫ Черный'}
+                                    </span>
+                                </Text>
+                            )}
+                        </>
                     )}
                 </Space>
             </Card>
