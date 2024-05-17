@@ -260,12 +260,12 @@ function RouletteCard() {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <div style={styles.submitButtonContainer}>
-                            <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton}>
-                                Submit
-                            </Button>
-                        </div>
                     </Form>
+                </div>
+                <div style={styles.submitButtonContainer}>
+                    <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton}>
+                        Submit
+                    </Button>
                 </div>
                 <div style={styles.cardBody}>
                     <div style={styles.numberGrid}>
@@ -409,9 +409,14 @@ const styles = {
     submitButtonContainer: {
         display: 'flex',
         justifyContent: 'center',
+        position: 'sticky',
+        bottom: '20px',
+        backgroundColor: 'white',
+        padding: '10px 0',
+        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
+        zIndex: 1,
     },
     submitButton: {
-        marginTop: '20px',
         padding: '10px 30px',
         fontSize: '16px',
         fontWeight: 'bold',
@@ -427,7 +432,7 @@ const styles = {
 function getColorForNumber(number) {
     if (number === 0) {
         return 'green';
-    } else if ([1, 3, 5, 5, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number)) {
+    } else if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number)) {
         return 'red';
     } else {
         return 'black';

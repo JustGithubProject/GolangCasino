@@ -30,7 +30,7 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
 
     return (
         <div style={styles.displayContainer}>
-            <Card style={styles.card}>
+            <Card style={{ ...styles.card, ...(isSpinning && styles.cardSpinning) }}>
                 <Space direction="vertical" align="center">
                     {isSpinning ? (
                         <Text strong style={styles.numberText}>
@@ -72,24 +72,29 @@ const styles = {
     },
     card: {
         width: '100%',
-        maxWidth: '700px',
+        maxWidth: '900px', // Увеличено для большей ширины
         backgroundColor: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '12px', // Сделаны более округлыми углы
+        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)', // Усилен эффект тени
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '20px',
+        padding: '30px', // Увеличен padding для лучшего восприятия
+        transition: 'max-width 0.5s ease', // Добавлен плавный переход
+    },
+    cardSpinning: {
+        maxWidth: '1200px', // Ширина карточки во время прокрутки
     },
     numberText: {
-        fontSize: '24px',
+        fontSize: '28px', // Увеличен размер шрифта
         fontWeight: 'bold',
         textAlign: 'center',
+        color: '#1890ff', // Добавлен цвет текста
     },
     colorText: {
-        fontSize: '20px',
-        marginTop: '10px',
+        fontSize: '24px', // Увеличен размер шрифта
+        marginTop: '15px', // Увеличен отступ сверху
         textAlign: 'center',
     },
 };

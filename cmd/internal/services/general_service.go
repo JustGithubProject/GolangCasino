@@ -54,8 +54,9 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     }
     fmt.Printf("fairPlay: %t", fairPlay)
     currentBalance := user.Balance
+    var dropped_number int
     if fairPlay {
-        currentBalance, err = user_player.NormalPlay(
+        currentBalance, dropped_number, err = user_player.NormalPlay(
             betMaps.EvenToBets,
             betMaps.OddToBets,
             betMaps.RedToBets,
@@ -69,7 +70,7 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
             betMaps.Third2To1Bets,
         )
     } else {
-        currentBalance, err = user_player.UnFairPlay(
+        currentBalance, dropped_number, err = user_player.UnFairPlay(
             betMaps.EvenToBets,
             betMaps.OddToBets,
             betMaps.RedToBets,
@@ -95,7 +96,7 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
         return
     }
-    c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user})
+    c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user, "dropped_number": dropped_number})
 }
 
 

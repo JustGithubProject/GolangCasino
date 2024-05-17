@@ -248,7 +248,7 @@ func (game *GameRoulette) UnfairSpinRoulette(
 	first2To1Bets map[string]float64,
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
-	) (float64, error){
+	) (float64, int, error){
 
 	lengthOfBetsToSectors := len(sectorsToBets)
 	lengthOfBetsToNumbers := len(numbersToBets)
@@ -278,7 +278,7 @@ func (game *GameRoulette) UnfairSpinRoulette(
 	prize += game.CheckSecond2to1Bet(lengthOfBetsSecond2To1, second2To1Bets, dropped_number)
 	prize += game.CheckThird2to1Bet(lengthofBetsThird2To1, third2To1Bets, dropped_number)
 
-	return prize, nil
+	return prize, dropped_number, nil
 }
 
 
@@ -323,7 +323,7 @@ func (game *GameRoulette) NormalSpinRoulette(
 	first2To1Bets map[string]float64,
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
-	) (float64, error){
+	) (float64, int, error){
 
 	lengthOfBetsToSectors := len(sectorsToBets)
 	lengthOfBetsToNumbers := len(numbersToBets)
@@ -351,7 +351,7 @@ func (game *GameRoulette) NormalSpinRoulette(
 	prize += game.CheckSecond2to1Bet(lengthOfBetsSecond2To1, second2To1Bets, dropped_number)
 	prize += game.CheckThird2to1Bet(lengthofBetsThird2To1, third2To1Bets, dropped_number)
 
-	return prize, nil
+	return prize, dropped_number, nil
 }
 
 

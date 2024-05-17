@@ -19,13 +19,13 @@ func (user *UserPlayer) NormalPlay(
 	first2To1Bets map[string]float64,
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
-) (float64, error) {
+) (float64, int, error) {
 	fmt.Println("Зашел в Normal Play")
 	// Падает
 	numbers := InitNumbersArray()
 	user.TypeOfGame.Numbers = numbers
 	fmt.Println(user.TypeOfGame.Numbers)
-	prize, err := user.TypeOfGame.NormalSpinRoulette(
+	prize, dropped_number, err := user.TypeOfGame.NormalSpinRoulette(
 		evenToBets,
 		oddToBets,
 		redToBets,
@@ -39,7 +39,7 @@ func (user *UserPlayer) NormalPlay(
 		third2To1Bets,
 	)
 	if err != nil {
-		return 0, &GameError{Message: "Game play error: " + err.Error()}
+		return 0, -1, &GameError{Message: "Game play error: " + err.Error()}
 	}
 	totalBet := user.getTotalBet(evenToBets, oddToBets,
 		redToBets,
@@ -57,7 +57,7 @@ func (user *UserPlayer) NormalPlay(
 	fmt.Printf("UserBalance: %.2f\n", user.Balance)
 	user.updateBalance(prize, totalBet)
 	fmt.Printf("After update UserBalance: %.2f\n", user.Balance)
-	return user.Balance, nil
+	return user.Balance, dropped_number, nil
 }
 
 func (user *UserPlayer) updateBalance(prize float64, bet float64) {
@@ -124,14 +124,14 @@ func (user *UserPlayer) UnFairPlay(
 	first2To1Bets map[string]float64,
 	second2To1Bets map[string]float64,
 	third2To1Bets map[string]float64,
-) (float64, error) {
+) (float64, int, error) {
 	weights_arr := InitWeights(37)
 	user.TypeOfGame.WeightsForNumbers = weights_arr
 	ShuffleWeights(user.TypeOfGame.WeightsForNumbers)
 	numbers := InitNumbersArray()
 	user.TypeOfGame.Numbers = numbers
 
-	prize, err := user.TypeOfGame.UnfairSpinRoulette(
+	prize, dropped_number, err := user.TypeOfGame.UnfairSpinRoulette(
 		evenToBets,
 		oddToBets,
 		redToBets,
@@ -145,7 +145,7 @@ func (user *UserPlayer) UnFairPlay(
 		third2To1Bets,
 	)
 	if err != nil {
-		return 0, &GameError{Message: "Game play error: " + err.Error()}
+		return 0, -1, &GameError{Message: "Game play error: " + err.Error()}
 	}
 	totalBet := user.getTotalBet(evenToBets, oddToBets,
 		redToBets,
@@ -162,5 +162,5 @@ func (user *UserPlayer) UnFairPlay(
 	fmt.Printf("UnfairPrize: %.2f\n", prize)
 	user.updateBalance(prize, totalBet)
 	fmt.Printf("UnfairBalance after update: %.2f\n", user.Balance)
-	return user.Balance, nil
+	return user.Balance, dropped_number, nil
 }
