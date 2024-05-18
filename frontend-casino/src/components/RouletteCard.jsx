@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Input, Button, Form, Row, Col, Typography } from 'antd';
+import { Card, Input, Button, Form, Row, Col, Typography, Spin, message } from 'antd';
 import Display from './Display';
 
 const { Title } = Typography;
@@ -7,8 +7,6 @@ const { Title } = Typography;
 function RouletteCard() {
     const [selectedNumbers, setSelectedNumbers] = useState([]);
     const [selectedColor, setSelectedColor] = useState(null);
-    const [selectedBlack, setSelectedBlack] = useState(false);
-    const [selectedRed, setSelectedRed] = useState(false);
     const [betAmount, setBetAmount] = useState('');
     const [evenBet, setEvenBet] = useState('');
     const [oddBet, setOddBet] = useState('');
@@ -40,11 +38,11 @@ function RouletteCard() {
     const handleColorClick = (color) => {
         setSelectedColor(color);
         if (color === 'black') {
-            setSelectedBlack(!selectedBlack);
-            setSelectedRed(false);
+            setBlackBet(blackBet ? '' : '100');
+            setRedBet('');
         } else if (color === 'red') {
-            setSelectedRed(!selectedRed);
-            setSelectedBlack(false);
+            setRedBet(redBet ? '' : '100');
+            setBlackBet('');
         }
     };
 
@@ -53,6 +51,11 @@ function RouletteCard() {
     };
 
     const handleSubmit = async () => {
+        if (!betAmount && !evenBet && !oddBet && !redBet && !blackBet && !first12Bet && !second12Bet && !third12Bet && !oneToEighteenBet && !nineteenToThirtySixBet && !first2To1Bet && !second2To1Bet && !third2To1Bet) {
+            message.error('Please place at least one bet.');
+            return;
+        }
+
         const params = new URLSearchParams();
 
         if (evenBet) params.append('even', evenBet);
@@ -80,6 +83,7 @@ function RouletteCard() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTYwMTY2OTQsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.6bzKBcZSUs938nN-sJmRSeC4Q9w29vGjOnACnDltezg',
                 },
                 body: JSON.stringify({}),
             });
@@ -90,7 +94,7 @@ function RouletteCard() {
 
             const data = await response.json();
             console.log(data);
-            setSpinResult(data.result); // предполагается, что в ответе есть поле "result" с результатом спина
+            setSpinResult(data.dropped_number); // Extracting dropped_number from the response
             setIsSpinning(false);
         } catch (error) {
             console.error('Error:', error);
@@ -98,14 +102,14 @@ function RouletteCard() {
         }
     };
 
-    const numbers = Array.from(Array(38).keys());
+    const numbers = Array.from({ length: 37 }, (_, i) => i); // Corrected to 37 for 0-36
 
     return (
         <div style={styles.container}>
             <Card style={styles.card}>
                 <Title level={2} style={styles.cardHeader}>Рулетка</Title>
                 <div style={styles.displayContainer}>
-                    <Display selectedNumbers={selectedNumbers} selectedColor={selectedColor} selectedBlack={selectedBlack} selectedRed={selectedRed} spinResult={spinResult} isSpinning={isSpinning} />
+                    <Display selectedNumbers={selectedNumbers} selectedColor={selectedColor} spinResult={spinResult} isSpinning={isSpinning} />
                 </div>
                 <div style={styles.scrollContainer}>
                     <Form layout="vertical" style={styles.form}>
@@ -116,6 +120,7 @@ function RouletteCard() {
                                 prefix="₽"
                                 value={betAmount}
                                 onChange={handleBetChange(setBetAmount)}
+                                style={styles.input}
                             />
                         </Form.Item>
                         <Row gutter={[16, 16]}>
@@ -127,6 +132,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={evenBet}
                                         onChange={handleBetChange(setEvenBet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -138,6 +144,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={oddBet}
                                         onChange={handleBetChange(setOddBet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -151,6 +158,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={redBet}
                                         onChange={handleBetChange(setRedBet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -162,6 +170,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={blackBet}
                                         onChange={handleBetChange(setBlackBet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -175,6 +184,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={first12Bet}
                                         onChange={handleBetChange(setFirst12Bet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -186,6 +196,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={second12Bet}
                                         onChange={handleBetChange(setSecond12Bet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -197,6 +208,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={third12Bet}
                                         onChange={handleBetChange(setThird12Bet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -210,6 +222,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={oneToEighteenBet}
                                         onChange={handleBetChange(setOneToEighteenBet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -221,6 +234,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={nineteenToThirtySixBet}
                                         onChange={handleBetChange(setNineteenToThirtySixBet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -234,6 +248,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={first2To1Bet}
                                         onChange={handleBetChange(setFirst2To1Bet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -245,6 +260,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={second2To1Bet}
                                         onChange={handleBetChange(setSecond2To1Bet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -256,6 +272,7 @@ function RouletteCard() {
                                         prefix="₽"
                                         value={third2To1Bet}
                                         onChange={handleBetChange(setThird2To1Bet)}
+                                        style={styles.input}
                                     />
                                 </Form.Item>
                             </Col>
@@ -263,8 +280,8 @@ function RouletteCard() {
                     </Form>
                 </div>
                 <div style={styles.submitButtonContainer}>
-                    <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton}>
-                        Submit
+                    <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
+                        {isSpinning ? <Spin /> : 'Вращать'}
                     </Button>
                 </div>
                 <div style={styles.cardBody}>
@@ -278,6 +295,8 @@ function RouletteCard() {
                                     ...styles.numberButton,
                                     backgroundColor: getColorForNumber(number),
                                     color: getTextColorForNumber(number),
+                                    transform: selectedNumbers.includes(number) ? 'scale(1.1)' : 'scale(1)',
+                                    transition: 'transform 0.2s',
                                 }}
                                 onClick={() => handleNumberClick(number)}
                             >
@@ -295,9 +314,12 @@ function RouletteCard() {
                             ...styles.colorButton,
                             backgroundColor: 'black',
                             color: 'white',
-                            opacity: selectedBlack ? '0.5' : '1',
+                            opacity: selectedColor === 'black' ? '0.5' : '1',
                             width: '120px',
                             height: '50px',
+                            marginRight: '10px',
+                            transition: 'opacity 0.2s, transform 0.2s',
+                            transform: selectedColor === 'black' ? 'scale(1.05)' : 'scale(1)',
                         }}
                         onClick={() => handleColorClick('black')}
                     >
@@ -308,9 +330,11 @@ function RouletteCard() {
                             ...styles.colorButton,
                             backgroundColor: 'red',
                             color: 'white',
-                            opacity: selectedRed ? '0.5' : '1',
+                            opacity: selectedColor === 'red' ? '0.5' : '1',
                             width: '120px',
                             height: '50px',
+                            transition: 'opacity 0.2s, transform 0.2s',
+                            transform: selectedColor === 'red' ? 'scale(1.05)' : 'scale(1)',
                         }}
                         onClick={() => handleColorClick('red')}
                     >
@@ -332,7 +356,7 @@ const styles = {
         padding: '20px',
     },
     card: {
-        width: '90%',
+        width: '100%',
         maxWidth: '1200px',
         backgroundColor: 'white',
         padding: '24px',
@@ -342,20 +366,16 @@ const styles = {
     cardHeader: {
         textAlign: 'center',
         marginBottom: '24px',
+        fontSize: '24px',
+        fontWeight: 'bold',
+        color: '#1890ff',
+        textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
     },
     form: {
         width: '100%',
     },
-    inputContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginBottom: '16px',
-    },
     input: {
         width: '100%',
-        maxWidth: '300px',
-        marginBottom: '10px',
     },
     cardBody: {
         display: 'flex',
@@ -378,10 +398,6 @@ const styles = {
         fontWeight: 'bold',
         borderRadius: '50%',
         border: 'none',
-        transition: 'transform 0.2s',
-    },
-    numberButtonSelected: {
-        transform: 'scale(1.1)',
     },
     displayContainer: {
         display: 'flex',
@@ -395,16 +411,15 @@ const styles = {
     colorButtons: {
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '10px',
+        marginTop: '20px',
     },
     colorButton: {
-        marginRight: '10px',
         padding: '10px 20px',
         fontSize: '16px',
         fontWeight: 'bold',
         borderRadius: '8px',
         border: 'none',
-        transition: 'opacity 0.2s',
+        cursor: 'pointer',
     },
     submitButtonContainer: {
         display: 'flex',

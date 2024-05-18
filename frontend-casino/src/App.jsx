@@ -1,12 +1,15 @@
-import RouletteCard from "./components/RouletteCard.jsx"
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import RouletteCard from './components/RouletteCard';
 
 function App() {
-
   return (
-    <div>
-      <RouletteCard/>
-    </div>
-  )
+      <Router>
+          <Routes>
+              <Route path="/roulette" element={<RouletteCard />} />
+          </Routes>
+      </Router>
+  );
 }
 
-export default App
+export default App;

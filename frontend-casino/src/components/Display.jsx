@@ -54,6 +54,11 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
                                     </span>
                                 </Text>
                             )}
+                            {spinResult !== null && (
+                                <Text strong style={styles.resultText}>
+                                    Выпавшее число: {spinResult}
+                                </Text>
+                            )}
                         </>
                     )}
                 </Space>
@@ -81,21 +86,32 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         padding: '30px', // Увеличен padding для лучшего восприятия
-        transition: 'max-width 0.5s ease', // Добавлен плавный переход
+        transition: 'max-width 0.5s ease, box-shadow 0.5s ease', // Добавлен плавный переход
+        textAlign: 'center', // Центрирование текста
     },
     cardSpinning: {
-        maxWidth: '1200px', // Ширина карточки во время прокрутки
+        maxWidth: '1100px', // Увеличена ширина карточки во время прокрутки
+        boxShadow: '0 0 20px #1890ff', // Свечение во время прокрутки
+        animation: 'rotate 2s linear infinite', // Добавлен вращающийся эффект
     },
     numberText: {
         fontSize: '28px', // Увеличен размер шрифта
         fontWeight: 'bold',
-        textAlign: 'center',
         color: '#1890ff', // Добавлен цвет текста
     },
     colorText: {
         fontSize: '24px', // Увеличен размер шрифта
         marginTop: '15px', // Увеличен отступ сверху
-        textAlign: 'center',
+    },
+    resultText: {
+        fontSize: '32px', // Увеличен размер шрифта для результата
+        fontWeight: 'bold',
+        color: '#ff4d4f', // Цвет текста для результата
+        marginTop: '20px', // Отступ сверху для результата
+    },
+    '@keyframes rotate': {
+        '0%': { transform: 'rotate(0deg)' },
+        '100%': { transform: 'rotate(360deg)' },
     },
 };
 
