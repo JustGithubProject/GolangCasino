@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Card, Input, Button, Form, Row, Col, Typography, Spin, message } from 'antd';
+import { Card, Button, Typography, Spin, message } from 'antd';
 import Display from './Display';
+import BetForm from './BetForm';
+import NumberGrid from './NumberGrid';
+import ColorButtons from './ColorButtons';
 
 const { Title } = Typography;
 
@@ -46,8 +49,24 @@ function RouletteCard() {
         }
     };
 
-    const handleBetChange = (setter) => (e) => {
-        setter(e.target.value);
+    const handleBetChange = (key) => (e) => {
+        const value = e.target.value;
+        switch (key) {
+            case 'betAmount': setBetAmount(value); break;
+            case 'evenBet': setEvenBet(value); break;
+            case 'oddBet': setOddBet(value); break;
+            case 'redBet': setRedBet(value); break;
+            case 'blackBet': setBlackBet(value); break;
+            case 'first12Bet': setFirst12Bet(value); break;
+            case 'second12Bet': setSecond12Bet(value); break;
+            case 'third12Bet': setThird12Bet(value); break;
+            case 'oneToEighteenBet': setOneToEighteenBet(value); break;
+            case 'nineteenToThirtySixBet': setNineteenToThirtySixBet(value); break;
+            case 'first2To1Bet': setFirst2To1Bet(value); break;
+            case 'second2To1Bet': setSecond2To1Bet(value); break;
+            case 'third2To1Bet': setThird2To1Bet(value); break;
+            default: break;
+        }
     };
 
     const handleSubmit = async () => {
@@ -94,7 +113,7 @@ function RouletteCard() {
 
             const data = await response.json();
             console.log(data);
-            setSpinResult(data.dropped_number); // Extracting dropped_number from the response
+            setSpinResult(data.dropped_number);
             setIsSpinning(false);
         } catch (error) {
             console.error('Error:', error);
@@ -102,7 +121,23 @@ function RouletteCard() {
         }
     };
 
-    const numbers = Array.from({ length: 37 }, (_, i) => i); // Corrected to 37 for 0-36
+    const numbers = Array.from({ length: 37 }, (_, i) => i);
+
+    const betValues = {
+        betAmount,
+        evenBet,
+        oddBet,
+        redBet,
+        blackBet,
+        first12Bet,
+        second12Bet,
+        third12Bet,
+        oneToEighteenBet,
+        nineteenToThirtySixBet,
+        first2To1Bet,
+        second2To1Bet,
+        third2To1Bet,
+    };
 
     return (
         <div style={styles.container}>
@@ -112,172 +147,7 @@ function RouletteCard() {
                     <Display selectedNumbers={selectedNumbers} selectedColor={selectedColor} spinResult={spinResult} isSpinning={isSpinning} />
                 </div>
                 <div style={styles.scrollContainer}>
-                    <Form layout="vertical" style={styles.form}>
-                        <Form.Item label="Введите ставку на число">
-                            <Input
-                                placeholder="Ставка на число"
-                                size="large"
-                                prefix="₽"
-                                value={betAmount}
-                                onChange={handleBetChange(setBetAmount)}
-                                style={styles.input}
-                            />
-                        </Form.Item>
-                        <Row gutter={[16, 16]}>
-                            <Col span={12}>
-                                <Form.Item label="Ставка на четное">
-                                    <Input
-                                        placeholder="Ставка на четное"
-                                        size="large"
-                                        prefix="₽"
-                                        value={evenBet}
-                                        onChange={handleBetChange(setEvenBet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item label="Ставка на нечетное">
-                                    <Input
-                                        placeholder="Ставка на нечетное"
-                                        size="large"
-                                        prefix="₽"
-                                        value={oddBet}
-                                        onChange={handleBetChange(setOddBet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[16, 16]}>
-                            <Col span={12}>
-                                <Form.Item label="Ставка на красное">
-                                    <Input
-                                        placeholder="Ставка на красное"
-                                        size="large"
-                                        prefix="₽"
-                                        value={redBet}
-                                        onChange={handleBetChange(setRedBet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item label="Ставка на черное">
-                                    <Input
-                                        placeholder="Ставка на черное"
-                                        size="large"
-                                        prefix="₽"
-                                        value={blackBet}
-                                        onChange={handleBetChange(setBlackBet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[16, 16]}>
-                            <Col span={8}>
-                                <Form.Item label="Ставка на 1st 12">
-                                    <Input
-                                        placeholder="Ставка на 1st 12"
-                                        size="large"
-                                        prefix="₽"
-                                        value={first12Bet}
-                                        onChange={handleBetChange(setFirst12Bet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item label="Ставка на 2nd 12">
-                                    <Input
-                                        placeholder="Ставка на 2nd 12"
-                                        size="large"
-                                        prefix="₽"
-                                        value={second12Bet}
-                                        onChange={handleBetChange(setSecond12Bet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item label="Ставка на 3rd 12">
-                                    <Input
-                                        placeholder="Ставка на 3rd 12"
-                                        size="large"
-                                        prefix="₽"
-                                        value={third12Bet}
-                                        onChange={handleBetChange(setThird12Bet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[16, 16]}>
-                            <Col span={12}>
-                                <Form.Item label="Ставка на 1-18">
-                                    <Input
-                                        placeholder="Ставка на 1-18"
-                                        size="large"
-                                        prefix="₽"
-                                        value={oneToEighteenBet}
-                                        onChange={handleBetChange(setOneToEighteenBet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item label="Ставка на 19-36">
-                                    <Input
-                                        placeholder="Ставка на 19-36"
-                                        size="large"
-                                        prefix="₽"
-                                        value={nineteenToThirtySixBet}
-                                        onChange={handleBetChange(setNineteenToThirtySixBet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[16, 16]}>
-                            <Col span={8}>
-                                <Form.Item label="Ставка на First 2 to 1">
-                                    <Input
-                                        placeholder="Ставка на First 2 to 1"
-                                        size="large"
-                                        prefix="₽"
-                                        value={first2To1Bet}
-                                        onChange={handleBetChange(setFirst2To1Bet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item label="Ставка на Second 2 to 1">
-                                    <Input
-                                        placeholder="Ставка на Second 2 to 1"
-                                        size="large"
-                                        prefix="₽"
-                                        value={second2To1Bet}
-                                        onChange={handleBetChange(setSecond2To1Bet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item label="Ставка на Third 2 to 1">
-                                    <Input
-                                        placeholder="Ставка на Third 2 to 1"
-                                        size="large"
-                                        prefix="₽"
-                                        value={third2To1Bet}
-                                        onChange={handleBetChange(setThird2To1Bet)}
-                                        style={styles.input}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
+                    <BetForm betValues={betValues} handleBetChange={handleBetChange} />
                 </div>
                 <div style={styles.submitButtonContainer}>
                     <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
@@ -285,62 +155,9 @@ function RouletteCard() {
                     </Button>
                 </div>
                 <div style={styles.cardBody}>
-                    <div style={styles.numberGrid}>
-                        {numbers.map((number) => (
-                            <Button
-                                key={number}
-                                shape="circle"
-                                size="large"
-                                style={{
-                                    ...styles.numberButton,
-                                    backgroundColor: getColorForNumber(number),
-                                    color: getTextColorForNumber(number),
-                                    transform: selectedNumbers.includes(number) ? 'scale(1.1)' : 'scale(1)',
-                                    transition: 'transform 0.2s',
-                                }}
-                                onClick={() => handleNumberClick(number)}
-                            >
-                                {number}
-                                {selectedNumbers.includes(number) && (
-                                    <span style={styles.coinIcon}>💰</span>
-                                )}
-                            </Button>
-                        ))}
-                    </div>
+                    <NumberGrid numbers={numbers} selectedNumbers={selectedNumbers} handleNumberClick={handleNumberClick} />
                 </div>
-                <div style={styles.colorButtons}>
-                    <Button
-                        style={{
-                            ...styles.colorButton,
-                            backgroundColor: 'black',
-                            color: 'white',
-                            opacity: selectedColor === 'black' ? '0.5' : '1',
-                            width: '120px',
-                            height: '50px',
-                            marginRight: '10px',
-                            transition: 'opacity 0.2s, transform 0.2s',
-                            transform: selectedColor === 'black' ? 'scale(1.05)' : 'scale(1)',
-                        }}
-                        onClick={() => handleColorClick('black')}
-                    >
-                        Черное
-                    </Button>
-                    <Button
-                        style={{
-                            ...styles.colorButton,
-                            backgroundColor: 'red',
-                            color: 'white',
-                            opacity: selectedColor === 'red' ? '0.5' : '1',
-                            width: '120px',
-                            height: '50px',
-                            transition: 'opacity 0.2s, transform 0.2s',
-                            transform: selectedColor === 'red' ? 'scale(1.05)' : 'scale(1)',
-                        }}
-                        onClick={() => handleColorClick('red')}
-                    >
-                        Красное
-                    </Button>
-                </div>
+                <ColorButtons selectedColor={selectedColor} handleColorClick={handleColorClick} />
             </Card>
         </div>
     );
@@ -371,55 +188,16 @@ const styles = {
         color: '#1890ff',
         textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
     },
-    form: {
-        width: '100%',
-    },
-    input: {
-        width: '100%',
-    },
-    cardBody: {
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: '20px',
-    },
-    numberGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(10, 1fr)',
-        gap: '10px',
-        justifyContent: 'center',
-    },
-    numberButton: {
-        width: '50px',
-        height: '50px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        borderRadius: '50%',
-        border: 'none',
-    },
     displayContainer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: '200px',
     },
-    coinIcon: {
-        marginLeft: '4px',
-    },
-    colorButtons: {
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: '20px',
-    },
-    colorButton: {
-        padding: '10px 20px',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        borderRadius: '8px',
-        border: 'none',
-        cursor: 'pointer',
+    scrollContainer: {
+        maxHeight: '400px',
+        overflowY: 'auto',
+        paddingRight: '15px', // Compensate for scrollbar width
     },
     submitButtonContainer: {
         display: 'flex',
@@ -437,25 +215,6 @@ const styles = {
         fontWeight: 'bold',
         borderRadius: '8px',
     },
-    scrollContainer: {
-        maxHeight: '400px',
-        overflowY: 'auto',
-        paddingRight: '15px', // Compensate for scrollbar width
-    },
 };
-
-function getColorForNumber(number) {
-    if (number === 0) {
-        return 'green';
-    } else if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number)) {
-        return 'red';
-    } else {
-        return 'black';
-    }
-}
-
-function getTextColorForNumber(number) {
-    return 'white';
-}
 
 export default RouletteCard;

@@ -13,7 +13,7 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
             let currentNumber = 0;
             const spinInterval = setInterval(() => {
                 setDisplayedNumber(currentNumber);
-                currentNumber = (currentNumber + 1) % 37; // Ограничить числа до 36
+                currentNumber = (currentNumber + 1) % 37;
             }, 100);
 
             timeout = setTimeout(() => {
@@ -72,46 +72,47 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
-        padding: '15px',
+        height: '200px',
     },
     card: {
         width: '100%',
-        maxWidth: '900px', // Увеличено для большей ширины
+        maxWidth: '900px',
         backgroundColor: 'white',
-        borderRadius: '12px', // Сделаны более округлыми углы
-        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)', // Усилен эффект тени
+        borderRadius: '12px',
+        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '30px', // Увеличен padding для лучшего восприятия
-        transition: 'max-width 0.5s ease, box-shadow 0.5s ease', // Добавлен плавный переход
-        textAlign: 'center', // Центрирование текста
+        padding: '30px',
+        transition: 'all 0.5s ease',
+        textAlign: 'center',
     },
     cardSpinning: {
-        maxWidth: '1100px', // Увеличена ширина карточки во время прокрутки
-        boxShadow: '0 0 20px #1890ff', // Свечение во время прокрутки
-        animation: 'rotate 2s linear infinite', // Добавлен вращающийся эффект
+        maxWidth: '1100px',
+        boxShadow: '0 0 20px #1890ff',
+        animation: 'spinEffect 5s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
     },
     numberText: {
-        fontSize: '28px', // Увеличен размер шрифта
+        fontSize: '32px',
         fontWeight: 'bold',
-        color: '#1890ff', // Добавлен цвет текста
+        color: '#1890ff',
     },
     colorText: {
-        fontSize: '24px', // Увеличен размер шрифта
-        marginTop: '15px', // Увеличен отступ сверху
+        fontSize: '24px',
+        marginTop: '15px',
     },
     resultText: {
-        fontSize: '32px', // Увеличен размер шрифта для результата
+        fontSize: '32px',
         fontWeight: 'bold',
-        color: '#ff4d4f', // Цвет текста для результата
-        marginTop: '20px', // Отступ сверху для результата
+        color: '#ff4d4f',
+        marginTop: '20px',
     },
-    '@keyframes rotate': {
+    '@keyframes spinEffect': {
         '0%': { transform: 'rotate(0deg)' },
-        '100%': { transform: 'rotate(360deg)' },
+        '80%': { transform: 'rotate(2880deg)' },
+        '90%': { transform: 'rotate(2950deg)' },
+        '100%': { transform: 'rotate(2880deg)' },
     },
 };
 
