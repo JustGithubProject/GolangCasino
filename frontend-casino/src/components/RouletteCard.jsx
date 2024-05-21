@@ -3,26 +3,27 @@ import { Card, Button, Typography, Spin, message } from 'antd';
 import Display from './Display';
 import BetForm from './BetForm';
 import NumberGrid from './NumberGrid';
-import ColorButtons from './ColorButtons';
 
 const { Title } = Typography;
 
 function RouletteCard() {
     const [selectedNumbers, setSelectedNumbers] = useState([]);
     const [selectedColor, setSelectedColor] = useState(null);
-    const [betAmount, setBetAmount] = useState('');
-    const [evenBet, setEvenBet] = useState('');
-    const [oddBet, setOddBet] = useState('');
-    const [redBet, setRedBet] = useState('');
-    const [blackBet, setBlackBet] = useState('');
-    const [first12Bet, setFirst12Bet] = useState('');
-    const [second12Bet, setSecond12Bet] = useState('');
-    const [third12Bet, setThird12Bet] = useState('');
-    const [oneToEighteenBet, setOneToEighteenBet] = useState('');
-    const [nineteenToThirtySixBet, setNineteenToThirtySixBet] = useState('');
-    const [first2To1Bet, setFirst2To1Bet] = useState('');
-    const [second2To1Bet, setSecond2To1Bet] = useState('');
-    const [third2To1Bet, setThird2To1Bet] = useState('');
+    const [betValues, setBetValues] = useState({
+        betAmount: '',
+        evenBet: '',
+        oddBet: '',
+        redBet: '',
+        blackBet: '',
+        first12Bet: '',
+        second12Bet: '',
+        third12Bet: '',
+        oneToEighteenBet: '',
+        nineteenToThirtySixBet: '',
+        first2To1Bet: '',
+        second2To1Bet: '',
+        third2To1Bet: '',
+    });
 
     const [spinResult, setSpinResult] = useState(null);
     const [isSpinning, setIsSpinning] = useState(false);
@@ -40,37 +41,54 @@ function RouletteCard() {
 
     const handleColorClick = (color) => {
         setSelectedColor(color);
-        if (color === 'black') {
-            setBlackBet(blackBet ? '' : '100');
-            setRedBet('');
-        } else if (color === 'red') {
-            setRedBet(redBet ? '' : '100');
-            setBlackBet('');
-        }
+        setBetValues((prevValues) => ({
+            ...prevValues,
+            redBet: color === 'red' ? (prevValues.redBet ? '' : '100') : '',
+            blackBet: color === 'black' ? (prevValues.blackBet ? '' : '100') : '',
+        }));
     };
 
     const handleBetChange = (key) => (e) => {
         const value = e.target.value;
-        switch (key) {
-            case 'betAmount': setBetAmount(value); break;
-            case 'evenBet': setEvenBet(value); break;
-            case 'oddBet': setOddBet(value); break;
-            case 'redBet': setRedBet(value); break;
-            case 'blackBet': setBlackBet(value); break;
-            case 'first12Bet': setFirst12Bet(value); break;
-            case 'second12Bet': setSecond12Bet(value); break;
-            case 'third12Bet': setThird12Bet(value); break;
-            case 'oneToEighteenBet': setOneToEighteenBet(value); break;
-            case 'nineteenToThirtySixBet': setNineteenToThirtySixBet(value); break;
-            case 'first2To1Bet': setFirst2To1Bet(value); break;
-            case 'second2To1Bet': setSecond2To1Bet(value); break;
-            case 'third2To1Bet': setThird2To1Bet(value); break;
-            default: break;
+        setBetValues((prevValues) => ({
+            ...prevValues,
+            [key]: value,
+        }));
+    };
+
+    const handleSectorClick = (sector) => {
+        const fieldMap = {
+            '1st 12': 'first12Bet',
+            '2nd 12': 'second12Bet',
+            '3rd 12': 'third12Bet',
+            '1 to 18': 'oneToEighteenBet',
+            'EVEN': 'evenBet',
+            'ODD': 'oddBet',
+            '19 to 36': 'nineteenToThirtySixBet',
+            '2 to 1 (1)': 'first2To1Bet',
+            '2 to 1 (2)': 'second2To1Bet',
+            '2 to 1 (3)': 'third2To1Bet',
+        };
+
+        const field = fieldMap[sector];
+        if (field) {
+            setBetValues((prevValues) => ({
+                ...prevValues,
+                [field]: prevValues[field] === '100' ? '' : '100',
+            }));
         }
     };
 
     const handleSubmit = async () => {
-        if (!betAmount && !evenBet && !oddBet && !redBet && !blackBet && !first12Bet && !second12Bet && !third12Bet && !oneToEighteenBet && !nineteenToThirtySixBet && !first2To1Bet && !second2To1Bet && !third2To1Bet) {
+        const {
+            betAmount, evenBet, oddBet, redBet, blackBet,
+            first12Bet, second12Bet, third12Bet, oneToEighteenBet,
+            nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet,
+        } = betValues;
+
+        if (!betAmount && !evenBet && !oddBet && !redBet && !blackBet && !first12Bet &&
+            !second12Bet && !third12Bet && !oneToEighteenBet && !nineteenToThirtySixBet &&
+            !first2To1Bet && !second2To1Bet && !third2To1Bet) {
             message.error('Please place at least one bet.');
             return;
         }
@@ -121,27 +139,10 @@ function RouletteCard() {
         }
     };
 
-    const betValues = {
-        betAmount,
-        evenBet,
-        oddBet,
-        redBet,
-        blackBet,
-        first12Bet,
-        second12Bet,
-        third12Bet,
-        oneToEighteenBet,
-        nineteenToThirtySixBet,
-        first2To1Bet,
-        second2To1Bet,
-        third2To1Bet,
-    };
-
-    // Использование чисел в нужном порядке
     const numbers = [
         [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
         [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
-        [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
+        [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34],
     ];
 
     return (
@@ -160,7 +161,13 @@ function RouletteCard() {
                     </Button>
                 </div>
                 <div style={styles.cardBody}>
-                    <NumberGrid numbers={numbers} selectedNumbers={selectedNumbers} handleNumberClick={handleNumberClick} handleColorClick={handleColorClick} />
+                    <NumberGrid
+                        numbers={numbers}
+                        selectedNumbers={selectedNumbers}
+                        handleNumberClick={handleNumberClick}
+                        handleColorClick={handleColorClick}
+                        handleSectorClick={handleSectorClick}
+                    />
                 </div>
             </Card>
         </div>

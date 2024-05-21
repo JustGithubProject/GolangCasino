@@ -1,7 +1,33 @@
 import React from 'react';
 import { Button } from 'antd';
 
-function NumberGrid({ numbers, selectedNumbers, handleNumberClick, handleColorClick }) {
+function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick }) {
+    const getButtonStyle = (number) => ({
+        ...styles.numberButton,
+        backgroundColor: getColorForNumber(number),
+        color: 'white',
+        opacity: selectedNumbers.includes(number) ? '0.7' : '1',
+        transform: selectedNumbers.includes(number) ? 'scale(1.1)' : 'scale(1)',
+    });
+
+    const getColorButtonStyle = (color) => ({
+        ...styles.diamondButton,
+        backgroundColor: color,
+        color: 'white',
+        opacity: selectedColor === color ? '0.7' : '1',
+        transform: selectedColor === color ? 'scale(1.1)' : 'scale(1)',
+    });
+
+    const getZeroButtonStyle = () => ({
+        ...styles.diamondButton,
+        backgroundColor: 'green',
+        color: 'white',
+        transform: 'rotate(45deg)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    });
+
     return (
         <div style={styles.container}>
             <div style={styles.grid}>
@@ -9,13 +35,10 @@ function NumberGrid({ numbers, selectedNumbers, handleNumberClick, handleColorCl
                     <Button
                         shape="circle"
                         size="large"
-                        style={getButtonStyle(0, selectedNumbers)}
+                        style={getZeroButtonStyle()}
                         onClick={() => handleNumberClick(0)}
                     >
-                        0
-                        {selectedNumbers.includes(0) && (
-                            <span style={styles.coinIcon}>💰</span>
-                        )}
+                        <span style={styles.diamondText}>0</span>
                     </Button>
                 </div>
                 <div style={styles.numbers}>
@@ -24,7 +47,7 @@ function NumberGrid({ numbers, selectedNumbers, handleNumberClick, handleColorCl
                             {numberRow.map((number, numberIndex) => (
                                 <Button
                                     key={numberIndex}
-                                    style={getButtonStyle(number, selectedNumbers)}
+                                    style={getButtonStyle(number)}
                                     onClick={() => handleNumberClick(number)}
                                 >
                                     {number}
@@ -35,24 +58,34 @@ function NumberGrid({ numbers, selectedNumbers, handleNumberClick, handleColorCl
                             ))}
                         </div>
                     ))}
-                    <div style={styles.labels}>
-                        <div style={styles.label}>1st 12</div>
-                        <div style={styles.label}>2nd 12</div>
-                        <div style={styles.label}>3rd 12</div>
+                    <div style={styles.row}>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('1st 12')}>1st 12</Button>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('2nd 12')}>2nd 12</Button>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('3rd 12')}>3rd 12</Button>
                     </div>
-                    <div style={styles.labels}>
-                        <div style={styles.label}>1 to 18</div>
-                        <div style={styles.label}>EVEN</div>
-                        <div style={styles.diamond}></div>
-                        <div style={styles.square}></div>
-                        <div style={styles.label}>ODD</div>
-                        <div style={styles.label}>19 to 36</div>
+                    <div style={styles.row}>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('1 to 18')}>1 to 18</Button>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('EVEN')}>EVEN</Button>
+                        <Button
+                            style={getColorButtonStyle('red')}
+                            onClick={() => handleColorClick('red')}
+                        >
+                            <span style={styles.diamondText}>Красное</span>
+                        </Button>
+                        <Button
+                            style={getColorButtonStyle('black')}
+                            onClick={() => handleColorClick('black')}
+                        >
+                            <span style={styles.diamondText}>Черное</span>
+                        </Button>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('ODD')}>ODD</Button>
+                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('19 to 36')}>19 to 36</Button>
                     </div>
-                    <div style={styles.labels}>
-                        <div style={styles.verticalLabel}>2 to 1</div>
-                        <div style={styles.verticalLabel}>2 to 1</div>
-                        <div style={styles.verticalLabel}>2 to 1</div>
-                    </div>
+                </div>
+                <div style={styles.column}>
+                    <Button style={styles.wideVerticalSectorButton} onClick={() => handleSectorClick('2 to 1 (1)')}>2 to 1</Button>
+                    <Button style={styles.wideVerticalSectorButton} onClick={() => handleSectorClick('2 to 1 (2)')}>2 to 1</Button>
+                    <Button style={styles.wideVerticalSectorButton} onClick={() => handleSectorClick('2 to 1 (3)')}>2 to 1</Button>
                 </div>
             </div>
         </div>
@@ -62,54 +95,54 @@ function NumberGrid({ numbers, selectedNumbers, handleNumberClick, handleColorCl
 const styles = {
     container: {
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         padding: '20px',
-        backgroundColor: '#006400', // Темно-зеленый фон
+        backgroundColor: '#006400', // Dark green background
     },
     grid: {
         display: 'flex',
         flexDirection: 'row', // Align columns in a row
-        border: '2px solid white', // Белая рамка для сетки
-        backgroundColor: '#006400', // Темно-зеленый фон
+        border: '2px solid white', // White border for the grid
+        backgroundColor: '#006400', // Dark green background
+        borderRadius: '10px', // Rounded corners for the grid
     },
     zeroColumn: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'green', // Темно-зеленый фон
-        width: '60px', // Ширина блока 0
-        borderRight: '2px solid white', // Белая рамка для нуля
-    },
-    hexagon: {
-        position: 'relative',
-        width: '60px',
-        height: '60px', // Сделать высоту блока 0 равной остальным
-        backgroundColor: '#006400', // Темно-зеленый фон
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#006400', // Dark green background
+        width: '60px', // Width of the zero block
+        borderRight: '2px solid white', // White border for the zero block
+        borderTopLeftRadius: '10px', // Rounded top left corner
+        borderBottomLeftRadius: '10px', // Rounded bottom left corner
     },
     numbers: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#006400', // Темно-зеленый фон
+        backgroundColor: '#006400', // Dark green background
     },
     row: {
         display: 'flex',
     },
+    column: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
     numberButton: {
-        width: '60px', // Увеличенный размер кнопок
+        width: '60px', // Increased button size
         height: '60px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: '18px', // Увеличенный размер шрифта
+        fontSize: '18px', // Increased font size
         fontWeight: 'bold',
-        borderRadius: '8px', // Закругленные края
-        border: '2px solid white', // Белая рамка для каждой кнопки
+        borderRadius: '8px', // Rounded corners
+        border: '2px solid white', // White border for each button
         transition: 'transform 0.2s, background-color 0.2s',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Тени для 3D-эффекта
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Shadows for 3D effect
+        margin: '2px', // Margin between buttons
     },
     selectedButton: {
         transform: 'scale(1.1)',
@@ -118,62 +151,78 @@ const styles = {
     coinIcon: {
         marginLeft: '4px',
     },
-    labels: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        width: '100%',
-        padding: '10px 0',
-        borderTop: '2px solid white', // Белая рамка сверху
-        borderBottom: '2px solid white', // Белая рамка снизу
-    },
-    label: {
+    sectorButton: {
+        flex: 1,
+        height: '60px',
+        backgroundColor: '#006400', // Dark green background
         color: 'white',
         fontSize: '16px',
         fontWeight: 'bold',
+        borderRadius: '8px',
+        border: '2px solid white',
+        cursor: 'pointer',
         textAlign: 'center',
-        flex: 1,
-        border: '2px solid white', // Белая рамка вокруг каждого лейбла
-        padding: '10px',
+        lineHeight: '60px',
+        margin: '2px', // Margin between buttons
+        transition: 'background-color 0.2s, transform 0.2s',
     },
-    verticalLabel: {
+    verticalSectorButton: {
+        flex: 1,
+        width: '60px',
+        height: '60px',
+        backgroundColor: '#006400', // Dark green background
         color: 'white',
         fontSize: '16px',
         fontWeight: 'bold',
+        borderRadius: '8px',
+        border: '2px solid white',
+        cursor: 'pointer',
         textAlign: 'center',
-        writingMode: 'vertical-rl',
-        transform: 'rotate(180deg)',
-        padding: '10px',
-        flex: 1,
-        border: '2px solid white', // Белая рамка вокруг каждого лейбла
+        margin: '2px', // Margin between buttons
+        transition: 'background-color 0.2s, transform 0.2s',
     },
-    diamond: {
-        width: '16px',
-        height: '16px',
-        backgroundColor: 'red',
+    wideVerticalSectorButton: {
+        flex: 1,
+        width: '80px', // Increased width for wider appearance
+        height: '60px',
+        backgroundColor: '#006400', // Dark green background
+        color: 'white',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        borderRadius: '8px',
+        border: '2px solid white',
+        cursor: 'pointer',
+        textAlign: 'center',
+        margin: '2px', // Margin between buttons
+        transition: 'background-color 0.2s, transform 0.2s',
+    },
+    colorButton: {
+        width: '80px', // Reduced button width
+        height: '40px', // Reduced button height
+        fontSize: '14px',
+        fontWeight: 'bold',
+        borderRadius: '8px',
+        border: '2px solid white', // White border around the button
+        cursor: 'pointer',
+        transition: 'opacity 0.2s, transform 0.2s',
+        textAlign: 'center',
+        lineHeight: '1', // To center the text vertically
+    },
+    diamondButton: {
+        width: '60px',
+        height: '60px',
+        backgroundColor: 'transparent',
+        border: '2px solid white',
         transform: 'rotate(45deg)',
-        border: '2px solid white', // Белая рамка вокруг ромба
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    square: {
-        width: '16px',
-        height: '16px',
-        backgroundColor: 'black',
-        border: '2px solid white', // Белая рамка вокруг квадрата
-    }
+    diamondText: {
+        transform: 'rotate(-45deg)',
+        textAlign: 'center',
+    },
 };
-
-function getButtonStyle(number, selectedNumbers) {
-    const baseStyle = {
-        ...styles.numberButton,
-        backgroundColor: getColorForNumber(number),
-        color: 'white',
-    };
-
-    if (selectedNumbers.includes(number)) {
-        return { ...baseStyle, ...styles.selectedButton };
-    }
-
-    return baseStyle;
-}
 
 function getColorForNumber(number) {
     if (number === 0) {
@@ -184,12 +233,5 @@ function getColorForNumber(number) {
         return 'black';
     }
 }
-
-// Пример чисел для отображения в нужном порядке
-const numbers = [
-    [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
-    [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
-    [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
-];
 
 export default NumberGrid;
