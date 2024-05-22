@@ -1,5 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
+import chip1 from '../images/11.png'; // Replace with the actual path to the image
+import chip5 from '../images/55.png'; // Replace with the actual path to the image
+import chip10 from '../images/100.png'; // Replace with the actual path to the image
 
 function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick }) {
     const getButtonStyle = (number) => ({
@@ -19,17 +22,18 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
     });
 
     const getZeroButtonStyle = () => ({
-        ...styles.diamondButton,
+        ...styles.zeroButton,
         backgroundColor: 'green',
         color: 'white',
-        transform: 'rotate(45deg)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
     });
 
     return (
         <div style={styles.container}>
+            <div style={styles.leftPanel}>
+                <img src={chip1} alt="Chip 1" style={styles.chip} />
+                <img src={chip5} alt="Chip 5" style={styles.chip} />
+                <img src={chip10} alt="Chip 10" style={styles.chip} />
+            </div>
             <div style={styles.grid}>
                 <div style={styles.zeroColumn}>
                     <Button
@@ -38,7 +42,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                         style={getZeroButtonStyle()}
                         onClick={() => handleNumberClick(0)}
                     >
-                        <span style={styles.diamondText}>0</span>
+                        0
                     </Button>
                 </div>
                 <div style={styles.numbers}>
@@ -83,9 +87,9 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                     </div>
                 </div>
                 <div style={styles.column}>
-                    <Button style={styles.wideVerticalSectorButton} onClick={() => handleSectorClick('2 to 1 (1)')}>2 to 1</Button>
-                    <Button style={styles.wideVerticalSectorButton} onClick={() => handleSectorClick('2 to 1 (2)')}>2 to 1</Button>
-                    <Button style={styles.wideVerticalSectorButton} onClick={() => handleSectorClick('2 to 1 (3)')}>2 to 1</Button>
+                    <Button style={styles.verticalSectorButton} onClick={() => handleSectorClick('2 to 1 (1)')}>2 to 1</Button>
+                    <Button style={styles.verticalSectorButton} onClick={() => handleSectorClick('2 to 1 (2)')}>2 to 1</Button>
+                    <Button style={styles.verticalSectorButton} onClick={() => handleSectorClick('2 to 1 (3)')}>2 to 1</Button>
                 </div>
             </div>
         </div>
@@ -95,11 +99,24 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
 const styles = {
     container: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row', // Change to row to accommodate left panel
         justifyContent: 'center',
         alignItems: 'center',
         padding: '20px',
         backgroundColor: '#006400', // Dark green background
+    },
+    leftPanel: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '10px',
+        backgroundColor: '#006400', // Dark green background
+    },
+    chip: {
+        width: '50px',
+        height: '50px',
+        marginBottom: '10px',
     },
     grid: {
         display: 'flex',
@@ -117,6 +134,17 @@ const styles = {
         borderRight: '2px solid white', // White border for the zero block
         borderTopLeftRadius: '10px', // Rounded top left corner
         borderBottomLeftRadius: '10px', // Rounded bottom left corner
+    },
+    zeroButton: {
+        width: '100%', // Full width of the zero block
+        height: '100%', // Full height of the zero block
+        fontSize: '24px', // Adjust font size for better appearance
+        fontWeight: 'bold',
+        borderRadius: '0px', // Remove rounded corners for better alignment
+        border: '2px solid white', // White border for the button
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     numbers: {
         display: 'flex',
@@ -168,7 +196,7 @@ const styles = {
     },
     verticalSectorButton: {
         flex: 1,
-        width: '60px',
+        width: '70px',
         height: '60px',
         backgroundColor: '#006400', // Dark green background
         color: 'white',
