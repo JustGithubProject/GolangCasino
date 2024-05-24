@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'antd';
-import chip1 from '../images/11.png'; // Replace with the actual path to the image
-import chip5 from '../images/55.png'; // Replace with the actual path to the image
-import chip10 from '../images/100.png'; // Replace with the actual path to the image
 
 function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick }) {
+    const [selectedCoin, setSelectedCoin] = useState(1);
+    const [bets, setBets] = useState({});
+
+    const handleNumberBet = (number) => {
+        handleNumberClick(number, selectedCoin);
+        setBets((prevBets) => ({
+            ...prevBets,
+            [number]: (prevBets[number] || 0) + selectedCoin,
+        }));
+    };
+
+    const handleSectorButtonClick = (sector) => {
+        handleSectorClick(sector, selectedCoin);
+    };
+
     const getButtonStyle = (number) => ({
         ...styles.numberButton,
         backgroundColor: getColorForNumber(number),
@@ -27,12 +39,26 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
         color: 'white',
     });
 
+    const getSectorButtonStyle = (sector) => ({
+        ...styles.sectorButton,
+    });
+
+    const handleCoinClick = (coin) => {
+        setSelectedCoin(coin);
+    };
+
     return (
         <div style={styles.container}>
             <div style={styles.leftPanel}>
-                <img src={chip1} alt="Chip 1" style={styles.chip} />
-                <img src={chip5} alt="Chip 5" style={styles.chip} />
-                <img src={chip10} alt="Chip 10" style={styles.chip} />
+                {[1, 5, 10, 50].map((coin) => (
+                    <Button
+                        key={coin}
+                        style={styles.coinButton}
+                        onClick={() => handleCoinClick(coin)}
+                    >
+                        {coin}
+                    </Button>
+                ))}
             </div>
             <div style={styles.grid}>
                 <div style={styles.zeroColumn}>
@@ -40,7 +66,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                         shape="circle"
                         size="large"
                         style={getZeroButtonStyle()}
-                        onClick={() => handleNumberClick(0)}
+                        onClick={() => handleNumberBet(0)}
                     >
                         0
                     </Button>
@@ -52,24 +78,24 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                                 <Button
                                     key={numberIndex}
                                     style={getButtonStyle(number)}
-                                    onClick={() => handleNumberClick(number)}
+                                    onClick={() => handleNumberBet(number)}
                                 >
                                     {number}
-                                    {selectedNumbers.includes(number) && (
-                                        <span style={styles.coinIcon}>💰</span>
+                                    {bets[number] && (
+                                        <span style={styles.betAmount}>{bets[number]}</span>
                                     )}
                                 </Button>
                             ))}
                         </div>
                     ))}
                     <div style={styles.row}>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('1st 12')}>1st 12</Button>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('2nd 12')}>2nd 12</Button>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('3rd 12')}>3rd 12</Button>
+                        <Button style={getSectorButtonStyle('1st 12')} onClick={() => handleSectorButtonClick('1st 12')}>1st 12</Button>
+                        <Button style={getSectorButtonStyle('2nd 12')} onClick={() => handleSectorButtonClick('2nd 12')}>2nd 12</Button>
+                        <Button style={getSectorButtonStyle('3rd 12')} onClick={() => handleSectorButtonClick('3rd 12')}>3rd 12</Button>
                     </div>
                     <div style={styles.row}>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('1 to 18')}>1 to 18</Button>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('EVEN')}>EVEN</Button>
+                        <Button style={getSectorButtonStyle('1 to 18')} onClick={() => handleSectorButtonClick('1 to 18')}>1 to 18</Button>
+                        <Button style={getSectorButtonStyle('EVEN')} onClick={() => handleSectorButtonClick('EVEN')}>EVEN</Button>
                         <Button
                             style={getColorButtonStyle('red')}
                             onClick={() => handleColorClick('red')}
@@ -82,14 +108,14 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                         >
                             <span style={styles.diamondText}>Черное</span>
                         </Button>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('ODD')}>ODD</Button>
-                        <Button style={styles.sectorButton} onClick={() => handleSectorClick('19 to 36')}>19 to 36</Button>
+                        <Button style={getSectorButtonStyle('ODD')} onClick={() => handleSectorButtonClick('ODD')}>ODD</Button>
+                        <Button style={getSectorButtonStyle('19 to 36')} onClick={() => handleSectorButtonClick('19 to 36')}>19 to 36</Button>
                     </div>
                 </div>
                 <div style={styles.column}>
-                    <Button style={styles.verticalSectorButton} onClick={() => handleSectorClick('2 to 1 (1)')}>2 to 1</Button>
-                    <Button style={styles.verticalSectorButton} onClick={() => handleSectorClick('2 to 1 (2)')}>2 to 1</Button>
-                    <Button style={styles.verticalSectorButton} onClick={() => handleSectorClick('2 to 1 (3)')}>2 to 1</Button>
+                    <Button style={getSectorButtonStyle('2 to 1 (1)')} onClick={() => handleSectorButtonClick('2 to 1 (1)')}>2 to 1</Button>
+                    <Button style={getSectorButtonStyle('2 to 1 (2)')} onClick={() => handleSectorButtonClick('2 to 1 (2)')}>2 to 1</Button>
+                    <Button style={getSectorButtonStyle('2 to 1 (3)')} onClick={() => handleSectorButtonClick('2 to 1 (3)')}>2 to 1</Button>
                 </div>
             </div>
         </div>
@@ -99,11 +125,11 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
 const styles = {
     container: {
         display: 'flex',
-        flexDirection: 'row', // Change to row to accommodate left panel
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         padding: '20px',
-        backgroundColor: '#006400', // Dark green background
+        backgroundColor: '#006400',
     },
     leftPanel: {
         display: 'flex',
@@ -111,37 +137,32 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         padding: '10px',
-        backgroundColor: '#006400', // Dark green background
-    },
-    chip: {
-        width: '50px',
-        height: '50px',
-        marginBottom: '10px',
+        backgroundColor: '#006400',
     },
     grid: {
         display: 'flex',
-        flexDirection: 'row', // Align columns in a row
-        border: '2px solid white', // White border for the grid
-        backgroundColor: '#006400', // Dark green background
-        borderRadius: '10px', // Rounded corners for the grid
+        flexDirection: 'row',
+        border: '2px solid white',
+        backgroundColor: '#006400',
+        borderRadius: '10px',
     },
     zeroColumn: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#006400', // Dark green background
-        width: '60px', // Width of the zero block
-        borderRight: '2px solid white', // White border for the zero block
-        borderTopLeftRadius: '10px', // Rounded top left corner
-        borderBottomLeftRadius: '10px', // Rounded bottom left corner
+        backgroundColor: '#006400',
+        width: '60px',
+        borderRight: '2px solid white',
+        borderTopLeftRadius: '10px',
+        borderBottomLeftRadius: '10px',
     },
     zeroButton: {
-        width: '100%', // Full width of the zero block
-        height: '100%', // Full height of the zero block
-        fontSize: '24px', // Adjust font size for better appearance
+        width: '100%',
+        height: '100%',
+        fontSize: '24px',
         fontWeight: 'bold',
-        borderRadius: '0px', // Remove rounded corners for better alignment
-        border: '2px solid white', // White border for the button
+        borderRadius: '0px',
+        border: '2px solid white',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -149,7 +170,7 @@ const styles = {
     numbers: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#006400', // Dark green background
+        backgroundColor: '#006400',
     },
     row: {
         display: 'flex',
@@ -159,30 +180,29 @@ const styles = {
         flexDirection: 'column',
     },
     numberButton: {
-        width: '60px', // Increased button size
+        width: '60px',
         height: '60px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: '18px', // Increased font size
+        fontSize: '18px',
         fontWeight: 'bold',
-        borderRadius: '8px', // Rounded corners
-        border: '2px solid white', // White border for each button
+        borderRadius: '8px',
+        border: '2px solid white',
         transition: 'transform 0.2s, background-color 0.2s',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Shadows for 3D effect
-        margin: '2px', // Margin between buttons
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+        margin: '2px',
     },
-    selectedButton: {
-        transform: 'scale(1.1)',
-        boxShadow: '0 0 10px #1890ff',
-    },
-    coinIcon: {
+    betAmount: {
         marginLeft: '4px',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        color: 'yellow',
     },
     sectorButton: {
         flex: 1,
         height: '60px',
-        backgroundColor: '#006400', // Dark green background
+        backgroundColor: '#006400',
         color: 'white',
         fontSize: '16px',
         fontWeight: 'bold',
@@ -191,50 +211,20 @@ const styles = {
         cursor: 'pointer',
         textAlign: 'center',
         lineHeight: '60px',
-        margin: '2px', // Margin between buttons
-        transition: 'background-color 0.2s, transform 0.2s',
-    },
-    verticalSectorButton: {
-        flex: 1,
-        width: '70px',
-        height: '60px',
-        backgroundColor: '#006400', // Dark green background
-        color: 'white',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        borderRadius: '8px',
-        border: '2px solid white',
-        cursor: 'pointer',
-        textAlign: 'center',
-        margin: '2px', // Margin between buttons
-        transition: 'background-color 0.2s, transform 0.2s',
-    },
-    wideVerticalSectorButton: {
-        flex: 1,
-        width: '80px', // Increased width for wider appearance
-        height: '60px',
-        backgroundColor: '#006400', // Dark green background
-        color: 'white',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        borderRadius: '8px',
-        border: '2px solid white',
-        cursor: 'pointer',
-        textAlign: 'center',
-        margin: '2px', // Margin between buttons
+        margin: '2px',
         transition: 'background-color 0.2s, transform 0.2s',
     },
     colorButton: {
-        width: '80px', // Reduced button width
-        height: '40px', // Reduced button height
+        width: '80px',
+        height: '40px',
         fontSize: '14px',
         fontWeight: 'bold',
         borderRadius: '8px',
-        border: '2px solid white', // White border around the button
+        border: '2px solid white',
         cursor: 'pointer',
         transition: 'opacity 0.2s, transform 0.2s',
         textAlign: 'center',
-        lineHeight: '1', // To center the text vertically
+        lineHeight: '1',
     },
     diamondButton: {
         width: '60px',
@@ -249,6 +239,21 @@ const styles = {
     diamondText: {
         transform: 'rotate(-45deg)',
         textAlign: 'center',
+    },
+    coinButton: {
+        width: '50px',
+        height: '50px',
+        margin: '5px',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        borderRadius: '50%',
+        backgroundColor: '#f0ad4e',
+        color: 'white',
+        border: '2px solid white',
+        transition: 'transform 0.2s',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 };
 

@@ -180,8 +180,8 @@ const styles = {
     card: {
         padding: '24px',
         borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        backgroundColor: '#f7f7f7',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#fff',
     },
     form: {
         width: '100%',
@@ -192,6 +192,9 @@ const styles = {
     input: {
         width: '100%',
         borderRadius: '4px',
+        border: '1px solid #d9d9d9',
+        padding: '8px 12px',
+        fontSize: '16px',
     },
 };
 

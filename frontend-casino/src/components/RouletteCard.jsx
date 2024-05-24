@@ -28,14 +28,14 @@ function RouletteCard() {
     const [spinResult, setSpinResult] = useState(null);
     const [isSpinning, setIsSpinning] = useState(false);
 
-    const handleNumberClick = (number) => {
+    const handleNumberClick = (number, amount) => {
+        setBetValues((prevValues) => ({
+            ...prevValues,
+            betAmount: (parseInt(prevValues.betAmount) || 0) + amount,
+        }));
         const index = selectedNumbers.indexOf(number);
         if (index === -1) {
             setSelectedNumbers([...selectedNumbers, number]);
-        } else {
-            const updatedNumbers = [...selectedNumbers];
-            updatedNumbers.splice(index, 1);
-            setSelectedNumbers(updatedNumbers);
         }
     };
 
@@ -43,8 +43,8 @@ function RouletteCard() {
         setSelectedColor(color);
         setBetValues((prevValues) => ({
             ...prevValues,
-            redBet: color === 'red' ? (prevValues.redBet ? '' : '100') : '',
-            blackBet: color === 'black' ? (prevValues.blackBet ? '' : '100') : '',
+            redBet: color === 'red' ? (parseInt(prevValues.redBet) || 0) + 100 : prevValues.redBet,
+            blackBet: color === 'black' ? (parseInt(prevValues.blackBet) || 0) + 100 : prevValues.blackBet,
         }));
     };
 
@@ -56,7 +56,7 @@ function RouletteCard() {
         }));
     };
 
-    const handleSectorClick = (sector) => {
+    const handleSectorClick = (sector, amount) => {
         const fieldMap = {
             '1st 12': 'first12Bet',
             '2nd 12': 'second12Bet',
@@ -74,7 +74,7 @@ function RouletteCard() {
         if (field) {
             setBetValues((prevValues) => ({
                 ...prevValues,
-                [field]: prevValues[field] === '100' ? '' : '100',
+                [field]: (parseInt(prevValues[field]) || 0) + amount,
             }));
         }
     };
@@ -148,19 +148,16 @@ function RouletteCard() {
     return (
         <div style={styles.container}>
             <Card style={styles.card}>
-                <Title level={2} style={styles.cardHeader}>Рулетка</Title>
                 <div style={styles.displayContainer}>
-                    <Display selectedNumbers={selectedNumbers} selectedColor={selectedColor} spinResult={spinResult} isSpinning={isSpinning} />
+                    <Display
+                        selectedNumbers={selectedNumbers}
+                        selectedColor={selectedColor}
+                        spinResult={spinResult}
+                        isSpinning={isSpinning}
+                        betValues={betValues}
+                    />
                 </div>
                 <div style={styles.scrollContainer}>
-                    <BetForm betValues={betValues} handleBetChange={handleBetChange} />
-                </div>
-                <div style={styles.submitButtonContainer}>
-                    <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
-                        {isSpinning ? <Spin /> : 'Вращать'}
-                    </Button>
-                </div>
-                <div style={styles.cardBody}>
                     <NumberGrid
                         numbers={numbers}
                         selectedNumbers={selectedNumbers}
@@ -168,6 +165,14 @@ function RouletteCard() {
                         handleColorClick={handleColorClick}
                         handleSectorClick={handleSectorClick}
                     />
+                </div>
+                <div style={styles.submitButtonContainer}>
+                    <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
+                        {isSpinning ? <Spin /> : 'Вращать'}
+                    </Button>
+                </div>
+                <div style={styles.scrollContainer}>
+                    <BetForm betValues={betValues} handleBetChange={handleBetChange} />
                 </div>
             </Card>
         </div>
@@ -191,13 +196,18 @@ const styles = {
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     },
-    cardHeader: {
+    titleContainer: {
+        backgroundColor: '#1890ff',
+        padding: '10px 20px',
+        borderRadius: '8px',
         textAlign: 'center',
         marginBottom: '24px',
-        fontSize: '24px',
+    },
+    cardHeader: {
+        color: 'white',
+        fontSize: '28px',
         fontWeight: 'bold',
-        color: '#1890ff',
-        textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
+        margin: 0,
     },
     displayContainer: {
         display: 'flex',

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 const { Text } = Typography;
 
-function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
+function Display({ selectedNumbers, selectedColor, spinResult, isSpinning, betValues }) {
     const [displayedNumber, setDisplayedNumber] = useState(null);
 
     useEffect(() => {
@@ -28,6 +28,27 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
         }
     }, [isSpinning, spinResult]);
 
+    const getSelectedBetsDisplay = () => {
+        const bets = [];
+
+        if (selectedNumbers.length > 0) {
+            bets.push(`Числа: ${selectedNumbers.join(', ')}`);
+        }
+        if (selectedColor) {
+            bets.push(`Цвет: ${selectedColor === 'red' ? 'Красное' : 'Черное'}`);
+        }
+        Object.keys(betValues).forEach((key) => {
+            if (betValues[key] && betValues[key] !== '') {
+                const value = parseInt(betValues[key], 10);
+                if (value > 0) {
+                    bets.push(`${key}: ₽${value}`);
+                }
+            }
+        });
+
+        return bets.length > 0 ? bets.join(' | ') : 'Нет ставок';
+    };
+
     return (
         <div style={styles.displayContainer}>
             <Card style={{ ...styles.card, ...(isSpinning && styles.cardSpinning) }}>
@@ -38,27 +59,10 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning }) {
                         </Text>
                     ) : (
                         <>
-                            {selectedNumbers.length > 0 ? (
-                                <Text strong style={styles.numberText}>
-                                    <CheckCircleTwoTone twoToneColor="#52c41a" /> Выбранные числа: {selectedNumbers.join(', ')}
-                                </Text>
-                            ) : (
-                                <Text strong style={styles.numberText}>
-                                    <CloseCircleTwoTone twoToneColor="#eb2f96" /> Выберите числа от 0 до 36
-                                </Text>
-                            )}
-                            {selectedColor && (
-                                <Text style={styles.colorText}>
-                                    <span style={{ color: selectedColor === 'red' ? '#ff4d4f' : '#595959' }}>
-                                        {selectedColor === 'red' ? '🔴 Красный' : '⚫ Черный'}
-                                    </span>
-                                </Text>
-                            )}
-                            {spinResult !== null && (
-                                <Text strong style={styles.resultText}>
-                                    Выпавшее число: {spinResult}
-                                </Text>
-                            )}
+                            <Text strong style={styles.numberText}>
+                                {spinResult !== null ? `Выпавшее число: ${spinResult}` : 'Выберите ставку'}
+                            </Text>
+                            <Text style={styles.betText}>{getSelectedBetsDisplay()}</Text>
                         </>
                     )}
                 </Space>
@@ -73,11 +77,12 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         height: '200px',
+        marginBottom: '20px',
     },
     card: {
         width: '100%',
         maxWidth: '900px',
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
         borderRadius: '12px',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
         display: 'flex',
@@ -94,19 +99,13 @@ const styles = {
         animation: 'spinEffect 5s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
     },
     numberText: {
-        fontSize: '32px',
+        fontSize: '40px',
         fontWeight: 'bold',
         color: '#1890ff',
     },
-    colorText: {
-        fontSize: '24px',
-        marginTop: '15px',
-    },
-    resultText: {
-        fontSize: '32px',
-        fontWeight: 'bold',
-        color: '#ff4d4f',
-        marginTop: '20px',
+    betText: {
+        fontSize: '20px',
+        color: '#595959',
     },
     '@keyframes spinEffect': {
         '0%': { transform: 'rotate(0deg)' },
