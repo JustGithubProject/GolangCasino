@@ -2,16 +2,15 @@ package main
 
 import (
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/handlers"
-	"github.com/gin-gonic/gin"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
 	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/middleware"
-
+	"github.com/gin-gonic/gin"
 )
 
-func main(){
+func main() {
 	db := database.InitDB()
 	// database.MigrateDB(db)
-	
+
 	r := gin.Default()
 	r.Use(middleware.LoggerMiddleware())
 
@@ -23,20 +22,27 @@ func main(){
 
 	// CORS middleware with specific origins
 	r.Use(func(c *gin.Context) {
-		allowedOrigins := []string{"localhost:3000", "127.0.0.1:3000"}
+		allowedOrigins := []string{"http://localhost:5173", "http://127.0.0.1:5173"}
 		origin := c.Request.Header.Get("Origin")
+		isAllowed := false
 		for _, allowedOrigin := range allowedOrigins {
 			if allowedOrigin == origin {
-				c.Writer.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-				c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-				c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-				if c.Request.Method == "OPTIONS" {
-					c.AbortWithStatus(200)
-					return
-				}
+				isAllowed = true
 				break
 			}
 		}
+
+		if isAllowed {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+			c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+			c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		}
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
 		c.Next()
 	})
 
@@ -51,10 +57,9 @@ func main(){
 	r.PUT("/update/game", handlers.UpdateGameHandler)
 	r.DELETE("/delete/game/:id", handlers.DeleteGameHandler)
 
-
 	// auth_handlers
 	r.POST("/register/user/", handlers.RegisterHandler)
-	r.POST("/login/user/",  handlers.LoginHandler)
+	r.POST("/login/user/", handlers.LoginHandler)
 
 	// common handlers(authenticated user)
 	r.POST("/spin-roulette-v1/", handlers.SpinRouletteHandler)

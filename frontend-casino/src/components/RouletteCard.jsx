@@ -110,7 +110,7 @@ function RouletteCard() {
         if (second2To1Bet) params.append('Second2To1', second2To1Bet);
         if (third2To1Bet) params.append('Third2To1', third2To1Bet);
 
-        const url = `http://localhost:8080/spin-roulette-v1/?${params.toString()}`;
+        const url = `http://localhost:8081/spin-roulette-v1/?${params.toString()}`;
 
         console.log('URL:', url);
 
@@ -120,7 +120,7 @@ function RouletteCard() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTYwMTY2OTQsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.6bzKBcZSUs938nN-sJmRSeC4Q9w29vGjOnACnDltezg',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY3MDQ3NDIsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.f0iLi6bimw1Us-5GCVGdu0kX_d9FfvqdHkYoW9J6qDU',
                 },
                 body: JSON.stringify({}),
             });

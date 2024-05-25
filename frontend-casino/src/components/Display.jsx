@@ -1,5 +1,4 @@
 import { Card, Typography, Space } from 'antd';
-import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
 const { Text } = Typography;
@@ -78,11 +77,12 @@ const styles = {
         alignItems: 'center',
         height: '200px',
         marginBottom: '20px',
+        background: 'linear-gradient(135deg, #ececec 0%, #f5f5f5 100%)',
     },
     card: {
         width: '100%',
         maxWidth: '900px',
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
         borderRadius: '12px',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
         display: 'flex',
@@ -92,11 +92,13 @@ const styles = {
         padding: '30px',
         transition: 'all 0.5s ease',
         textAlign: 'center',
+        transform: 'scale(1)',
     },
     cardSpinning: {
         maxWidth: '1100px',
         boxShadow: '0 0 20px #1890ff',
         animation: 'spinEffect 5s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+        transform: 'scale(1.05)',
     },
     numberText: {
         fontSize: '40px',
@@ -106,6 +108,7 @@ const styles = {
     betText: {
         fontSize: '20px',
         color: '#595959',
+        marginTop: '10px',
     },
     '@keyframes spinEffect': {
         '0%': { transform: 'rotate(0deg)' },
