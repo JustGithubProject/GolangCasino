@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/services"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
 
-function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick }) {
-    const [selectedCoin, setSelectedCoin] = useState(1);
+function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick, reset, setSelectedCoin }) {
+    const [selectedCoin, setLocalSelectedCoin] = useState(1);
     const [bets, setBets] = useState({});
 
     const handleNumberBet = (number) => {
@@ -21,7 +21,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
         ...styles.numberButton,
         backgroundColor: getColorForNumber(number),
         color: 'white',
-        opacity: selectedNumbers.includes(number) ? '0.7' : '1',
+        opacity: selectedNumbers.includes(number) ? 0.7 : 1,
         transform: selectedNumbers.includes(number) ? 'scale(1.1)' : 'scale(1)',
     });
 
@@ -29,7 +29,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
         ...styles.diamondButton,
         backgroundColor: color,
         color: 'white',
-        opacity: selectedColor === color ? '0.7' : '1',
+        opacity: selectedColor === color ? 0.7 : 1,
         transform: selectedColor === color ? 'scale(1.1)' : 'scale(1)',
     });
 
@@ -44,8 +44,13 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
     });
 
     const handleCoinClick = (coin) => {
+        setLocalSelectedCoin(coin);
         setSelectedCoin(coin);
     };
+
+    useEffect(() => {
+        setBets({});
+    }, [reset]);
 
     return (
         <div style={styles.container}>
@@ -189,7 +194,7 @@ const styles = {
         fontWeight: 'bold',
         borderRadius: '8px',
         border: '2px solid white',
-        transition: 'transform 0.2s, background-color 0.2s',
+        transition: 'transform 0.2s, background-color 0.2s, opacity 0.2s',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
         margin: '2px',
     },
@@ -212,7 +217,7 @@ const styles = {
         textAlign: 'center',
         lineHeight: '60px',
         margin: '2px',
-        transition: 'background-color 0.2s, transform 0.2s',
+        transition: 'background-color 0.2s, transform 0.2s, opacity 0.2s',
     },
     colorButton: {
         width: '80px',

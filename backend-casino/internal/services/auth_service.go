@@ -6,9 +6,9 @@ import (
 	"time"
     "encoding/hex"
 
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/repositories"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/repositories"
 	"github.com/golang-jwt/jwt"
 
 )

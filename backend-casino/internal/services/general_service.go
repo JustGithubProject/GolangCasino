@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
 	"github.com/gin-gonic/gin"
 )
 

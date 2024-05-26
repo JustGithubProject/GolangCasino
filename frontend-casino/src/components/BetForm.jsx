@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Input, Row, Col, Card } from 'antd';
+import { Form, Input, Row, Col, Card, Button } from 'antd';
 
-function BetForm({ betValues, handleBetChange }) {
+function BetForm({ betValues, handleBetChange, reset }) {
     const { betAmount, evenBet, oddBet, redBet, blackBet, first12Bet, second12Bet, third12Bet, oneToEighteenBet, nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet } = betValues;
 
     return (
@@ -171,6 +171,9 @@ function BetForm({ betValues, handleBetChange }) {
                         </Form.Item>
                     </Col>
                 </Row>
+                <Button type="default" onClick={reset} style={styles.clearButton}>
+                    Очистить
+                </Button>
             </Form>
         </Card>
     );
@@ -194,6 +197,12 @@ const styles = {
         borderRadius: '4px',
         border: '1px solid #d9d9d9',
         padding: '8px 12px',
+        fontSize: '16px',
+    },
+    clearButton: {
+        marginTop: '16px',
+        width: '100%',
+        padding: '10px',
         fontSize: '16px',
     },
 };

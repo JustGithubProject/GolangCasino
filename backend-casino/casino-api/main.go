@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/handlers"
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/database"
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/api/middleware"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/middleware"
 	"github.com/gin-gonic/gin"
 )
 

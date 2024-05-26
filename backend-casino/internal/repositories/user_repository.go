@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
 	"gorm.io/gorm"
 )
 

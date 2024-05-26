@@ -24,6 +24,7 @@ function RouletteCard() {
         second2To1Bet: '',
         third2To1Bet: '',
     });
+    const [selectedCoin, setSelectedCoin] = useState(1);
 
     const [spinResult, setSpinResult] = useState(null);
     const [isSpinning, setIsSpinning] = useState(false);
@@ -43,8 +44,8 @@ function RouletteCard() {
         setSelectedColor(color);
         setBetValues((prevValues) => ({
             ...prevValues,
-            redBet: color === 'red' ? (parseInt(prevValues.redBet) || 0) + 100 : prevValues.redBet,
-            blackBet: color === 'black' ? (parseInt(prevValues.blackBet) || 0) + 100 : prevValues.blackBet,
+            redBet: color === 'red' ? (parseInt(prevValues.redBet) || 0) + selectedCoin : prevValues.redBet,
+            blackBet: color === 'black' ? (parseInt(prevValues.blackBet) || 0) + selectedCoin : prevValues.blackBet,
         }));
     };
 
@@ -120,7 +121,7 @@ function RouletteCard() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY3MDQ3NDIsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.f0iLi6bimw1Us-5GCVGdu0kX_d9FfvqdHkYoW9J6qDU',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY3OTg5NjYsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.Qg0GIkgQAZD_AwMzeSGYQP7A_RLnD6Tk90qRj7uJcrM',
                 },
                 body: JSON.stringify({}),
             });
@@ -139,6 +140,26 @@ function RouletteCard() {
         }
     };
 
+    const handleReset = () => {
+        setSelectedNumbers([]);
+        setSelectedColor(null);
+        setBetValues({
+            betAmount: '',
+            evenBet: '',
+            oddBet: '',
+            redBet: '',
+            blackBet: '',
+            first12Bet: '',
+            second12Bet: '',
+            third12Bet: '',
+            oneToEighteenBet: '',
+            nineteenToThirtySixBet: '',
+            first2To1Bet: '',
+            second2To1Bet: '',
+            third2To1Bet: '',
+        });
+    };
+
     const numbers = [
         [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
         [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
@@ -148,6 +169,7 @@ function RouletteCard() {
     return (
         <div style={styles.container}>
             <Card style={styles.card}>
+    
                 <div style={styles.displayContainer}>
                     <Display
                         selectedNumbers={selectedNumbers}
@@ -161,18 +183,24 @@ function RouletteCard() {
                     <NumberGrid
                         numbers={numbers}
                         selectedNumbers={selectedNumbers}
+                        selectedColor={selectedColor}
                         handleNumberClick={handleNumberClick}
                         handleColorClick={handleColorClick}
                         handleSectorClick={handleSectorClick}
+                        reset={handleReset}
+                        setSelectedCoin={setSelectedCoin}
                     />
                 </div>
                 <div style={styles.submitButtonContainer}>
                     <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
-                        {isSpinning ? <Spin /> : 'Вращать'}
+                        {isSpinning ? <Spin /> : 'Spin'}
+                    </Button>
+                    <Button type="default" size="large" onClick={handleReset} style={styles.resetButton} disabled={isSpinning}>
+                        Reset
                     </Button>
                 </div>
                 <div style={styles.scrollContainer}>
-                    <BetForm betValues={betValues} handleBetChange={handleBetChange} />
+                    <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
                 </div>
             </Card>
         </div>
@@ -185,16 +213,16 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#f0f2f5',
+        background: 'linear-gradient(to right, #43cea2, #185a9d)', // Add a gradient background
         padding: '20px',
     },
     card: {
         width: '100%',
         maxWidth: '1200px',
-        backgroundColor: 'white',
+        backgroundColor: '#f8f9fa', // Light grey background for the card
         padding: '24px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
     },
     titleContainer: {
         backgroundColor: '#1890ff',
@@ -214,6 +242,10 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         height: '200px',
+        marginBottom: '24px',
+        backgroundColor: '#ffffff',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
     },
     scrollContainer: {
         maxHeight: '400px',
@@ -225,20 +257,32 @@ const styles = {
         justifyContent: 'center',
         position: 'sticky',
         bottom: '20px',
-        backgroundColor: 'white',
+        backgroundColor: '#f8f9fa',
         padding: '10px 0',
         boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
         zIndex: 1,
+        marginBottom: '24px',
     },
     submitButton: {
         padding: '10px 30px',
         fontSize: '16px',
         fontWeight: 'bold',
         borderRadius: '8px',
+        marginLeft: '10px',
+        background: 'linear-gradient(to right, #ff416c, #ff4b2b)', // Gradient for the spin button
+        border: 'none',
+        color: 'white',
     },
-    cardBody: {
-        paddingTop: '24px',
-    }
+    resetButton: {
+        padding: '10px 30px',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        borderRadius: '8px',
+        marginLeft: '10px',
+        background: 'linear-gradient(to right, #6a11cb, #2575fc)', // Gradient for the reset button
+        border: 'none',
+        color: 'white',
+    },
 };
 
 export default RouletteCard;

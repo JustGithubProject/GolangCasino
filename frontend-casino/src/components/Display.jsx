@@ -48,6 +48,14 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning, betVa
         return bets.length > 0 ? bets.join(' | ') : 'Нет ставок';
     };
 
+    const getColorForNumber = (number) => {
+        if (number === 0) return 'green';
+        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        return redNumbers.includes(number) ? 'red' : 'black';
+    };
+
+    const spinResultColor = getColorForNumber(spinResult);
+
     return (
         <div style={styles.displayContainer}>
             <Card style={{ ...styles.card, ...(isSpinning && styles.cardSpinning) }}>
@@ -58,7 +66,7 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning, betVa
                         </Text>
                     ) : (
                         <>
-                            <Text strong style={styles.numberText}>
+                            <Text strong style={{ ...styles.numberText, color: spinResultColor }}>
                                 {spinResult !== null ? `Выпавшее число: ${spinResult}` : 'Выберите ставку'}
                             </Text>
                             <Text style={styles.betText}>{getSelectedBetsDisplay()}</Text>
@@ -77,7 +85,9 @@ const styles = {
         alignItems: 'center',
         height: '200px',
         marginBottom: '20px',
-        background: 'linear-gradient(135deg, #ececec 0%, #f5f5f5 100%)',
+        background: 'linear-gradient(135deg, #e0e0e0 0%, #f0f0f0 100%)',
+        borderRadius: '12px',
+        padding: '10px',
     },
     card: {
         width: '100%',
@@ -93,22 +103,27 @@ const styles = {
         transition: 'all 0.5s ease',
         textAlign: 'center',
         transform: 'scale(1)',
+        border: '1px solid #d9d9d9',
     },
     cardSpinning: {
         maxWidth: '1100px',
         boxShadow: '0 0 20px #1890ff',
         animation: 'spinEffect 5s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
-        transform: 'scale(1.05)',
+        transform: 'scale(1.1)',
+        border: '1px solid #1890ff',
     },
     numberText: {
-        fontSize: '40px',
+        fontSize: '48px',
         fontWeight: 'bold',
         color: '#1890ff',
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+        transition: 'color 0.5s ease',
     },
     betText: {
         fontSize: '20px',
         color: '#595959',
         marginTop: '10px',
+        fontStyle: 'italic',
     },
     '@keyframes spinEffect': {
         '0%': { transform: 'rotate(0deg)' },

@@ -8,7 +8,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/JustGithubProject/GolangCasino/cmd/internal/models"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
 )
 
 
