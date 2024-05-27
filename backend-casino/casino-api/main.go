@@ -50,6 +50,7 @@ func main() {
 
 	// Routes for management(admin)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)
+	r.GET("/user/name/:username", handlers.GetUserByUsernameHandler)
 	r.PUT("/update/user", handlers.UpdateUserHandler)
 	r.DELETE("/delete/user/:id", handlers.DeleteUserHandler)
 	r.POST("/create/game/", handlers.CreateGameHandler)

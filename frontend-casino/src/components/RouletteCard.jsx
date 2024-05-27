@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Typography, Spin, message } from 'antd';
 import BetForm from './BetForm';
 import NumberGrid from './NumberGrid';
 import { CSSTransition } from 'react-transition-group';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import * as jwtDecodeModule from 'jwt-decode';
+
+
 import './styles.css';
 
 const { Text } = Typography;
+
 
 function RouletteCard() {
     const [selectedNumbers, setSelectedNumbers] = useState([]);
@@ -32,6 +36,33 @@ function RouletteCard() {
     const [resultMessage, setResultMessage] = useState(null);
     const [showResult, setShowResult] = useState(false);
     const [showBetForm, setShowBetForm] = useState(false);
+    const [username, setUsername] = useState(null);
+    const [balance, setBalance] = useState(null);
+
+    useEffect(() => {
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY5MjYwMDIsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.9Or9kv7MQtJepLoEa6g_hv2euALTMm3L-zOrt3nCF64';
+        const decodedToken = jwtDecodeModule.jwtDecode(token);
+        const username = decodedToken.username;
+        setUsername(username);
+        fetchUserBalance(username);
+    }, []);
+
+    const fetchUserBalance = async (username) => {
+        try {
+            const response = await fetch(`http://localhost:8081/user/name/${username}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setBalance(data.Balance);
+        } catch (error) {
+            console.error('Error fetching user balance:', error);
+        }
+    };
 
     const handleNumberClick = (number, amount) => {
         setBetValues((prevValues) => ({
@@ -125,7 +156,7 @@ function RouletteCard() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY5MTE4OTgsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.svQ3QQk3pRm6-1Bg2yC30KOduSWlr7ExzKQCXUEdU-Y',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY5MjYwMDIsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.9Or9kv7MQtJepLoEa6g_hv2euALTMm3L-zOrt3nCF64',
                 },
                 body: JSON.stringify({}),
             });
@@ -186,7 +217,7 @@ function RouletteCard() {
             }
         }
 
-        setResultMessage(winnings > 0 ? `Вы выиграли: ₽${winnings}` : 'Вы не выиграли');
+        setResultMessage(winnings > 0 ? `You won: ₽${winnings}` : 'You did not win');
     };
 
     const handleReset = () => {
@@ -237,6 +268,10 @@ function RouletteCard() {
                         </div>
                     </CSSTransition>
                 )}
+                <div style={styles.balanceContainer}>
+                    {username && <Text style={styles.balanceText}>Пользователь: {username}</Text>}
+                    {balance !== null && <Text style={styles.balanceText}>Баланс: ₽{balance}</Text>}
+                </div>
                 <div style={showBetForm ? styles.numberGridContainer : styles.fullNumberGridContainer}>
                     <NumberGrid
                         numbers={numbers}
@@ -266,7 +301,7 @@ function RouletteCard() {
                         onClick={toggleBetForm}
                         style={styles.openButton}
                     >
-                        Показать форму ставок
+                        Show Bet Form
                     </Button>
                 )}
                 <div style={styles.submitButtonContainer}>
@@ -274,7 +309,7 @@ function RouletteCard() {
                         {isSpinning ? <Spin /> : 'Вращать'}
                     </Button>
                     <Button type="default" size="large" onClick={handleReset} style={styles.resetButton} disabled={isSpinning}>
-                        Сбросить ставки
+                        Очистить
                     </Button>
                 </div>
             </Card>
@@ -294,20 +329,10 @@ const styles = {
     card: {
         width: '100%',
         maxWidth: '1800px',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#333',
         padding: '32px',
         borderRadius: '24px',
         boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
-    },
-    cardHeader: {
-        textAlign: 'center',
-        marginBottom: '32px',
-        color: '#fff',
-        fontSize: '36px',
-        fontWeight: 'bold',
-        background: 'linear-gradient(to right, #ff416c, #ff4b2b)',
-        padding: '20px',
-        borderRadius: '12px',
     },
     resultOverlay: {
         position: 'fixed',
@@ -332,10 +357,70 @@ const styles = {
         fontWeight: 'bold',
         color: '#fff',
     },
-    scrollContainer: {
-        maxHeight: '700px',
-        overflowY: 'auto',
-        paddingRight: '20px',
+    balanceContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px',
+    },
+    balanceText: {
+        fontSize: '20px',
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    numberGridContainer: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    fullNumberGridContainer: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    betFormContainer: {
+        position: 'relative',
+        flexShrink: 0,
+        width: '100%',
+        maxWidth: '2000px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    betForm: {
+        width: '100%',
+        backgroundColor: '#333',
+        borderRadius: '24px',
+        padding: '32px',
+        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        background: 'transparent',
+        border: 'none',
+        color: '#ff4b2b',
+        fontSize: '16px',
+    },
+    openButton: {
+        marginTop: '20px',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        borderRadius: '12px',
+        background: 'linear-gradient(to right, #6a11cb, #2575fc)',
+        border: 'none',
+        color: 'white',
+        transition: 'background 0.3s ease, transform 0.3s ease',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        ':hover': {
+            transform: 'scale(1.05)',
+        },
+        ':active': {
+            transform: 'scale(0.95)',
+        },
     },
     submitButtonContainer: {
         display: 'flex',
@@ -367,71 +452,6 @@ const styles = {
         fontWeight: 'bold',
         borderRadius: '20px',
         marginLeft: '15px',
-        background: 'linear-gradient(to right, #6a11cb, #2575fc)',
-        border: 'none',
-        color: 'white',
-        transition: 'background 0.3s ease, transform 0.3s ease',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        ':hover': {
-            transform: 'scale(1.05)',
-        },
-        ':active': {
-            transform: 'scale(0.95)',
-        },
-    },
-    fullscreenButton: {
-        padding: '12px 40px',
-        fontSize: '18px',
-        fontWeight: 'bold',
-        borderRadius: '12px',
-        marginLeft: '15px',
-        background: 'linear-gradient(to right, #43cea2, #185a9d)',
-        border: 'none',
-        color: 'white',
-        transition: 'background 0.3s ease, transform 0.3s ease',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        ':hover': {
-            transform: 'scale(1.05)',
-        },
-        ':active': {
-            transform: 'scale(0.95)',
-        },
-    },
-    numberGridContainer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    fullNumberGridContainer: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    betFormContainer: {
-        position: 'relative',
-        flexShrink: 0,
-        width: '100%',
-        maxWidth: '800px',
-        marginLeft: '400px',
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        background: 'transparent',
-        border: 'none',
-        color: '#ff4b2b',
-        fontSize: '16px',
-    },
-    openButton: {
-        marginTop: '20px',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        borderRadius: '12px',
         background: 'linear-gradient(to right, #6a11cb, #2575fc)',
         border: 'none',
         color: 'white',

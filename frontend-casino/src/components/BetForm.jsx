@@ -173,8 +173,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-    
+                </Row>  
             </Form>
         </Card>
     );
@@ -182,37 +181,36 @@ function BetForm({ betValues, handleBetChange, reset }) {
 
 const styles = {
     card: {
-        padding: '24px',
+        padding: '32px',
         borderRadius: '16px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-        backgroundColor: '#ffffff',
+        boxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
+        background: 'linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%)',
         marginBottom: '24px',
+        border: '1px solid #fff',
     },
     form: {
         width: '100%',
+        backgroundColor: 'transparent',
     },
     formItem: {
-        marginBottom: '16px',
+        marginBottom: '20px',
+        backgroundColor: 'transparent',
     },
     input: {
         width: '100%',
-        borderRadius: '8px',
-        border: '1px solid #d9d9d9',
-        padding: '10px 16px',
+        borderRadius: '12px',
+        border: '1px solid #e0e0e0',
+        padding: '12px 18px',
         fontSize: '16px',
+        backgroundColor: '#fff',
+        color: '#333',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'border-color 0.3s ease',
     },
-    clearButton: {
-        marginTop: '20px',
-        width: '100%',
-        padding: '20px',
-        fontSize: '11px',
-        borderRadius: '10px',
-        backgroundColor: '#ff4b2b',
-        color: '#ffffff',
-        border: 'none',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        transition: 'background-color 0.3s ease',
-    },
+    inputFocus: {
+        borderColor: '#ff416c',
+    }
 };
+
 
 export default BetForm;

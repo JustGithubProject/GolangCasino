@@ -70,6 +70,25 @@ func GetUserByIdHandler(c *gin.Context) {
     c.JSON(http.StatusOK, user)
 }
 
+func GetUserByUsernameHandler(c *gin.Context){
+    username := c.Param("username")
+
+    // Initialize the database connection
+    db := database.InitDB()
+    userRepository := repositories.UserRepository{Db: db}
+
+    // Call the repository method to get the user by their ID
+    user, err := userRepository.GetUserByUsername(username)
+    if err != nil {
+        // If there's an error getting the user, return a 500 Internal Server Error response
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+        return
+    }
+
+    // Return the user object as JSON
+    c.JSON(http.StatusOK, user)
+}
+
 
 func UpdateUserHandler(c *gin.Context) {
     // Extract the user ID from the request parameters

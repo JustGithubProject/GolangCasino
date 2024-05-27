@@ -137,8 +137,7 @@ const styles = {
         padding: '20px',
         backgroundColor: '#1e1e1e',
         width: '100%',
-        maxWidth: '2500px',
-        maxHeight: '800px',
+        maxWidth: '1200px',
         margin: '0 auto',
         borderRadius: '10px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
@@ -171,7 +170,7 @@ const styles = {
     },
     zeroButton: {
         width: '100%',
-        height: '100%',
+        height: '60px',
         fontSize: '24px',
         fontWeight: 'bold',
         borderRadius: '0px',
