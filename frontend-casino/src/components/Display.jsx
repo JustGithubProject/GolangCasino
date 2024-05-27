@@ -66,8 +66,8 @@ function Display({ selectedNumbers, selectedColor, spinResult, isSpinning, betVa
                         </Text>
                     ) : (
                         <>
-                            <Text strong style={{ ...styles.numberText, color: spinResultColor }}>
-                                {spinResult !== null ? `Выпавшее число: ${spinResult}` : 'Выберите ставку'}
+                            <Text strong style={styles.resultText}>
+                                Выпавшее число: <span style={{ color: spinResultColor }}>{spinResult !== null ? spinResult : 'Выберите ставку'}</span>
                             </Text>
                             <Text style={styles.betText}>{getSelectedBetsDisplay()}</Text>
                         </>
@@ -93,7 +93,7 @@ const styles = {
         width: '100%',
         maxWidth: '900px',
         backgroundColor: '#ffffff',
-        borderRadius: '12px',
+        borderRadius: '16px',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
         display: 'flex',
         flexDirection: 'column',
@@ -118,6 +118,12 @@ const styles = {
         color: '#1890ff',
         textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
         transition: 'color 0.5s ease',
+    },
+    resultText: {
+        fontSize: '48px',
+        fontWeight: 'bold',
+        color: '#000000',
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
     },
     betText: {
         fontSize: '20px',

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Card, Button, Typography, Spin, message } from 'antd';
-import Display from './Display';
+import { Card, Button, Typography, Spin, message, Space } from 'antd';
 import BetForm from './BetForm';
 import NumberGrid from './NumberGrid';
+import { CSSTransition } from 'react-transition-group';
+import './styles.css';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 function RouletteCard() {
     const [selectedNumbers, setSelectedNumbers] = useState([]);
@@ -28,6 +29,8 @@ function RouletteCard() {
 
     const [spinResult, setSpinResult] = useState(null);
     const [isSpinning, setIsSpinning] = useState(false);
+    const [resultMessage, setResultMessage] = useState(null);
+    const [showResult, setShowResult] = useState(false);
 
     const handleNumberClick = (number, amount) => {
         setBetValues((prevValues) => ({
@@ -133,11 +136,56 @@ function RouletteCard() {
             const data = await response.json();
             console.log(data);
             setSpinResult(data.dropped_number);
+            calculateWinnings(data.dropped_number);
             setIsSpinning(false);
+            setShowResult(true);
+            setTimeout(() => {
+                setShowResult(false);
+                handleReset();  // Очистка формы после игры
+            }, 5000); // Show the result for 5 seconds
         } catch (error) {
             console.error('Error:', error);
             setIsSpinning(false);
         }
+    };
+
+    const calculateWinnings = (droppedNumber) => {
+        let winnings = 0;
+        if (selectedNumbers.includes(droppedNumber)) {
+            winnings += (parseInt(betValues.betAmount) || 0) * 36;
+        }
+        if ((droppedNumber % 2 === 0 && betValues.evenBet) || (droppedNumber % 2 !== 0 && betValues.oddBet)) {
+            winnings += (parseInt(betValues.evenBet) || 0) * 2;
+            winnings += (parseInt(betValues.oddBet) || 0) * 2;
+        }
+        if ((droppedNumber <= 18 && betValues.oneToEighteenBet) || (droppedNumber >= 19 && betValues.nineteenToThirtySixBet)) {
+            winnings += (parseInt(betValues.oneToEighteenBet) || 0) * 2;
+            winnings += (parseInt(betValues.nineteenToThirtySixBet) || 0) * 2;
+        }
+        if ((droppedNumber >= 1 && droppedNumber <= 12 && betValues.first12Bet) ||
+            (droppedNumber >= 13 && droppedNumber <= 24 && betValues.second12Bet) ||
+            (droppedNumber >= 25 && droppedNumber <= 36 && betValues.third12Bet)) {
+            winnings += (parseInt(betValues.first12Bet) || 0) * 3;
+            winnings += (parseInt(betValues.second12Bet) || 0) * 3;
+            winnings += (parseInt(betValues.third12Bet) || 0) * 3;
+        }
+        if ((droppedNumber % 3 === 1 && betValues.first2To1Bet) ||
+            (droppedNumber % 3 === 2 && betValues.second2To1Bet) ||
+            (droppedNumber % 3 === 0 && betValues.third2To1Bet)) {
+            winnings += (parseInt(betValues.first2To1Bet) || 0) * 3;
+            winnings += (parseInt(betValues.second2To1Bet) || 0) * 3;
+            winnings += (parseInt(betValues.third2To1Bet) || 0) * 3;
+        }
+        if (selectedColor && (selectedColor === 'red' || selectedColor === 'black')) {
+            const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+            const isRed = redNumbers.includes(droppedNumber);
+            if ((selectedColor === 'red' && isRed) || (selectedColor === 'black' && !isRed)) {
+                winnings += (parseInt(betValues.redBet) || 0) * 2;
+                winnings += (parseInt(betValues.blackBet) || 0) * 2;
+            }
+        }
+
+        setResultMessage(winnings > 0 ? `Вы выиграли: ₽${winnings}` : 'Вы не выиграли');
     };
 
     const handleReset = () => {
@@ -158,6 +206,18 @@ function RouletteCard() {
             second2To1Bet: '',
             third2To1Bet: '',
         });
+        setSpinResult(null);
+        setResultMessage(null);
+    };
+
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch((err) => {
+                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
     };
 
     const numbers = [
@@ -169,16 +229,19 @@ function RouletteCard() {
     return (
         <div style={styles.container}>
             <Card style={styles.card}>
-    
-                <div style={styles.displayContainer}>
-                    <Display
-                        selectedNumbers={selectedNumbers}
-                        selectedColor={selectedColor}
-                        spinResult={spinResult}
-                        isSpinning={isSpinning}
-                        betValues={betValues}
-                    />
-                </div>
+                {resultMessage && (
+                    <CSSTransition
+                        in={showResult}
+                        timeout={300}
+                        classNames="fade"
+                        unmountOnExit
+                    >
+                        <div style={styles.resultOverlay}>
+                            <Text style={styles.resultText}>{resultMessage}<p></p></Text>
+                            {spinResult !== null && <Text style={styles.spinResultText}>Выпавшее число: {spinResult}</Text>}
+                        </div>
+                    </CSSTransition>
+                )}
                 <div style={styles.scrollContainer}>
                     <NumberGrid
                         numbers={numbers}
@@ -193,10 +256,13 @@ function RouletteCard() {
                 </div>
                 <div style={styles.submitButtonContainer}>
                     <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
-                        {isSpinning ? <Spin /> : 'Spin'}
+                        {isSpinning ? <Spin /> : 'Вращать'}
                     </Button>
                     <Button type="default" size="large" onClick={handleReset} style={styles.resetButton} disabled={isSpinning}>
-                        Reset
+                        Сбросить ставки
+                    </Button>
+                    <Button type="default" size="large" onClick={toggleFullscreen} style={styles.fullscreenButton}>
+                        Полноэкранный режим
                     </Button>
                 </div>
                 <div style={styles.scrollContainer}>
@@ -213,55 +279,60 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(to right, #43cea2, #185a9d)', // Add a gradient background
+        background: 'linear-gradient(to right, #43cea2, #185a9d)',
         padding: '20px',
     },
     card: {
         width: '100%',
         maxWidth: '1200px',
-        backgroundColor: '#f8f9fa', // Light grey background for the card
+        backgroundColor: '#f8f9fa',
         padding: '24px',
         borderRadius: '16px',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
     },
-    titleContainer: {
-        backgroundColor: '#1890ff',
-        padding: '10px 20px',
-        borderRadius: '8px',
+    cardHeader: {
         textAlign: 'center',
         marginBottom: '24px',
-    },
-    cardHeader: {
-        color: 'white',
-        fontSize: '28px',
+        color: '#fff',
+        fontSize: '32px',
         fontWeight: 'bold',
-        margin: 0,
-    },
-    displayContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '200px',
-        marginBottom: '24px',
-        backgroundColor: '#ffffff',
+        background: 'linear-gradient(to right, #ff416c, #ff4b2b)',
+        padding: '16px',
         borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    },
+    resultOverlay: {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: '20px',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+        textAlign: 'center',
+        zIndex: 1000,
+    },
+    resultText: {
+        fontSize: '24px',
+        fontWeight: 'bold',
+        color: '#fff',
+        marginBottom: '10px',
+    },
+    spinResultText: {
+        fontSize: '20px',
+        fontWeight: 'bold',
+        color: '#fff',
     },
     scrollContainer: {
         maxHeight: '400px',
         overflowY: 'auto',
-        paddingRight: '15px', // Compensate for scrollbar width
+        paddingRight: '15px',
     },
     submitButtonContainer: {
         display: 'flex',
         justifyContent: 'center',
-        position: 'sticky',
-        bottom: '20px',
-        backgroundColor: '#f8f9fa',
-        padding: '10px 0',
-        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
-        zIndex: 1,
-        marginBottom: '24px',
+        alignItems: 'center',
+        marginTop: '24px',
     },
     submitButton: {
         padding: '10px 30px',
@@ -269,19 +340,30 @@ const styles = {
         fontWeight: 'bold',
         borderRadius: '8px',
         marginLeft: '10px',
-        background: 'linear-gradient(to right, #ff416c, #ff4b2b)', // Gradient for the spin button
+        background: 'linear-gradient(to right, #ff416c, #ff4b2b)',
         border: 'none',
         color: 'white',
     },
     resetButton: {
+        padding: '10px 10px',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        borderRadius: '8px',
+        marginLeft: '10px',
+        background: 'linear-gradient(to right, #6a11cb, #2575fc)',
+        border: 'none',
+        color: 'white',
+    },
+    fullscreenButton: {
         padding: '10px 30px',
         fontSize: '16px',
         fontWeight: 'bold',
         borderRadius: '8px',
         marginLeft: '10px',
-        background: 'linear-gradient(to right, #6a11cb, #2575fc)', // Gradient for the reset button
+        background: 'linear-gradient(to right, #43cea2, #185a9d)',
         border: 'none',
         color: 'white',
+        
     },
 };
 

@@ -2,7 +2,10 @@ import React from 'react';
 import { Form, Input, Row, Col, Card, Button } from 'antd';
 
 function BetForm({ betValues, handleBetChange, reset }) {
-    const { betAmount, evenBet, oddBet, redBet, blackBet, first12Bet, second12Bet, third12Bet, oneToEighteenBet, nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet } = betValues;
+    const {
+        betAmount, evenBet, oddBet, redBet, blackBet, first12Bet, second12Bet, third12Bet,
+        oneToEighteenBet, nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet
+    } = betValues;
 
     return (
         <Card style={styles.card}>
@@ -171,9 +174,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Button type="default" onClick={reset} style={styles.clearButton}>
-                    Очистить
-                </Button>
+    
             </Form>
         </Card>
     );
@@ -182,9 +183,10 @@ function BetForm({ betValues, handleBetChange, reset }) {
 const styles = {
     card: {
         padding: '24px',
-        borderRadius: '8px',
+        borderRadius: '16px',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
+        marginBottom: '24px',
     },
     form: {
         width: '100%',
@@ -194,16 +196,22 @@ const styles = {
     },
     input: {
         width: '100%',
-        borderRadius: '4px',
+        borderRadius: '8px',
         border: '1px solid #d9d9d9',
-        padding: '8px 12px',
+        padding: '10px 16px',
         fontSize: '16px',
     },
     clearButton: {
-        marginTop: '16px',
+        marginTop: '20px',
         width: '100%',
-        padding: '10px',
-        fontSize: '16px',
+        padding: '20px',
+        fontSize: '11px',
+        borderRadius: '10px',
+        backgroundColor: '#ff4b2b',
+        color: '#ffffff',
+        border: 'none',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'background-color 0.3s ease',
     },
 };
 
