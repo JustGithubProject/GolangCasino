@@ -35,7 +35,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
 
     const getZeroButtonStyle = () => ({
         ...styles.zeroButton,
-        backgroundColor: 'green',
+        backgroundColor: '#008000',
         color: 'white',
     });
 
@@ -74,6 +74,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                         onClick={() => handleNumberBet(0)}
                     >
                         0
+                        {bets[0] && <span style={styles.betAmount}>{bets[0]}</span>}
                     </Button>
                 </div>
                 <div style={styles.numbers}>
@@ -134,7 +135,13 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         padding: '20px',
-        backgroundColor: '#006400',
+        backgroundColor: '#1e1e1e',
+        width: '100%',
+        maxWidth: '2500px',
+        maxHeight: '800px',
+        margin: '0 auto',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     },
     leftPanel: {
         display: 'flex',
@@ -142,22 +149,23 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         padding: '10px',
-        backgroundColor: '#006400',
+        backgroundColor: '#2c2c2c',
+        borderRadius: '10px 0 0 10px',
     },
     grid: {
         display: 'flex',
         flexDirection: 'row',
-        border: '2px solid white',
-        backgroundColor: '#006400',
+        border: '2px solid #ffffff',
+        backgroundColor: '#2c2c2c',
         borderRadius: '10px',
     },
     zeroColumn: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#006400',
+        backgroundColor: '#2c2c2c',
         width: '60px',
-        borderRight: '2px solid white',
+        borderRight: '2px solid #ffffff',
         borderTopLeftRadius: '10px',
         borderBottomLeftRadius: '10px',
     },
@@ -167,15 +175,17 @@ const styles = {
         fontSize: '24px',
         fontWeight: 'bold',
         borderRadius: '0px',
-        border: '2px solid white',
+        border: '2px solid #ffffff',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        position: 'relative',
+        transition: 'transform 0.2s, background-color 0.2s, opacity 0.2s',
     },
     numbers: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#006400',
+        backgroundColor: '#2c2c2c',
     },
     row: {
         display: 'flex',
@@ -193,13 +203,16 @@ const styles = {
         fontSize: '18px',
         fontWeight: 'bold',
         borderRadius: '8px',
-        border: '2px solid white',
+        border: '2px solid #ffffff',
         transition: 'transform 0.2s, background-color 0.2s, opacity 0.2s',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
         margin: '2px',
+        position: 'relative',
     },
     betAmount: {
-        marginLeft: '4px',
+        position: 'absolute',
+        top: '5px',
+        right: '5px',
         fontSize: '14px',
         fontWeight: 'bold',
         color: 'yellow',
@@ -207,12 +220,12 @@ const styles = {
     sectorButton: {
         flex: 1,
         height: '60px',
-        backgroundColor: '#006400',
+        backgroundColor: '#2c2c2c',
         color: 'white',
         fontSize: '16px',
         fontWeight: 'bold',
         borderRadius: '8px',
-        border: '2px solid white',
+        border: '2px solid #ffffff',
         cursor: 'pointer',
         textAlign: 'center',
         lineHeight: '60px',
@@ -225,7 +238,7 @@ const styles = {
         fontSize: '14px',
         fontWeight: 'bold',
         borderRadius: '8px',
-        border: '2px solid white',
+        border: '2px solid #ffffff',
         cursor: 'pointer',
         transition: 'opacity 0.2s, transform 0.2s',
         textAlign: 'center',
@@ -235,15 +248,18 @@ const styles = {
         width: '60px',
         height: '60px',
         backgroundColor: 'transparent',
-        border: '2px solid white',
+        border: '2px solid #ffffff',
         transform: 'rotate(45deg)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        transition: 'opacity 0.2s, transform 0.2s',
     },
     diamondText: {
         transform: 'rotate(-45deg)',
         textAlign: 'center',
+        fontSize: '18px',
+        fontWeight: 'bold',
     },
     coinButton: {
         width: '50px',
@@ -252,23 +268,24 @@ const styles = {
         fontSize: '18px',
         fontWeight: 'bold',
         borderRadius: '50%',
-        backgroundColor: '#f0ad4e',
+        backgroundColor: '#ff9800',
         color: 'white',
-        border: '2px solid white',
+        border: '2px solid #ffffff',
         transition: 'transform 0.2s',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     },
 };
 
 function getColorForNumber(number) {
     if (number === 0) {
-        return 'green';
+        return '#008000';
     } else if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number)) {
-        return 'red';
+        return '#d32f2f';
     } else {
-        return 'black';
+        return '#212121';
     }
 }
 

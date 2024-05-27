@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Button, Typography, Spin, message, Space } from 'antd';
+import { Card, Button, Typography, Spin, message } from 'antd';
 import BetForm from './BetForm';
 import NumberGrid from './NumberGrid';
 import { CSSTransition } from 'react-transition-group';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import './styles.css';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 function RouletteCard() {
     const [selectedNumbers, setSelectedNumbers] = useState([]);
@@ -26,11 +27,11 @@ function RouletteCard() {
         third2To1Bet: '',
     });
     const [selectedCoin, setSelectedCoin] = useState(1);
-
     const [spinResult, setSpinResult] = useState(null);
     const [isSpinning, setIsSpinning] = useState(false);
     const [resultMessage, setResultMessage] = useState(null);
     const [showResult, setShowResult] = useState(false);
+    const [showBetForm, setShowBetForm] = useState(false);
 
     const handleNumberClick = (number, amount) => {
         setBetValues((prevValues) => ({
@@ -124,7 +125,7 @@ function RouletteCard() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY3OTg5NjYsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.Qg0GIkgQAZD_AwMzeSGYQP7A_RLnD6Tk90qRj7uJcrM',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY5MTE4OTgsInVzZXJuYW1lIjoiS3JvcGl2YSJ9.svQ3QQk3pRm6-1Bg2yC30KOduSWlr7ExzKQCXUEdU-Y',
                 },
                 body: JSON.stringify({}),
             });
@@ -141,7 +142,7 @@ function RouletteCard() {
             setShowResult(true);
             setTimeout(() => {
                 setShowResult(false);
-                handleReset();  // Очистка формы после игры
+                handleReset();
             }, 5000); // Show the result for 5 seconds
         } catch (error) {
             console.error('Error:', error);
@@ -210,14 +211,8 @@ function RouletteCard() {
         setResultMessage(null);
     };
 
-    const toggleFullscreen = () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch((err) => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            document.exitFullscreen();
-        }
+    const toggleBetForm = () => {
+        setShowBetForm(!showBetForm);
     };
 
     const numbers = [
@@ -242,7 +237,7 @@ function RouletteCard() {
                         </div>
                     </CSSTransition>
                 )}
-                <div style={styles.scrollContainer}>
+                <div style={showBetForm ? styles.numberGridContainer : styles.fullNumberGridContainer}>
                     <NumberGrid
                         numbers={numbers}
                         selectedNumbers={selectedNumbers}
@@ -254,6 +249,26 @@ function RouletteCard() {
                         setSelectedCoin={setSelectedCoin}
                     />
                 </div>
+                {showBetForm ? (
+                    <div style={styles.betFormContainer}>
+                        <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
+                        <Button
+                            type="text"
+                            icon={<CloseOutlined />}
+                            onClick={toggleBetForm}
+                            style={styles.closeButton}
+                        />
+                    </div>
+                ) : (
+                    <Button
+                        type="default"
+                        icon={<PlusOutlined />}
+                        onClick={toggleBetForm}
+                        style={styles.openButton}
+                    >
+                        Показать форму ставок
+                    </Button>
+                )}
                 <div style={styles.submitButtonContainer}>
                     <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
                         {isSpinning ? <Spin /> : 'Вращать'}
@@ -261,12 +276,6 @@ function RouletteCard() {
                     <Button type="default" size="large" onClick={handleReset} style={styles.resetButton} disabled={isSpinning}>
                         Сбросить ставки
                     </Button>
-                    <Button type="default" size="large" onClick={toggleFullscreen} style={styles.fullscreenButton}>
-                        Полноэкранный режим
-                    </Button>
-                </div>
-                <div style={styles.scrollContainer}>
-                    <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
                 </div>
             </Card>
         </div>
@@ -284,86 +293,156 @@ const styles = {
     },
     card: {
         width: '100%',
-        maxWidth: '1200px',
-        backgroundColor: '#f8f9fa',
-        padding: '24px',
-        borderRadius: '16px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        maxWidth: '1800px',
+        backgroundColor: '#ffffff',
+        padding: '32px',
+        borderRadius: '24px',
+        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
     },
     cardHeader: {
         textAlign: 'center',
-        marginBottom: '24px',
+        marginBottom: '32px',
         color: '#fff',
-        fontSize: '32px',
+        fontSize: '36px',
         fontWeight: 'bold',
         background: 'linear-gradient(to right, #ff416c, #ff4b2b)',
-        padding: '16px',
-        borderRadius: '8px',
+        padding: '20px',
+        borderRadius: '12px',
     },
     resultOverlay: {
         position: 'fixed',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        padding: '20px',
-        borderRadius: '16px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        padding: '30px',
+        borderRadius: '20px',
+        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.5)',
         textAlign: 'center',
         zIndex: 1000,
     },
     resultText: {
-        fontSize: '24px',
+        fontSize: '26px',
         fontWeight: 'bold',
         color: '#fff',
-        marginBottom: '10px',
+        marginBottom: '15px',
     },
     spinResultText: {
-        fontSize: '20px',
+        fontSize: '22px',
         fontWeight: 'bold',
         color: '#fff',
     },
     scrollContainer: {
-        maxHeight: '400px',
+        maxHeight: '700px',
         overflowY: 'auto',
-        paddingRight: '15px',
+        paddingRight: '20px',
     },
     submitButtonContainer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '24px',
+        marginTop: '32px',
     },
     submitButton: {
-        padding: '10px 30px',
+        padding: '12px 60px',
         fontSize: '16px',
         fontWeight: 'bold',
-        borderRadius: '8px',
-        marginLeft: '10px',
+        borderRadius: '20px',
+        marginLeft: '15px',
         background: 'linear-gradient(to right, #ff416c, #ff4b2b)',
         border: 'none',
         color: 'white',
+        transition: 'background 0.3s ease, transform 0.3s ease',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        ':hover': {
+            transform: 'scale(1.05)',
+        },
+        ':active': {
+            transform: 'scale(0.95)',
+        },
     },
     resetButton: {
-        padding: '10px 10px',
+        padding: '12px 40px',
         fontSize: '16px',
         fontWeight: 'bold',
-        borderRadius: '8px',
-        marginLeft: '10px',
+        borderRadius: '20px',
+        marginLeft: '15px',
         background: 'linear-gradient(to right, #6a11cb, #2575fc)',
         border: 'none',
         color: 'white',
+        transition: 'background 0.3s ease, transform 0.3s ease',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        ':hover': {
+            transform: 'scale(1.05)',
+        },
+        ':active': {
+            transform: 'scale(0.95)',
+        },
     },
     fullscreenButton: {
-        padding: '10px 30px',
-        fontSize: '16px',
+        padding: '12px 40px',
+        fontSize: '18px',
         fontWeight: 'bold',
-        borderRadius: '8px',
-        marginLeft: '10px',
+        borderRadius: '12px',
+        marginLeft: '15px',
         background: 'linear-gradient(to right, #43cea2, #185a9d)',
         border: 'none',
         color: 'white',
-        
+        transition: 'background 0.3s ease, transform 0.3s ease',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        ':hover': {
+            transform: 'scale(1.05)',
+        },
+        ':active': {
+            transform: 'scale(0.95)',
+        },
+    },
+    numberGridContainer: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    fullNumberGridContainer: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    betFormContainer: {
+        position: 'relative',
+        flexShrink: 0,
+        width: '100%',
+        maxWidth: '800px',
+        marginLeft: '400px',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        background: 'transparent',
+        border: 'none',
+        color: '#ff4b2b',
+        fontSize: '16px',
+    },
+    openButton: {
+        marginTop: '20px',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        borderRadius: '12px',
+        background: 'linear-gradient(to right, #6a11cb, #2575fc)',
+        border: 'none',
+        color: 'white',
+        transition: 'background 0.3s ease, transform 0.3s ease',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        ':hover': {
+            transform: 'scale(1.05)',
+        },
+        ':active': {
+            transform: 'scale(0.95)',
+        },
     },
 };
 
