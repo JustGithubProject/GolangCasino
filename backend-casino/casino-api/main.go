@@ -4,7 +4,9 @@ import (
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/middleware"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func main() {
@@ -20,31 +22,15 @@ func main() {
 		c.Next()
 	})
 
-	// CORS middleware with specific origins
-	r.Use(func(c *gin.Context) {
-		allowedOrigins := []string{"http://localhost:5173", "http://127.0.0.1:5173"}
-		origin := c.Request.Header.Get("Origin")
-		isAllowed := false
-		for _, allowedOrigin := range allowedOrigins {
-			if allowedOrigin == origin {
-				isAllowed = true
-				break
-			}
-		}
-
-		if isAllowed {
-			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
-			c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-			c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		}
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	})
+	// CORS middleware
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173", "http://127.0.0.1:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// Routes
 

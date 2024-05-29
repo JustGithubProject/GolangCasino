@@ -87,7 +87,6 @@ type RegisterInput struct{
 	Name string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 	Email string `json:"email" binding:"required"`
-	Balance float64 `json:"balance" binding:"required"`
 }
 
 type UserInput struct {
@@ -106,7 +105,7 @@ func CreateUser(input RegisterInput) error {
         Name:     input.Name,
         Password: input.Password,
         Email:    input.Email,
-        Balance:  input.Balance,
+        Balance:  0.0,
     }
 
     if err := userRepository.CreateUser(&u); err != nil {
