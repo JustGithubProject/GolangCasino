@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -11,22 +12,16 @@ const Login = () => {
     setError('');
     setSuccess('');
     try {
-      const response = await fetch('http://localhost:8081/login/user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
+      const response = await axios.post(
+        'http://127.0.0.1:8081/login/user',
+        { username, password },
+        { withCredentials: true } // Include credentials for CORS requests
+      );
+  
+      const data = response.data;
       const token = data.token; // Assuming your backend returns the token in the "token" field
       localStorage.setItem('token', token); // Store the token in localStorage
-
+  
       setSuccess('Login successful!');
     } catch (err) {
       setError('Login failed. Please try again.');

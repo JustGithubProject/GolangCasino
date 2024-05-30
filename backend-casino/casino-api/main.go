@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/middleware"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 func main() {
@@ -16,23 +16,15 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.LoggerMiddleware())
 
+	// Use the custom CORS middleware
+	r.Use(middleware.CORSMiddleware())
+	fmt.Println("CORS okay")
+
 	// Passing the database instance to query handlers
 	r.Use(func(c *gin.Context) {
 		c.Set("DB", db)
 		c.Next()
 	})
-
-	// CORS middleware
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "http://127.0.0.1:5173"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
-
-	// Routes
 
 	// Routes for management(admin)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)

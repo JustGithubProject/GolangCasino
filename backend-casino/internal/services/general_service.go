@@ -307,8 +307,9 @@ func HandleUserLogin(c *gin.Context) {
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
             return
         }
-
+        
         // Set the Authorization header with the new token
+        fmt.Println("tokenString", tokenString)
         c.Header("Authorization", "Bearer "+tokenString)
         c.JSON(http.StatusOK, gin.H{"token": tokenString})
         return
