@@ -13,10 +13,16 @@ const Login = () => {
     setSuccess('');
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8081/login/user',
+        'http://127.0.0.1:8081/login/user/',
         { username, password },
-        { withCredentials: true } // Include credentials for CORS requests
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        } 
       );
+      console.log(response.status)
   
       const data = response.data;
       const token = data.token; // Assuming your backend returns the token in the "token" field

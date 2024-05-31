@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -14,5 +15,6 @@ func RegisterHandler(c *gin.Context) {
 
 
 func LoginHandler(c *gin.Context) {
+	fmt.Println("Inside of Loginhandler")
 	services.HandleUserLogin(c)
 }

@@ -265,6 +265,7 @@ func HandleUserRegister(c *gin.Context){
 }
 
 func HandleUserLogin(c *gin.Context) {
+    fmt.Println("Inside of HandleUserLogin")
     var userInput UserInput
     if err := c.BindJSON(&userInput); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "(Bind)Invalid JSON"})
