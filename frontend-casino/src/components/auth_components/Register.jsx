@@ -1,30 +1,36 @@
 import React, { useState } from 'react';
-import { fetchWithAuth } from './fetchWrapper'; // Use named import
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [balance, setBalance] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     try {
-      const response = fetchWithAuth('/register/user/', {
-        method: 'POST',
-        body: JSON.stringify({ username, password, email, balance: parseFloat(balance) }),
-      });
+      const response = await axios.post(
+        'http://127.0.0.1:8081/register/user/',
+        { username, password, email },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Registration failed');
       }
 
-      const data = await response.json();
       setSuccess('Registration successful!');
+      navigate('/login'); // Redirect to the roulette page
     } catch (err) {
       setError('Registration failed. Please try again.');
     }
@@ -112,17 +118,6 @@ const Register = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Balance:</label>
-          <input
-            type="number"
-            step="0.01"
-            value={balance}
-            onChange={(e) => setBalance(e.target.value)}
             required
             style={styles.input}
           />
