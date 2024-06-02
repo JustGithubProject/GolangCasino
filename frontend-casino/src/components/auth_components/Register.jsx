@@ -19,18 +19,19 @@ const Register = () => {
         'http://127.0.0.1:8081/register/user/',
         { username, password, email },
         {
+          withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
           },
         }
       );
 
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         throw new Error('Registration failed');
       }
 
       setSuccess('Registration successful!');
-      navigate('/login'); // Redirect to the roulette page
+      navigate('/login'); // Redirect to the login page
     } catch (err) {
       setError('Registration failed. Please try again.');
     }
@@ -43,38 +44,44 @@ const Register = () => {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
-      background: 'linear-gradient(to right, #333, #555)',
+      background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)',
       color: '#fff',
       fontFamily: 'Arial, sans-serif',
+      padding: '20px',
     },
     form: {
       display: 'flex',
       flexDirection: 'column',
       background: '#fff',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      padding: '30px',
+      borderRadius: '10px',
+      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
       color: '#333',
+      width: '300px',
     },
     formGroup: {
-      marginBottom: '15px',
+      marginBottom: '20px',
     },
     label: {
-      marginBottom: '5px',
+      marginBottom: '8px',
+      fontSize: '14px',
     },
     input: {
-      padding: '10px',
+      padding: '12px',
       borderRadius: '20px',
       border: '1px solid #ddd',
+      width: '100%',
+      fontSize: '14px',
     },
     button: {
-      padding: '10px',
+      padding: '12px',
       borderRadius: '20px',
       border: 'none',
-      background: '#ff416c',
+      background: 'linear-gradient(to right, #ff416c, #ff4b2b)',
       color: '#fff',
       cursor: 'pointer',
       fontSize: '16px',
+      transition: 'background 0.3s ease',
     },
     error: {
       color: '#ff4b2b',
@@ -122,7 +129,14 @@ const Register = () => {
             style={styles.input}
           />
         </div>
-        <button type="submit" style={styles.button}>Register</button>
+        <button
+          type="submit"
+          style={styles.button}
+          onMouseOver={(e) => e.target.style.background = 'linear-gradient(to right, #ff4b2b, #ff416c)'}
+          onMouseOut={(e) => e.target.style.background = 'linear-gradient(to right, #ff416c, #ff4b2b)'}
+        >
+          Register
+        </button>
       </form>
     </div>
   );
