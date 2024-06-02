@@ -52,11 +52,8 @@ func (user *UserPlayer) NormalPlay(
 		second2To1Bets,
 		third2To1Bets,
 	)
-	fmt.Printf("PRIZE=%.2f\n", prize)
-	fmt.Printf("totalBet=%.2f\n", prize)
-	fmt.Printf("UserBalance: %.2f\n", user.Balance)
+	
 	user.updateBalance(prize, totalBet)
-	fmt.Printf("After update UserBalance: %.2f\n", user.Balance)
 	return user.Balance, dropped_number, nil
 }
 

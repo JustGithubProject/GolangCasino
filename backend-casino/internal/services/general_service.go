@@ -54,6 +54,24 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     }
     fmt.Printf("fairPlay: %t", fairPlay)
     currentBalance := user.Balance
+    totalBet := user_player.getTotalBet(
+        betMaps.EvenToBets,
+        betMaps.OddToBets,
+        betMaps.RedToBets,
+        betMaps.BlackToBets,
+        betMaps.SectorsToBets,
+        betMaps.NumberToBets,
+        betMaps.OneToEighteenBets,
+        betMaps.NineteenToThirtySixBets,
+        betMaps.First2To1Bets,
+        betMaps.Second2To1Bets,
+        betMaps.Third2To1Bets,
+	)
+    if totalBet > currentBalance{
+        fmt.Println("You don't have enough funds")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to place a bet with insufficient funds"})
+        return
+    }
     var dropped_number int
     if fairPlay {
         currentBalance, dropped_number, err = user_player.NormalPlay(
@@ -248,14 +266,9 @@ func HandleUserRegister(c *gin.Context){
         return
     }
     // Удаляем начальные и конечные пробелы из пароля
-    fmt.Println(input.Password)
     input.Password = strings.TrimSpace(input.Password)
-    fmt.Println(input.Password)
     hashedPassword := HashPassword(input.Password)
-    fmt.Println(hashedPassword)
-    fmt.Println(HashPassword("12345678"))
     input.Password = hashedPassword
-    fmt.Println(input.Password)
     if err := CreateUser(input); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
         return
