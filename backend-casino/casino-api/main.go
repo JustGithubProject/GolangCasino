@@ -75,6 +75,7 @@ func main() {
 	// auth_handlers
 	r.POST("/register/user/", handlers.RegisterHandler)
 	r.POST("/login/user/", handlers.LoginHandler)
+	r.POST("/logout", handlers.LogoutHandler)
 
 	// common handlers(authenticated user)
 	r.POST("/spin-roulette-v1/", handlers.SpinRouletteHandler)

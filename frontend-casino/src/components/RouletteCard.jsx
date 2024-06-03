@@ -210,7 +210,7 @@ function RouletteCard() {
       }
     }
 
-    setResultMessage(winnings > 0 ? `You won: ₽${winnings}` : 'You did not win');
+    setResultMessage(winnings > 0 ? `Вы выиграли: ₽${winnings}` : 'Вы не выиграли');
   };
 
   const handleReset = () => {
