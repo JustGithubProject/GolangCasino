@@ -44,7 +44,7 @@ const Register = () => {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
-      background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)',
+      background: 'linear-gradient(to right, #43cea2, #185a9d)',
       color: '#fff',
       fontFamily: 'Arial, sans-serif',
       padding: '20px',
