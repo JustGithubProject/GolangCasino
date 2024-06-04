@@ -31,33 +31,23 @@ const Register = () => {
       }
 
       setSuccess('Registration successful!');
-      navigate('/login'); // Redirect to the login page
+      navigate('/');
     } catch (err) {
       setError('Registration failed. Please try again.');
     }
   };
 
   const styles = {
-    authContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-      background: 'linear-gradient(to right, #43cea2, #185a9d)',
-      color: '#fff',
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px',
-    },
     form: {
       display: 'flex',
       flexDirection: 'column',
       background: '#fff',
       padding: '30px',
-      borderRadius: '10px',
-      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+      borderRadius: '15px',
+      boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
       color: '#333',
-      width: '300px',
+      width: '350px',
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     },
     formGroup: {
       marginBottom: '20px',
@@ -65,6 +55,7 @@ const Register = () => {
     label: {
       marginBottom: '8px',
       fontSize: '14px',
+      fontWeight: 'bold',
     },
     input: {
       padding: '12px',
@@ -72,6 +63,8 @@ const Register = () => {
       border: '1px solid #ddd',
       width: '100%',
       fontSize: '14px',
+      outline: 'none',
+      transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
     },
     button: {
       padding: '12px',
@@ -81,7 +74,11 @@ const Register = () => {
       color: '#fff',
       cursor: 'pointer',
       fontSize: '16px',
-      transition: 'background 0.3s ease',
+      transition: 'background 0.3s ease, transform 0.3s ease',
+    },
+    buttonHover: {
+      background: 'linear-gradient(to right, #ff4b2b, #ff416c)',
+      transform: 'scale(1.05)',
     },
     error: {
       color: '#ff4b2b',
@@ -94,51 +91,52 @@ const Register = () => {
   };
 
   return (
-    <div style={styles.authContainer}>
-      <h2>Register</h2>
-      {error && <p style={styles.error}>{error}</p>}
-      {success && <p style={styles.success}>{success}</p>}
-      <form onSubmit={handleRegister} style={styles.form}>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={styles.input}
-          />
-        </div>
-        <button
-          type="submit"
-          style={styles.button}
-          onMouseOver={(e) => e.target.style.background = 'linear-gradient(to right, #ff4b2b, #ff416c)'}
-          onMouseOut={(e) => e.target.style.background = 'linear-gradient(to right, #ff416c, #ff4b2b)'}
-        >
-          Register
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleRegister} style={styles.form}>
+      <div style={styles.formGroup}>
+        <label style={styles.label}>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          style={username ? { ...styles.input, borderColor: '#185a9d', boxShadow: '0 0 8px rgba(24, 90, 157, 0.2)' } : styles.input}
+        />
+      </div>
+      <div style={styles.formGroup}>
+        <label style={styles.label}>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          style={password ? { ...styles.input, borderColor: '#185a9d', boxShadow: '0 0 8px rgba(24, 90, 157, 0.2)' } : styles.input}
+        />
+      </div>
+      <div style={styles.formGroup}>
+        <label style={styles.label}>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={email ? { ...styles.input, borderColor: '#185a9d', boxShadow: '0 0 8px rgba(24, 90, 157, 0.2)' } : styles.input}
+        />
+      </div>
+      <button
+        type="submit"
+        style={styles.button}
+        onMouseOver={(e) => {
+          e.currentTarget.style.background = styles.buttonHover.background;
+          e.currentTarget.style.transform = styles.buttonHover.transform;
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.background = styles.button.background;
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+      >
+        Register
+      </button>
+    </form>
   );
 };
 

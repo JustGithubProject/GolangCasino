@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Login from './auth_components/Login';
+import Register from './auth_components/Register';
 
 const Home = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
   const handleLogout = async () => {
     try {
       await axios.post('http://127.0.0.1:8081/logout');
 
-      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
 
-      window.location.href = '/login';
+      window.location.href = '/roulette';
     } catch (error) {
       console.error('Failed to logout:', error);
     }
@@ -28,13 +34,11 @@ const Home = () => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: '250px',
+    width: '200px',
     padding: '20px',
     backgroundColor: '#333',
     color: '#fff',
     boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
-    borderTopLeftRadius: '10px',
-    borderBottomLeftRadius: '10px',
   };
 
   const ulStyle = {
@@ -52,10 +56,9 @@ const Home = () => {
     textDecoration: 'none',
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: '18px',
-    width: '100%',
+    fontSize: '16px',
     display: 'block',
-    padding: '10px 15px',
+    padding: '10px',
     borderRadius: '4px',
     transition: 'background-color 0.3s, transform 0.3s',
   };
@@ -69,10 +72,9 @@ const Home = () => {
     backgroundColor: '#007BFF',
     color: '#fff',
     border: 'none',
-    padding: '10px 15px',
-    fontSize: '18px',
+    padding: '10px',
+    fontSize: '16px',
     fontWeight: 'bold',
-    width: '100%',
     borderRadius: '4px',
     cursor: 'pointer',
     transition: 'background-color 0.3s, transform 0.3s',
@@ -87,18 +89,30 @@ const Home = () => {
     alignItems: 'center',
   };
 
-  const headingStyle = {
-    fontSize: '48px',
+  const tabStyle = {
+    display: 'flex',
+    justifyContent: 'center',
     marginBottom: '20px',
-    textAlign: 'center',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
   };
 
-  const paragraphStyle = {
-    fontSize: '24px',
-    textAlign: 'center',
-    maxWidth: '600px',
-    lineHeight: '1.5',
+  const tabButtonStyle = {
+    padding: '10px 20px',
+    cursor: 'pointer',
+    border: 'none',
+    background: 'none',
+    fontSize: '18px',
+    fontWeight: 'bold',
+    borderBottom: isLogin ? '2px solid #007BFF' : 'none',
+  };
+
+  const inactiveTabButtonStyle = {
+    padding: '10px 20px',
+    cursor: 'pointer',
+    border: 'none',
+    background: 'none',
+    fontSize: '18px',
+    fontWeight: 'bold',
+    borderBottom: !isLogin ? '2px solid #007BFF' : 'none',
   };
 
   return (
@@ -122,38 +136,6 @@ const Home = () => {
             </Link>
           </li>
           <li style={liStyle}>
-            <Link
-              to="/login"
-              style={linkStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = linkHoverStyle.backgroundColor;
-                e.currentTarget.style.transform = linkHoverStyle.transform;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Login
-            </Link>
-          </li>
-          <li style={liStyle}>
-            <Link
-              to="/register"
-              style={linkStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = linkHoverStyle.backgroundColor;
-                e.currentTarget.style.transform = linkHoverStyle.transform;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Register
-            </Link>
-          </li>
-          <li style={liStyle}>
             <button
               onClick={handleLogout}
               style={buttonStyle}
@@ -172,10 +154,41 @@ const Home = () => {
         </ul>
       </nav>
       <div style={mainStyle}>
-        <h1 style={headingStyle}>Welcome to Our Site</h1>
-        <p style={paragraphStyle}>
-          Select an option from the navigation menu to get started.
-        </p>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#fff',
+          color: '#333',
+          padding: '30px',
+          borderRadius: '15px',
+          boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          width: '350px',
+        }}>
+          <div style={tabStyle}>
+            <button
+              style={tabButtonStyle}
+              onClick={() => setIsLogin(true)}
+            >
+              Логин
+            </button>
+            <button
+              style={inactiveTabButtonStyle}
+              onClick={() => setIsLogin(false)}
+            >
+              Регистрация
+            </button>
+          </div>
+          {error && <p style={{ color: '#ff4b2b' }}>{error}</p>}
+          {success && <p style={{ color: '#28a745' }}>{success}</p>}
+          {isLogin ? (
+            <Login />
+          ) : (
+            <Register />
+          )}
+        </div>
       </div>
     </div>
   );
