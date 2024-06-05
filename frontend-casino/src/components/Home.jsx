@@ -5,8 +5,15 @@ import Register from './auth_components/Register';
 import * as jwtDecodeModule from 'jwt-decode';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import Footer from './Footer';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import carousel styles
 import backgroundImage from '../images/casinoImage_2.png';
 import cardBackgroundImage from '../images/card.png'; // Import the card background image
+
+import image1 from '../images/cas_image_99.png';
+import image2 from '../images/cas_image_9.png';
+import image3 from '../images/cas_image_11.png';
 
 const Home = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -55,10 +62,12 @@ const Home = () => {
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: '"Roboto", sans-serif',
     background: `url(${backgroundImage}) no-repeat center center fixed`,
     backgroundSize: 'cover',
     color: '#fff',
+    position: 'relative',
+    paddingBottom: '60px', // Space for the footer
   };
 
   const mainStyle = {
@@ -117,18 +126,19 @@ const Home = () => {
     background: `url(${cardBackgroundImage}) no-repeat center center`,
     backgroundSize: 'cover',
     color: '#fff',
-    padding: '40px', // Increase padding for larger card
-    borderRadius: '10px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-    width: '206px', // Increase width for larger card
-    height: '155px', // Increase height for larger card
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease', // Faster animation
+    padding: '40px',
+    borderRadius: '15px',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+    width: '220px',
+    height: '180px',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     animation: 'fadeIn 1s',
-    border: '2px solid #fff', // Add border
+    border: '2px solid rgba(255, 255, 255, 0.8)',
+    marginBottom: '10px',
   };
 
   const cardButtonStyle = {
-    backgroundColor: '#4CAF50', // Match the green color from the image
+    backgroundColor: '#4CAF50',
     color: '#fff',
     border: 'none',
     padding: '10px 20px',
@@ -137,11 +147,11 @@ const Home = () => {
     fontWeight: 'bold',
     textDecoration: 'none',
     display: 'inline-block',
-    transition: 'background-color 0.2s ease, transform 0.2s ease', // Faster animation
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
   };
 
   const handleMouseEnter = (event) => {
-    event.target.style.backgroundColor = '#43A047'; // Darker green for hover
+    event.target.style.backgroundColor = '#388E3C';
     event.target.style.transform = 'scale(1.05)';
   };
 
@@ -155,7 +165,21 @@ const Home = () => {
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     gap: '20px',
     padding: '20px',
-    gridTemplateColumns: 'repeat(3, 1fr)', // Three columns per row
+    gridTemplateColumns: 'repeat(3, 1fr)',
+  };
+
+  const carouselImageStyle = {
+    maxHeight: '320px',
+    objectFit: 'cover',
+  };
+
+  const cardLabelStyle = {
+    backgroundColor: '#000',
+    color: '#fff',
+    fontSize: '16px',
+    margin: 0,
+    padding: '5px 0',
+    borderRadius: '0 0 15px 15px',
   };
 
   return (
@@ -166,20 +190,41 @@ const Home = () => {
         handleLogout={handleLogout}
         style={{ backgroundColor: '#007BFF', padding: '10px', color: '#fff' }}
       />
+      <Carousel
+        showThumbs={false}
+        autoPlay
+        infiniteLoop
+        interval={1200}
+        dynamicHeight={false}
+        showStatus={false}
+        showIndicators={false}
+      >
+        <div>
+          <img src={image1} alt="Image 1" style={carouselImageStyle} />
+        </div>
+        <div>
+          <img src={image2} alt="Image 2" style={carouselImageStyle} />
+        </div>
+        <div>
+          <img src={image3} alt="Image 3" style={carouselImageStyle} />
+        </div>
+      </Carousel>
       <div style={mainStyle}>
         {isAuthenticated ? (
           <div style={cardGridStyle}>
-            {/* Duplicate the card multiple times for demonstration */}
             {[...Array(6)].map((_, index) => (
-              <div key={index} style={cardStyle}>
-                <Link
-                  to="/roulette"
-                  style={cardButtonStyle}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  Играть
-                </Link>
+              <div key={index} style={{ textAlign: 'center' }}>
+                <div style={cardStyle}>
+                  <Link
+                    to="/roulette"
+                    style={cardButtonStyle}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    Играть
+                  </Link>
+                </div>
+                <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
               </div>
             ))}
           </div>
@@ -190,7 +235,7 @@ const Home = () => {
                 style={tabButtonStyle(isLogin)}
                 onClick={() => setIsLogin(true)}
               >
-                Логин
+                Войти
               </button>
               <button
                 style={tabButtonStyle(!isLogin)}
@@ -209,6 +254,7 @@ const Home = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

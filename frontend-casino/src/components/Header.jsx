@@ -15,9 +15,10 @@ const Header = ({ username, balance, handleLogout }) => {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '20px 40px',
-    backgroundColor: '#2C3E50',
+    backgroundColor: 'rgba(44, 62, 80, 0.8)', // More transparent background
     color: '#ECF0F1',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)',
+    backdropFilter: 'blur(10px)', // Adds a blur effect to the background
   };
 
   const userInfoStyle = {
@@ -29,7 +30,7 @@ const Header = ({ username, balance, handleLogout }) => {
     width: '50px',
     height: '50px',
     borderRadius: '50%',
-    backgroundColor: '#3498DB',
+    backgroundColor: 'rgba(52, 152, 219, 0.8)', // More transparent avatar background
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -78,12 +79,12 @@ const Header = ({ username, balance, handleLogout }) => {
   };
 
   const linkHoverStyle = {
-    backgroundColor: '#3498DB',
+    backgroundColor: 'rgba(52, 152, 219, 0.8)', // More transparent hover background
     transform: 'scale(1.1)',
   };
 
   const buttonStyle = {
-    backgroundColor: '#E74C3C',
+    backgroundColor: 'rgba(231, 76, 60, 0.8)', // More transparent button background
     color: '#fff',
     border: 'none',
     padding: '10px 20px',
@@ -100,7 +101,6 @@ const Header = ({ username, balance, handleLogout }) => {
     fontSize: '20px',
   };
 
-  // Функция для форматирования числа с разделителем тысяч
   const formatBalance = (balance) => {
     return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(balance);
   };
@@ -142,11 +142,11 @@ const Header = ({ username, balance, handleLogout }) => {
               onClick={handleLogout}
               style={buttonStyle}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#C0392B';
+                e.currentTarget.style.backgroundColor = 'rgba(192, 57, 43, 0.8)'; // More transparent hover background
                 e.currentTarget.style.transform = 'scale(1.1)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#E74C3C';
+                e.currentTarget.style.backgroundColor = 'rgba(231, 76, 60, 0.8)'; // More transparent button background
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
