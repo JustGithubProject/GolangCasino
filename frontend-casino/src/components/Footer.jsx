@@ -1,7 +1,7 @@
 import React from 'react';
 
 const footerStyle = {
-  background: 'linear-gradient(to right, #131313, #1e1e1e)', // Gradient to match the dark theme
+  background: 'linear-gradient(to right, rgba(19, 19, 19, 0.8), rgba(30, 30, 30, 0.8))', // Gradient with transparency
   color: '#fff',
   textAlign: 'center',
   padding: '20px 0',

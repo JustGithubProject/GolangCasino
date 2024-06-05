@@ -15,7 +15,7 @@ const Header = ({ username, balance, handleLogout }) => {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '20px 40px',
-    backgroundColor: 'rgba(44, 62, 80, 0.8)', // More transparent background
+    background: 'linear-gradient(to right, rgba(19, 19, 19, 0.8), rgba(30, 30, 30, 0.8))', // Matching footer gradient
     color: '#ECF0F1',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)',
     backdropFilter: 'blur(10px)', // Adds a blur effect to the background
