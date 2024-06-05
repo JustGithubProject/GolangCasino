@@ -68,11 +68,12 @@ const Home = () => {
     color: '#fff',
     position: 'relative',
     paddingBottom: '60px', // Space for the footer
+    overflow: 'hidden', // Prevent scrolling
   };
 
   const mainStyle = {
     flex: 1,
-    padding: '40px',
+    padding: '20px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -82,15 +83,15 @@ const Home = () => {
   const tabStyle = {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: '20px',
+    marginBottom: '10px',
   };
 
   const tabButtonStyle = (active) => ({
-    padding: '10px 20px',
+    padding: '5px 10px',
     cursor: 'pointer',
     border: 'none',
     background: 'none',
-    fontSize: '18px',
+    fontSize: '16px',
     fontWeight: 'bold',
     borderBottom: active ? '2px solid #28a745' : 'none',
     color: active ? '#28a745' : '#333',
@@ -103,11 +104,11 @@ const Home = () => {
     justifyContent: 'center',
     background: '#fff',
     color: '#333',
-    padding: '30px',
-    borderRadius: '15px',
+    padding: '20px',
+    borderRadius: '10px',
     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    width: '350px',
+    width: '300px',
   };
 
   const errorStyle = {
@@ -126,22 +127,22 @@ const Home = () => {
     background: `url(${cardBackgroundImage}) no-repeat center center`,
     backgroundSize: 'cover',
     color: '#fff',
-    padding: '40px',
-    borderRadius: '15px',
+    padding: '30px',
+    borderRadius: '10px',
     boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-    width: '220px',
-    height: '180px',
+    width: '200px',
+    height: '160px',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     animation: 'fadeIn 1s',
     border: '2px solid rgba(255, 255, 255, 0.8)',
-    marginBottom: '10px',
+    marginBottom: '5px',
   };
 
   const cardButtonStyle = {
     backgroundColor: '#4CAF50',
     color: '#fff',
     border: 'none',
-    padding: '10px 20px',
+    padding: '8px 16px',
     borderRadius: '5px',
     cursor: 'pointer',
     fontWeight: 'bold',
@@ -162,24 +163,24 @@ const Home = () => {
 
   const cardGridStyle = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: '20px',
-    padding: '20px',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+    gap: '10px',
+    padding: '10px',
     gridTemplateColumns: 'repeat(3, 1fr)',
   };
 
   const carouselImageStyle = {
-    maxHeight: '320px',
+    maxHeight: '250px',
     objectFit: 'cover',
   };
 
   const cardLabelStyle = {
     backgroundColor: '#000',
     color: '#fff',
-    fontSize: '16px',
+    fontSize: '14px',
     margin: 0,
     padding: '5px 0',
-    borderRadius: '0 0 15px 15px',
+    borderRadius: '0 0 10px 10px',
   };
 
   return (
