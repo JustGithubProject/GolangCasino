@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
@@ -37,6 +39,10 @@ const Register = () => {
     }
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const styles = {
     form: {
       display: 'flex',
@@ -51,6 +57,7 @@ const Register = () => {
     },
     formGroup: {
       marginBottom: '20px',
+      position: 'relative', // Add this to position the toggle button correctly
     },
     label: {
       marginBottom: '8px',
@@ -58,7 +65,7 @@ const Register = () => {
       fontWeight: 'bold',
     },
     input: {
-      padding: '12px',
+      padding: '12px 40px 12px 12px', // Add right padding to make space for the icon
       borderRadius: '20px',
       border: '1px solid #ddd',
       width: '100%',
@@ -88,6 +95,21 @@ const Register = () => {
       color: '#28a745',
       marginBottom: '10px',
     },
+    toggleButton: {
+      position: 'absolute',
+      right: '10px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '18px',
+      color: '#aaa',
+      padding: '0', // Ensure the button has no padding for correct positioning
+    },
+    icon: {
+      verticalAlign: 'middle',
+    },
   };
 
   return (
@@ -105,12 +127,15 @@ const Register = () => {
       <div style={styles.formGroup}>
         <label style={styles.label}>Password:</label>
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           style={password ? { ...styles.input, borderColor: '#185a9d', boxShadow: '0 0 8px rgba(24, 90, 157, 0.2)' } : styles.input}
         />
+        <button type="button" onClick={toggleShowPassword} style={styles.toggleButton}>
+          {showPassword ? <FaEyeSlash style={styles.icon} /> : <FaEye style={styles.icon} />}
+        </button>
       </div>
       <div style={styles.formGroup}>
         <label style={styles.label}>Email:</label>
@@ -136,6 +161,8 @@ const Register = () => {
       >
         Register
       </button>
+      {error && <div style={styles.error}>{error}</div>}
+      {success && <div style={styles.success}>{success}</div>}
     </form>
   );
 };

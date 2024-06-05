@@ -1,83 +1,58 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { fetchWithAuth } from './auth_components/fetchWrapper';
 import Login from './auth_components/Login';
 import Register from './auth_components/Register';
+import * as jwtDecodeModule from 'jwt-decode';
+import Header from './Header';
 
 const Home = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [username, setUsername] = useState('');
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecodeModule.jwtDecode(token);
+      const username = decodedToken.username;
+      setUsername(username);
+      fetchUserBalance(username);
+    }
+  }, []);
+
+  const fetchUserBalance = async (username) => {
+    try {
+      const response = await fetchWithAuth(`http://127.0.0.1:8081/user/name/${username}`);
+      if (response.ok) {
+        const data = await response.json();
+        setBalance(data.Balance);
+      } else {
+        console.error('Failed to fetch user balance:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching user balance:', error);
+    }
+  };
 
   const handleLogout = async () => {
-    try {
-      await axios.post('http://127.0.0.1:8081/logout');
-
+    const response = await fetchWithAuth('http://127.0.0.1:8081/logout', { method: 'POST' });
+    if (response.ok) {
       localStorage.removeItem('token');
-
       window.location.href = '/roulette';
-    } catch (error) {
-      console.error('Failed to logout:', error);
+    } else {
+      console.error('Failed to logout:', response.status);
     }
   };
 
   const containerStyle = {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     height: '100vh',
     fontFamily: 'Arial, sans-serif',
     background: 'linear-gradient(to right, #43cea2, #185a9d)',
     color: '#fff',
-  };
-
-  const navStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    width: '200px',
-    padding: '20px',
-    backgroundColor: '#333',
-    color: '#fff',
-    boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
-  };
-
-  const ulStyle = {
-    listStyleType: 'none',
-    padding: '0',
-    margin: '0',
-    width: '100%',
-  };
-
-  const liStyle = {
-    margin: '15px 0',
-  };
-
-  const linkStyle = {
-    textDecoration: 'none',
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: '16px',
-    display: 'block',
-    padding: '10px',
-    borderRadius: '4px',
-    transition: 'background-color 0.3s, transform 0.3s',
-  };
-
-  const linkHoverStyle = {
-    backgroundColor: '#007BFF',
-    transform: 'scale(1.05)',
-  };
-
-  const buttonStyle = {
-    backgroundColor: '#007BFF',
-    color: '#fff',
-    border: 'none',
-    padding: '10px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s, transform 0.3s',
   };
 
   const mainStyle = {
@@ -95,64 +70,20 @@ const Home = () => {
     marginBottom: '20px',
   };
 
-  const tabButtonStyle = {
+  const tabButtonStyle = (active) => ({
     padding: '10px 20px',
     cursor: 'pointer',
     border: 'none',
     background: 'none',
     fontSize: '18px',
     fontWeight: 'bold',
-    borderBottom: isLogin ? '2px solid #007BFF' : 'none',
-  };
-
-  const inactiveTabButtonStyle = {
-    padding: '10px 20px',
-    cursor: 'pointer',
-    border: 'none',
-    background: 'none',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    borderBottom: !isLogin ? '2px solid #007BFF' : 'none',
-  };
+    borderBottom: active ? '2px solid #007BFF' : 'none',
+    color: active ? '#007BFF' : '#333',
+  });
 
   return (
     <div style={containerStyle}>
-      <nav style={navStyle}>
-        <ul style={ulStyle}>
-          <li style={liStyle}>
-            <Link
-              to="/roulette"
-              style={linkStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = linkHoverStyle.backgroundColor;
-                e.currentTarget.style.transform = linkHoverStyle.transform;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Roulette
-            </Link>
-          </li>
-          <li style={liStyle}>
-            <button
-              onClick={handleLogout}
-              style={buttonStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#0056b3';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#007BFF';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Logout
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <Header username={username} balance={balance} handleLogout={handleLogout} />
       <div style={mainStyle}>
         <div style={{
           display: 'flex',
@@ -169,13 +100,13 @@ const Home = () => {
         }}>
           <div style={tabStyle}>
             <button
-              style={tabButtonStyle}
+              style={tabButtonStyle(isLogin)}
               onClick={() => setIsLogin(true)}
             >
               Логин
             </button>
             <button
-              style={inactiveTabButtonStyle}
+              style={tabButtonStyle(!isLogin)}
               onClick={() => setIsLogin(false)}
             >
               Регистрация
