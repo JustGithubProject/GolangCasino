@@ -79,8 +79,7 @@ func main() {
 
 	// common handlers(authenticated user)
 	r.POST("/spin-roulette-v1/", handlers.SpinRouletteHandler)
-	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler)
-
+	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler) // like rooms(6 different handlers)
 	// Start the web server
 	r.Run(":8081")
 }

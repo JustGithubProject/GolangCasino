@@ -7,6 +7,7 @@ import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from './auth_components/fetchWrapper';
 import './styles.css';
+import Header from './Header';  // Import the Header component
 
 const { Text } = Typography;
 
@@ -49,7 +50,7 @@ function RouletteCard() {
 
   const fetchUserBalance = async (username) => {
     try {
-      const response = fetchWithAuth(`http://localhost:8081/user/name/${username}`);
+      const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -111,7 +112,7 @@ function RouletteCard() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const {
       betAmount, evenBet, oddBet, redBet, blackBet,
       first12Bet, second12Bet, third12Bet, oneToEighteenBet,
@@ -148,7 +149,7 @@ function RouletteCard() {
 
     try {
       setIsSpinning(true);
-      const response = fetchWithAuth(url, {
+      const response = await fetchWithAuth(url, {
         method: 'POST',
         body: JSON.stringify({}),
       });
@@ -157,17 +158,16 @@ function RouletteCard() {
         throw new Error('Network response was not ok');
       }
 
-      response.json().then(data => {
-        console.log(data);
-        setSpinResult(data.dropped_number);
-        calculateWinnings(data.dropped_number);
-        setIsSpinning(false);
-        setShowResult(true);
-        setTimeout(() => {
-          setShowResult(false);
-          handleReset();
-        }, 5000); // Show the result for 5 seconds
-      });
+      const data = await response.json();
+      console.log(data);
+      setSpinResult(data.dropped_number);
+      calculateWinnings(data.dropped_number);
+      setIsSpinning(false);
+      setShowResult(true);
+      setTimeout(() => {
+        setShowResult(false);
+        handleReset();
+      }, 5000); // Show the result for 5 seconds
     } catch (error) {
       console.error('Error:', error);
       setIsSpinning(false);
@@ -247,6 +247,10 @@ function RouletteCard() {
 
   return (
     <div style={styles.container}>
+      <Header username={username} balance={balance} handleLogout={() => {
+        localStorage.removeItem('token');
+        window.location.reload();
+      }} />  {/* Add Header component here */}
       <Card style={styles.card}>
         {resultMessage && (
           <CSSTransition
@@ -313,7 +317,7 @@ function RouletteCard() {
 const styles = {
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
     minHeight: '100vh',
     background: 'linear-gradient(to right, #43cea2, #185a9d)',

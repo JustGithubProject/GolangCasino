@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faHome } from '@fortawesome/free-solid-svg-icons';
 
 const Header = ({ username, balance, handleLogout }) => {
   const [showBalance, setShowBalance] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const toggleBalance = () => {
     setShowBalance(!showBalance);
@@ -15,22 +23,28 @@ const Header = ({ username, balance, handleLogout }) => {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '20px 40px',
-    background: 'linear-gradient(to right, rgba(19, 19, 19, 0.8), rgba(30, 30, 30, 0.8))', // Matching footer gradient
+    background: 'linear-gradient(to right, rgba(19, 19, 19, 0.8), rgba(30, 30, 30, 0.8))',
     color: '#ECF0F1',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)',
-    backdropFilter: 'blur(10px)', // Adds a blur effect to the background
+    backdropFilter: 'blur(10px)',
+  };
+
+  const rightSectionStyle = {
+    display: 'flex',
+    alignItems: 'center',
   };
 
   const userInfoStyle = {
     display: 'flex',
     alignItems: 'center',
+    marginRight: '20px',
   };
 
   const avatarStyle = {
     width: '50px',
     height: '50px',
     borderRadius: '50%',
-    backgroundColor: 'rgba(52, 152, 219, 0.8)', // More transparent avatar background
+    backgroundColor: 'rgba(52, 152, 219, 0.8)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -43,12 +57,14 @@ const Header = ({ username, balance, handleLogout }) => {
   const usernameStyle = {
     fontSize: '18px',
     fontWeight: 'bold',
+    display: 'flex',
+    alignItems: 'center',
   };
 
   const balanceStyle = {
     fontSize: '16px',
-    color: '#BDC3C7',
-    marginLeft: '10px',
+    color: '#fff',
+    marginLeft: '20px',
   };
 
   const navStyle = {
@@ -79,12 +95,12 @@ const Header = ({ username, balance, handleLogout }) => {
   };
 
   const linkHoverStyle = {
-    backgroundColor: 'rgba(52, 152, 219, 0.8)', // More transparent hover background
+    backgroundColor: 'rgba(52, 152, 219, 0.8)',
     transform: 'scale(1.1)',
   };
 
   const buttonStyle = {
-    backgroundColor: 'rgba(231, 76, 60, 0.8)', // More transparent button background
+    backgroundColor: 'rgba(231, 76, 60, 0.8)',
     color: '#fff',
     border: 'none',
     padding: '10px 20px',
@@ -101,24 +117,21 @@ const Header = ({ username, balance, handleLogout }) => {
     fontSize: '20px',
   };
 
+  const homeIconStyle = {
+    cursor: 'pointer',
+    fontSize: '24px',
+    color: '#ECF0F1',
+  };
+
   const formatBalance = (balance) => {
     return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(balance);
   };
 
   return (
     <header style={headerStyle}>
-      <div style={userInfoStyle}>
-        <div style={avatarStyle}>{username.charAt(0).toUpperCase()}</div>
-        <div>
-          <div style={usernameStyle}>{username}</div>
-          {showBalance && <div style={balanceStyle}>Баланс: {formatBalance(balance)}</div>}
-        </div>
-        <FontAwesomeIcon
-          icon={showBalance ? faEyeSlash : faEye}
-          style={iconStyle}
-          onClick={toggleBalance}
-        />
-      </div>
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <FontAwesomeIcon icon={faHome} style={homeIconStyle} />
+      </Link>
       <nav style={navStyle}>
         <ul style={ulStyle}>
           <li style={liStyle}>
@@ -137,24 +150,42 @@ const Header = ({ username, balance, handleLogout }) => {
               Roulette
             </Link>
           </li>
-          <li style={liStyle}>
-            <button
-              onClick={handleLogout}
-              style={buttonStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(192, 57, 43, 0.8)'; // More transparent hover background
-                e.currentTarget.style.transform = 'scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(231, 76, 60, 0.8)'; // More transparent button background
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Logout
-            </button>
-          </li>
+          {isAuthenticated && (
+            <li style={liStyle}>
+              <button
+                onClick={handleLogout}
+                style={buttonStyle}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(192, 57, 43, 0.8)';
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(231, 76, 60, 0.8)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                Logout
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
+      {isAuthenticated && (
+        <div style={rightSectionStyle}>
+          <div style={userInfoStyle}>
+            <div style={avatarStyle}>{username.charAt(0).toUpperCase()}</div>
+            <div style={usernameStyle}>
+              <div>{username}</div>
+              {showBalance && <div style={balanceStyle}>Баланс: {formatBalance(balance)}</div>}
+              <FontAwesomeIcon
+                icon={showBalance ? faEyeSlash : faEye}
+                style={iconStyle}
+                onClick={toggleBalance}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

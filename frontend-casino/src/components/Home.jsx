@@ -52,7 +52,7 @@ const Home = () => {
     const response = await fetchWithAuth('http://127.0.0.1:8081/logout', { method: 'POST' });
     if (response.ok) {
       localStorage.removeItem('token');
-      window.location.href = '/roulette';
+      window.location.href = '/';
     } else {
       console.error('Failed to logout:', response.status);
     }
@@ -94,7 +94,7 @@ const Home = () => {
     fontSize: '16px',
     fontWeight: 'bold',
     borderBottom: active ? '2px solid #28a745' : 'none',
-    color: active ? '#28a745' : '#333',
+    color: active ? '#28a745' : '#fff', // Dark theme color
   });
 
   const formContainerStyle = {
@@ -102,13 +102,13 @@ const Home = () => {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    background: '#fff',
-    color: '#333',
+    background: '#2c3e50', // Dark background color
+    color: '#ECF0F1', // Light text color
     padding: '20px',
     borderRadius: '10px',
     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    width: '300px',
+    width: '350px', // Increased width
   };
 
   const errorStyle = {

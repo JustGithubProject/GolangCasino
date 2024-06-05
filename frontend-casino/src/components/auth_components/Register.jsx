@@ -47,27 +47,30 @@ const Register = () => {
     form: {
       display: 'flex',
       flexDirection: 'column',
-      background: '#fff',
+      background: '#2c3e50', // Dark background color
       padding: '30px',
       borderRadius: '15px',
       boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
-      color: '#333',
+      color: '#ECF0F1',
       width: '350px',
       transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     },
     formGroup: {
       marginBottom: '20px',
-      position: 'relative', // Add this to position the toggle button correctly
+      position: 'relative',
     },
     label: {
       marginBottom: '8px',
       fontSize: '14px',
       fontWeight: 'bold',
+      color: '#ECF0F1', // Light text color
     },
     input: {
-      padding: '12px 40px 12px 12px', // Add right padding to make space for the icon
+      padding: '12px 40px 12px 12px',
       borderRadius: '20px',
-      border: '1px solid #ddd',
+      border: '1px solid #34495e',
+      background: '#34495e', // Darker input background
+      color: '#ECF0F1', // Light text color
       width: '100%',
       fontSize: '14px',
       outline: 'none',
@@ -105,7 +108,7 @@ const Register = () => {
       cursor: 'pointer',
       fontSize: '18px',
       color: '#aaa',
-      padding: '0', // Ensure the button has no padding for correct positioning
+      padding: '0',
     },
     icon: {
       verticalAlign: 'middle',
@@ -115,7 +118,7 @@ const Register = () => {
   return (
     <form onSubmit={handleRegister} style={styles.form}>
       <div style={styles.formGroup}>
-        <label style={styles.label}>Username:</label>
+        <label style={styles.label}>Логин:</label>
         <input
           type="text"
           value={username}
@@ -125,7 +128,7 @@ const Register = () => {
         />
       </div>
       <div style={styles.formGroup}>
-        <label style={styles.label}>Password:</label>
+        <label style={styles.label}>Пароль:</label>
         <input
           type={showPassword ? 'text' : 'password'}
           value={password}
@@ -159,7 +162,7 @@ const Register = () => {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        Register
+        Регистрация
       </button>
       {error && <div style={styles.error}>{error}</div>}
       {success && <div style={styles.success}>{success}</div>}
