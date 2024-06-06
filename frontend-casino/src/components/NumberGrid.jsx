@@ -4,6 +4,7 @@ import { Button } from 'antd';
 function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick, reset, setSelectedCoin }) {
     const [selectedCoin, setLocalSelectedCoin] = useState(1);
     const [bets, setBets] = useState({});
+    const [totalBetAmount, setTotalBetAmount] = useState(0);
 
     const handleNumberBet = (number) => {
         handleNumberClick(number, selectedCoin);
@@ -15,6 +16,18 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
 
     const handleSectorButtonClick = (sector) => {
         handleSectorClick(sector, selectedCoin);
+        setBets((prevBets) => ({
+            ...prevBets,
+            [sector]: (prevBets[sector] || 0) + selectedCoin,
+        }));
+    };
+
+    const handleColorButtonClick = (color) => {
+        handleColorClick(color, selectedCoin);
+        setBets((prevBets) => ({
+            ...prevBets,
+            [color]: (prevBets[color] || 0) + selectedCoin,
+        }));
     };
 
     const getButtonStyle = (number) => ({
@@ -48,9 +61,21 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
         setSelectedCoin(coin);
     };
 
-    useEffect(() => {
+    const resetBets = () => {
         setBets({});
+        setTotalBetAmount(0);
+    };
+
+    useEffect(() => {
+        if (reset) {
+            resetBets();
+        }
     }, [reset]);
+
+    useEffect(() => {
+        const total = Object.values(bets).reduce((sum, bet) => sum + bet, 0);
+        setTotalBetAmount(total);
+    }, [bets]);
 
     return (
         <div style={styles.container}>
@@ -64,6 +89,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                         {coin}
                     </Button>
                 ))}
+                <div style={styles.totalBetAmount}>Total Bet: {totalBetAmount}</div>
             </div>
             <div style={styles.grid}>
                 <div style={styles.zeroColumn}>
@@ -104,13 +130,13 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
                         <Button style={getSectorButtonStyle('EVEN')} onClick={() => handleSectorButtonClick('EVEN')}>EVEN</Button>
                         <Button
                             style={getColorButtonStyle('red')}
-                            onClick={() => handleColorClick('red')}
+                            onClick={() => handleColorButtonClick('red')}
                         >
                             <span style={styles.diamondText}>Красное</span>
                         </Button>
                         <Button
                             style={getColorButtonStyle('black')}
-                            onClick={() => handleColorClick('black')}
+                            onClick={() => handleColorButtonClick('black')}
                         >
                             <span style={styles.diamondText}>Черное</span>
                         </Button>
@@ -275,6 +301,12 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    },
+    totalBetAmount: {
+        marginTop: '20px',
+        color: 'white',
+        fontSize: '20px',
+        fontWeight: 'bold',
     },
 };
 

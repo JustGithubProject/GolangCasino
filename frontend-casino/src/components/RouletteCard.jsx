@@ -8,6 +8,13 @@ import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from './auth_components/fetchWrapper';
 import './styles.css';
 import Header from './Header';  // Import the Header component
+import backgroundImage from '../images/casinoImage_2.png';
+
+import BalanceDisplay from './BalanceDisplay';  
+import ResultOverlay from './ResultOverlay'; 
+import BetButton from './BetButton';  
+import BetFormToggle from './BetFormToggle'; 
+
 
 const { Text } = Typography;
 
@@ -250,66 +257,32 @@ function RouletteCard() {
       <Header username={username} balance={balance} handleLogout={() => {
         localStorage.removeItem('token');
         window.location.reload();
-      }} />  {/* Add Header component here */}
-      <Card style={styles.card}>
-        {resultMessage && (
-          <CSSTransition
-            in={showResult}
-            timeout={300}
-            classNames="fade"
-            unmountOnExit
-          >
-            <div style={styles.resultOverlay}>
-              <Text style={styles.resultText}>{resultMessage}<p></p></Text>
-              {spinResult !== null && <Text style={styles.spinResultText}>Выпавшее число: {spinResult}</Text>}
-            </div>
-          </CSSTransition>
-        )}
-        <div style={styles.balanceContainer}>
-          {username && <Text style={styles.balanceText}>Пользователь: {username}</Text>}
-          {balance !== null && <Text style={styles.balanceText}>Баланс: ₽{balance}</Text>}
-        </div>
-        <div style={showBetForm ? styles.numberGridContainer : styles.fullNumberGridContainer}>
-          <NumberGrid
-            numbers={numbers}
-            selectedNumbers={selectedNumbers}
-            selectedColor={selectedColor}
-            handleNumberClick={handleNumberClick}
-            handleColorClick={handleColorClick}
-            handleSectorClick={handleSectorClick}
-            reset={handleReset}
-            setSelectedCoin={setSelectedCoin}
-          />
-        </div>
-        {showBetForm ? (
-          <div style={styles.betFormContainer}>
-            <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
-            <Button
-              type="text"
-              icon={<CloseOutlined />}
-              onClick={toggleBetForm}
-              style={styles.closeButton}
+      }} />
+      <div style={styles.content}>
+        <Card style={styles.card}>
+          <ResultOverlay showResult={showResult} resultMessage={resultMessage} spinResult={spinResult} />
+          <BalanceDisplay username={username} balance={balance} />
+          <div style={showBetForm ? styles.numberGridContainer : styles.fullNumberGridContainer}>
+            <NumberGrid
+              numbers={numbers}
+              selectedNumbers={selectedNumbers}
+              selectedColor={selectedColor}
+              handleNumberClick={handleNumberClick}
+              handleColorClick={handleColorClick}
+              handleSectorClick={handleSectorClick}
+              reset={handleReset}
+              setSelectedCoin={setSelectedCoin}
             />
           </div>
-        ) : (
-          <Button
-            type="default"
-            icon={<PlusOutlined />}
-            onClick={toggleBetForm}
-            style={styles.openButton}
-          >
-            Show Bet Form
-          </Button>
-        )}
-        <div style={styles.submitButtonContainer}>
-          <Button type="primary" size="large" onClick={handleSubmit} style={styles.submitButton} disabled={isSpinning}>
-            {isSpinning ? <Spin /> : 'Вращать'}
-          </Button>
-          <Button type="default" size="large" onClick={handleReset} style={styles.resetButton} disabled={isSpinning}>
-            Очистить
-          </Button>
-        </div>
-      </Card>
+          {showBetForm && (
+            <div style={styles.betFormContainer}>
+              <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
+            </div>
+          )}
+          <BetFormToggle showBetForm={showBetForm} toggleBetForm={toggleBetForm} />
+          <BetButton isSpinning={isSpinning} handleSubmit={handleSubmit} handleReset={handleReset} />
+        </Card>
+      </div>
     </div>
   );
 }
@@ -320,16 +293,46 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     minHeight: '100vh',
-    background: 'linear-gradient(to right, #43cea2, #185a9d)',
+    background: `url(${backgroundImage}) no-repeat center center fixed`,
+    backgroundSize: 'cover',
     padding: '20px',
+    paddingTop: '150px', 
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: '1800px',
   },
   card: {
     width: '100%',
-    maxWidth: '1800px',
     backgroundColor: '#333',
     padding: '32px',
     borderRadius: '24px',
     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+  },
+  header: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 20px',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    borderRadius: '24px',
+    marginBottom: '20px',
+  },
+  headerText: {
+    fontSize: '20px',
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  logoutButton: {
+    color: '#fff',
+    fontSize: '16px',
+    cursor: 'pointer',
+    background: 'transparent',
+    border: 'none',
   },
   resultOverlay: {
     position: 'fixed',
@@ -444,5 +447,8 @@ const styles = {
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
   },
 };
+
+
+
 
 export default RouletteCard;

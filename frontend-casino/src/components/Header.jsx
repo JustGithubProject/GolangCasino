@@ -27,6 +27,10 @@ const Header = ({ username, balance, handleLogout }) => {
     color: '#ECF0F1',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)',
     backdropFilter: 'blur(10px)',
+    width: '100%',
+    position: 'fixed',
+    top: '0',
+    zIndex: '1000',
   };
 
   const rightSectionStyle = {
@@ -108,7 +112,9 @@ const Header = ({ username, balance, handleLogout }) => {
     fontWeight: 'bold',
     borderRadius: '30px',
     cursor: 'pointer',
+    marginRight: '30px',
     transition: 'background-color 0.3s, transform 0.3s',
+    marginLeft: 'auto',
   };
 
   const iconStyle = {
@@ -132,42 +138,25 @@ const Header = ({ username, balance, handleLogout }) => {
       <Link to="/" style={{ textDecoration: 'none' }}>
         <FontAwesomeIcon icon={faHome} style={homeIconStyle} />
       </Link>
+      {isAuthenticated && (
+        <button
+          onClick={handleLogout}
+          style={buttonStyle}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(192, 57, 43, 0.8)';
+            e.currentTarget.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(231, 76, 60, 0.8)';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          Выйти
+        </button>
+      )}
       <nav style={navStyle}>
         <ul style={ulStyle}>
-          <li style={liStyle}>
-            <Link
-              to="/roulette"
-              style={linkStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = linkHoverStyle.backgroundColor;
-                e.currentTarget.style.transform = linkHoverStyle.transform;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Roulette
-            </Link>
-          </li>
-          {isAuthenticated && (
-            <li style={liStyle}>
-              <button
-                onClick={handleLogout}
-                style={buttonStyle}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(192, 57, 43, 0.8)';
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(231, 76, 60, 0.8)';
-                  e.currentTarget.style.transform = 'scale(1)';
-                }}
-              >
-                Logout
-              </button>
-            </li>
-          )}
+          {/* Additional navigation links can be added here */}
         </ul>
       </nav>
       {isAuthenticated && (

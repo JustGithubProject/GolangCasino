@@ -169,6 +169,11 @@ const Home = () => {
     gridTemplateColumns: 'repeat(3, 1fr)',
   };
 
+  const carouselContainerStyle = {
+    marginTop: '80px', // Space below the header
+    width: '100%',
+  };
+
   const carouselImageStyle = {
     maxHeight: '250px',
     objectFit: 'cover',
@@ -189,27 +194,28 @@ const Home = () => {
         username={username}
         balance={balance}
         handleLogout={handleLogout}
-        style={{ backgroundColor: '#007BFF', padding: '10px', color: '#fff' }}
       />
-      <Carousel
-        showThumbs={false}
-        autoPlay
-        infiniteLoop
-        interval={1200}
-        dynamicHeight={false}
-        showStatus={false}
-        showIndicators={false}
-      >
-        <div>
-          <img src={image1} alt="Image 1" style={carouselImageStyle} />
-        </div>
-        <div>
-          <img src={image2} alt="Image 2" style={carouselImageStyle} />
-        </div>
-        <div>
-          <img src={image3} alt="Image 3" style={carouselImageStyle} />
-        </div>
-      </Carousel>
+      <div style={carouselContainerStyle}>
+        <Carousel
+          showThumbs={false}
+          autoPlay
+          infiniteLoop
+          interval={1200}
+          dynamicHeight={false}
+          showStatus={false}
+          showIndicators={false}
+        >
+          <div>
+            <img src={image1} alt="Image 1" style={carouselImageStyle} />
+          </div>
+          <div>
+            <img src={image2} alt="Image 2" style={carouselImageStyle} />
+          </div>
+          <div>
+            <img src={image3} alt="Image 3" style={carouselImageStyle} />
+          </div>
+        </Carousel>
+      </div>
       <div style={mainStyle}>
         {isAuthenticated ? (
           <div style={cardGridStyle}>
