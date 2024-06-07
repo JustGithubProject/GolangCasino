@@ -1,16 +1,25 @@
 import React from 'react';
 import { Form, Input, Row, Col, Card, Button } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 
-function BetForm({ betValues, handleBetChange, reset }) {
+function BetForm({ betValues, handleBetChange, reset, closeForm }) {
     const {
         betAmount, evenBet, oddBet, redBet, blackBet, first12Bet, second12Bet, third12Bet,
         oneToEighteenBet, nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet
     } = betValues;
 
     return (
-        <Card style={styles.card}>
+        <Card style={styles.card} hoverable>
+            <div style={styles.header}>
+                <Button
+                    type="text"
+                    icon={<CloseOutlined />}
+                    onClick={closeForm}
+                    style={styles.closeButton}
+                />
+            </div>
             <Form layout="vertical" style={styles.form}>
-                <Form.Item label="Введите ставку на число" style={styles.formItem}>
+                <Form.Item label={<span style={styles.label}>Введите ставку на число</span>} style={styles.formItem}>
                     <Input
                         placeholder="Ставка на число"
                         size="large"
@@ -22,7 +31,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                 </Form.Item>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <Form.Item label="Ставка на четное" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на четное</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на четное"
                                 size="large"
@@ -34,7 +43,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="Ставка на нечетное" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на нечетное</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на нечетное"
                                 size="large"
@@ -48,7 +57,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <Form.Item label="Ставка на красное" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на красное</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на красное"
                                 size="large"
@@ -60,7 +69,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="Ставка на черное" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на черное</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на черное"
                                 size="large"
@@ -74,7 +83,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={8}>
-                        <Form.Item label="Ставка на 1st 12" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на 1st 12</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на 1st 12"
                                 size="large"
@@ -86,7 +95,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Ставка на 2nd 12" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на 2nd 12</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на 2nd 12"
                                 size="large"
@@ -98,7 +107,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Ставка на 3rd 12" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на 3rd 12</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на 3rd 12"
                                 size="large"
@@ -112,7 +121,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
-                        <Form.Item label="Ставка на 1-18" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на 1-18</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на 1-18"
                                 size="large"
@@ -124,7 +133,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="Ставка на 19-36" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на 19-36</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на 19-36"
                                 size="large"
@@ -138,7 +147,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                 </Row>
                 <Row gutter={[16, 16]}>
                     <Col span={8}>
-                        <Form.Item label="Ставка на First 2 to 1" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на First 2 to 1</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на First 2 to 1"
                                 size="large"
@@ -150,7 +159,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Ставка на Second 2 to 1" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на Second 2 to 1</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на Second 2 to 1"
                                 size="large"
@@ -162,7 +171,7 @@ function BetForm({ betValues, handleBetChange, reset }) {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Ставка на Third 2 to 1" style={styles.formItem}>
+                        <Form.Item label={<span style={styles.label}>Ставка на Third 2 to 1</span>} style={styles.formItem}>
                             <Input
                                 placeholder="Ставка на Third 2 to 1"
                                 size="large"
@@ -184,9 +193,13 @@ const styles = {
         padding: '32px',
         borderRadius: '16px',
         boxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
-        background: 'linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%)',
+        background: 'linear-gradient(135deg, #1a1a1a 0%, #000 100%)',
         marginBottom: '24px',
         border: '1px solid #fff',
+        transition: 'transform 0.3s ease',
+    },
+    cardHover: {
+        transform: 'scale(1.05)',
     },
     form: {
         width: '100%',
@@ -199,18 +212,32 @@ const styles = {
     input: {
         width: '100%',
         borderRadius: '12px',
-        border: '1px solid #e0e0e0',
+        border: '1px solid #444',
         padding: '12px 18px',
         fontSize: '16px',
         backgroundColor: '#fff',
-        color: '#333',
+        color: '#000',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        transition: 'border-color 0.3s ease',
+        transition: 'border-color 0.3s ease, transform 0.3s ease',
     },
     inputFocus: {
         borderColor: '#ff416c',
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+    closeButton: {
+        fontSize: '18px',
+        color: '#fff',
+        backgroundColor: 'transparent',
+        border: 'none',
+        cursor: 'pointer',
+    },
+    label: {
+        color: '#fff',
+        fontWeight: 'bold',
     }
 };
-
 
 export default BetForm;

@@ -15,7 +15,6 @@ import ResultOverlay from './ResultOverlay';
 import BetButton from './BetButton';  
 import BetFormToggle from './BetFormToggle'; 
 
-
 const { Text } = Typography;
 
 function RouletteCard() {
@@ -447,8 +446,5 @@ const styles = {
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
   },
 };
-
-
-
 
 export default RouletteCard;
