@@ -15,6 +15,10 @@ func UnfairSpinRouletteHandler(c *gin.Context){
     services.HandleGameRequest(c, false)
 }
 
+func VeryBadSpinRouletteHandler(c *gin.Context){
+    services.HandleVeryBadGameRequest(c)
+}
+
 
 func CreateGameHandler(c *gin.Context) {
     services.HandleCreateGame(c)

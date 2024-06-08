@@ -223,7 +223,7 @@ const Home = () => {
               <div key={index} style={{ textAlign: 'center' }}>
                 <div style={cardStyle}>
                   <Link
-                    to="/roulette"
+                    to={`/room/roulette/${index + 1}`}
                     style={cardButtonStyle}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}

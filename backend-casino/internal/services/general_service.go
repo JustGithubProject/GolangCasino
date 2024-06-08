@@ -117,6 +117,89 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
     c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user, "dropped_number": dropped_number})
 }
 
+func HandleVeryBadGameRequest(c *gin.Context){
+    username, err := ValidateToken(c)
+    if err != nil {
+        fmt.Println("С токеном проблемы?")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    user_repository, err := InitializeUserRepository()
+    if err != nil{
+        fmt.Println("С репозиторием ?")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    user, err := user_repository.GetUserByUsername(username)
+    fmt.Printf("User=%v+\n", user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+
+    user_player := UserPlayer{}
+    user_player.Balance = user.Balance
+
+    // Получаем структуру с игровыми параметрами
+    gameParams := GetGameParams(c)
+    fmt.Printf("GameParams: %v+\n", gameParams)
+    // Делаем ключи и прокидываем ставку для того чтобы передать в NormalPlay и UnFairPlay
+    betMaps := InitBetsMap(gameParams)
+    fmt.Printf("BetMaps: %v+\n", betMaps)
+    if err != nil {
+        fmt.Println("Failure to get game parameters")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game parameters"})
+        return
+    }
+    currentBalance := user.Balance
+    totalBet := user_player.getTotalBet(
+        betMaps.EvenToBets,
+        betMaps.OddToBets,
+        betMaps.RedToBets,
+        betMaps.BlackToBets,
+        betMaps.SectorsToBets,
+        betMaps.NumberToBets,
+        betMaps.OneToEighteenBets,
+        betMaps.NineteenToThirtySixBets,
+        betMaps.First2To1Bets,
+        betMaps.Second2To1Bets,
+        betMaps.Third2To1Bets,
+	)
+    if totalBet > currentBalance{
+        fmt.Println("You don't have enough funds")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to place a bet with insufficient funds"})
+        return
+    }
+    var dropped_number int
+    currentBalance, dropped_number, err = user_player.UnFairPlay(
+        betMaps.EvenToBets,
+        betMaps.OddToBets,
+        betMaps.RedToBets,
+        betMaps.BlackToBets,
+        betMaps.SectorsToBets,
+        betMaps.NumberToBets,
+        betMaps.OneToEighteenBets,
+        betMaps.NineteenToThirtySixBets,
+        betMaps.First2To1Bets,
+        betMaps.Second2To1Bets,
+        betMaps.Third2To1Bets,
+    )
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    user.Balance = currentBalance
+    err = user_repository.UpdateBalanceUser(user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
+        return
+    }
+    c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user, "dropped_number": dropped_number})
+}
+
 
 func HandleCreateGame(c *gin.Context){
     // Parse the JSON data from the request body into the game model
