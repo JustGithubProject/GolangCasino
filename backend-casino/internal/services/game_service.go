@@ -312,6 +312,56 @@ func (game *GameRoulette) GenerateRandomSectorFromArray(number int) string{
 
 
 func (game *GameRoulette) NormalSpinRoulette(
+    evenToBets map[string]float64,
+    oddToBets map[string]float64,
+    redToBets map[string]float64,
+    blackToBets map[string]float64,
+    sectorsToBets map[string]float64,
+    numbersToBets map[int]float64,
+    oneToEighteenBets map[string]float64,
+    nineteenToThirtySixBets map[string]float64,
+    first2To1Bets map[string]float64,
+    second2To1Bets map[string]float64,
+    third2To1Bets map[string]float64,
+) (float64, int, error) {
+    dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
+    dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
+    prize := 0.0
+
+	// Проверка ставок на конкретные числа
+	prize += game.CheckNumberBet(len(numbersToBets), numbersToBets, dropped_number)
+	if dropped_number == 0 {
+        return prize, dropped_number, nil
+    }
+    // Проверка ставок на секторы
+    prize += game.CheckSectorBet(len(sectorsToBets), sectorsToBets, dropped_sector)
+    
+    // Проверка ставок на цвет
+    prize += game.CheckColorBet(len(blackToBets), len(redToBets), blackToBets, redToBets, dropped_number)
+    
+    // Проверка ставок на чет/нечет
+    prize += game.CheckParityBet(len(evenToBets), len(oddToBets), evenToBets, oddToBets, dropped_number)
+    
+    // Проверка ставок на 1-18
+    prize += game.Check1To18Bet(len(oneToEighteenBets), oneToEighteenBets, dropped_number)
+    
+    // Проверка ставок на 19-36
+    prize += game.Check19To36Bet(len(nineteenToThirtySixBets), nineteenToThirtySixBets, dropped_number)
+    
+    // Проверка ставок на 1-2-3 2to1
+    prize += game.CheckFirst2to1Bet(len(first2To1Bets), first2To1Bets, dropped_number)
+    prize += game.CheckSecond2to1Bet(len(second2To1Bets), second2To1Bets, dropped_number)
+    prize += game.CheckThird2to1Bet(len(third2To1Bets), third2To1Bets, dropped_number)
+
+    return prize, dropped_number, nil
+}
+
+// func (game *GameRoulette) GenerateRandomNumberByBets(numbers []int){
+	
+// }
+
+
+func (game *GameRoulette) VeryBadSpinRoulette(
 	evenToBets map[string]float64,
 	oddToBets map[string]float64,
 	redToBets map[string]float64,
@@ -353,5 +403,4 @@ func (game *GameRoulette) NormalSpinRoulette(
 
 	return prize, dropped_number, nil
 }
-
 

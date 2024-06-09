@@ -21,7 +21,6 @@ func (user *UserPlayer) NormalPlay(
 	third2To1Bets map[string]float64,
 ) (float64, int, error) {
 	fmt.Println("Зашел в Normal Play")
-	// Падает
 	numbers := InitNumbersArray()
 	user.TypeOfGame.Numbers = numbers
 	fmt.Println(user.TypeOfGame.Numbers)
@@ -58,14 +57,7 @@ func (user *UserPlayer) NormalPlay(
 }
 
 func (user *UserPlayer) updateBalance(prize float64, bet float64) {
-	if prize > bet {
-		user.Balance += prize
-		if prize == bet {
-			user.Balance += 0
-		}
-	} else {
-		user.Balance -= bet
-	}
+    user.Balance += prize - bet
 }
 
 func (user *UserPlayer) sumMapValues(bets map[string]float64) float64 {
