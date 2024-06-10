@@ -356,9 +356,96 @@ func (game *GameRoulette) NormalSpinRoulette(
     return prize, dropped_number, nil
 }
 
-// func (game *GameRoulette) GenerateRandomNumberByBets(numbers []int){
+//////////////////////////////////////////////////////////////////////////////////////////////
+//              VeryBadSpinRoulette (LOOK DOWN)                                  			//
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+func (game *GameRoulette) FindMinBet(
+	evenToBets map[string]float64,
+	oddToBets map[string]float64,
+	redToBets map[string]float64,
+	blackToBets map[string]float64,
+	sectorsToBets map[string]float64,
+	numbersToBets map[int]float64,
+	oneToEighteenBets map[string]float64,
+	nineteenToThirtySixBets map[string]float64,
+	first2To1Bets map[string]float64,
+	second2To1Bets map[string]float64,
+	third2To1Bets map[string]float64,) (float64, string){
 	
-// }
+	evenBet := evenToBets["even"]
+	oddBet := oddToBets["odd"]
+	redBet := redToBets["red"]
+	blackBet := blackToBets["black"]
+	sectorsBetFirst := sectorsToBets["1 st 12"]
+	sectorsBetSecond := sectorsToBets["2 nd 12"]
+	sectorsBetThird := sectorsToBets["3 rd 12"]
+	// Еще должно быть numbersToBets ТУТ(ключ может быть массивом)
+	oneToEighteenBet := oneToEighteenBets["1to18"]
+	nineteenToThirtySixBet := nineteenToThirtySixBets["19to36"]
+	first2To1Bet := first2To1Bets["2to1"]
+	second2To1Bet := second2To1Bets["2to1"]
+	third2To1Bet := third2To1Bets["2to1"]
+	
+	var bets = [13]float64{
+		evenBet,
+		oddBet,
+		redBet,
+		blackBet,
+		sectorsBetFirst,
+		sectorsBetSecond,
+		sectorsBetThird,
+		sectorsBetThird,
+		oneToEighteenBet,
+		nineteenToThirtySixBet,
+		first2To1Bet,
+		second2To1Bet,
+		third2To1Bet,
+	}
+	minBet := bets[0]
+	minIndex := 0
+	for i := 1; i < 13; i++{
+		if bets[i] < minBet{
+			minBet = bets[i]
+			minIndex = i
+		}
+	}
+	var fields = [13]string{
+		"even",
+		"odd",
+		"red",
+		"black",
+		"1 st 12",
+		"2 nd 12",
+		"3 rd 12",
+		"1to18",
+		"19to36",
+		"2to1",
+		"2to1",
+		"2to1",
+	}
+	minField := fields[minIndex]
+	fmt.Println(minField) 
+	return minBet, minField
+}
+
+
+func (game *GameRoulette) GenerateRandomNumberByBets(
+	evenToBets map[string]float64,
+	oddToBets map[string]float64,
+	redToBets map[string]float64,
+	blackToBets map[string]float64,
+	sectorsToBets map[string]float64,
+	numbersToBets map[int]float64,
+	oneToEighteenBets map[string]float64,
+	nineteenToThirtySixBets map[string]float64,
+	first2To1Bets map[string]float64,
+	second2To1Bets map[string]float64,
+	third2To1Bets map[string]float64,
+	numbers []int){
+	min_bet := game.FindMinBet()	
+}
 
 
 func (game *GameRoulette) VeryBadSpinRoulette(
