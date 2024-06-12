@@ -84,7 +84,7 @@ func ValidateToken(c *gin.Context) (string, error) {
 
 
 // Функция для получения параметров игры из запроса
-func GetGameParams(c *gin.Context) GameParams {
+func GetGameParams(c *gin.Context) GameParamsV2 {
     var (
         guessEvenBet             float64
         guessOddBet              float64
@@ -232,6 +232,27 @@ type GameParams struct {
     Err                      error
 }
 
+
+type GameParamsV2 struct {
+    GuessEvenBet             float64
+    GuessOddBet              float64
+    GuessRedBet              float64
+    GuessBlackBet            float64
+    GuessSector1st12Bet      float64
+    GuessSector2nd12Bet      float64
+    GuessSector3rd12Bet      float64
+    GuessNumberBet           [37]float64
+    GuessNumber              [37]int
+    GuessOneToEighteenBet    float64
+    GuessNineteenToThirtySix float64
+    GuessFirst2To1Bet        float64
+    GuessSecond2To1Bet       float64
+    GuessThird2To1Bet        float64
+    Err                      error
+}
+
+
+
 type BetMaps struct {
     EvenToBets             map[string]float64
     OddToBets              map[string]float64
@@ -245,6 +266,64 @@ type BetMaps struct {
     Second2To1Bets         map[string]float64
     Third2To1Bets          map[string]float64
 }
+
+
+type BetMapsV2 struct {
+    EvenToBets             map[string]float64
+    OddToBets              map[string]float64
+    RedToBets              map[string]float64
+    BlackToBets            map[string]float64
+    SectorsToBets          map[string]float64
+    NumberToBets           map[[37]int][37]float64
+    OneToEighteenBets      map[string]float64
+    NineteenToThirtySixBets map[string]float64
+    First2To1Bets          map[string]float64
+    Second2To1Bets         map[string]float64
+    Third2To1Bets          map[string]float64
+}
+
+
+func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
+    betMaps := BetMapsV2{
+        EvenToBets:              make(map[string]float64),
+        OddToBets:               make(map[string]float64),
+        RedToBets:               make(map[string]float64),
+        BlackToBets:             make(map[string]float64),
+        SectorsToBets:           make(map[string]float64),
+        NumberToBets:            make(map[[37]int][37]float64),
+        OneToEighteenBets:       make(map[string]float64),
+        NineteenToThirtySixBets: make(map[string]float64),
+        First2To1Bets:           make(map[string]float64),
+        Second2To1Bets:          make(map[string]float64),
+        Third2To1Bets:           make(map[string]float64),
+    }
+
+    betMaps.EvenToBets["even"] = gameParams.GuessEvenBet
+    betMaps.OddToBets["odd"] = gameParams.GuessOddBet
+    betMaps.RedToBets["red"] = gameParams.GuessRedBet
+    betMaps.BlackToBets["black"] = gameParams.GuessBlackBet
+
+    // Sectors (1 st 12, 2 nd 12, 3 rd 12. КОСТЫЛЬ)
+    if gameParams.GuessSector1st12Bet > 0 {
+        betMaps.SectorsToBets["1 st 12"] = gameParams.GuessSector1st12Bet
+    }
+    if gameParams.GuessSector2nd12Bet > 0 {
+        betMaps.SectorsToBets["2 nd 12"] = gameParams.GuessSector2nd12Bet
+    }
+    if gameParams.GuessSector3rd12Bet > 0 {
+        betMaps.SectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
+    }
+
+    betMaps.NumberToBets[gameParams.GuessNumber] = gameParams.GuessNumberBet
+    betMaps.OneToEighteenBets["1to18"] = gameParams.GuessOneToEighteenBet
+    betMaps.NineteenToThirtySixBets["19to36"] = gameParams.GuessNineteenToThirtySix
+    betMaps.First2To1Bets["2to1"] = gameParams.GuessFirst2To1Bet
+    betMaps.Second2To1Bets["2to1"] = gameParams.GuessSecond2To1Bet
+    betMaps.Third2To1Bets["2to1"] = gameParams.GuessThird2To1Bet
+
+    return betMaps
+}
+
 
 
 func InitBetsMap(gameParams GameParams) BetMaps {

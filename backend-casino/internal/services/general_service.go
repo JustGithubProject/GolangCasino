@@ -120,7 +120,7 @@ func HandleGameRequest(c *gin.Context, fairPlay bool) {
 func HandleVeryBadGameRequest(c *gin.Context){
     username, err := ValidateToken(c)
     if err != nil {
-        fmt.Println("С токеном проблемы?")
+        fmt.Println("Проблема с токеном?")
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
         return
     }
@@ -146,7 +146,7 @@ func HandleVeryBadGameRequest(c *gin.Context){
     gameParams := GetGameParams(c)
     fmt.Printf("GameParams: %v+\n", gameParams)
     // Делаем ключи и прокидываем ставку для того чтобы передать в NormalPlay и UnFairPlay
-    betMaps := InitBetsMap(gameParams)
+    betMaps := InitBetsMapV2(gameParams)
     fmt.Printf("BetMaps: %v+\n", betMaps)
     if err != nil {
         fmt.Println("Failure to get game parameters")
@@ -154,7 +154,7 @@ func HandleVeryBadGameRequest(c *gin.Context){
         return
     }
     currentBalance := user.Balance
-    totalBet := user_player.getTotalBet(
+    totalBet := user_player.getTotalBetV2(
         betMaps.EvenToBets,
         betMaps.OddToBets,
         betMaps.RedToBets,
