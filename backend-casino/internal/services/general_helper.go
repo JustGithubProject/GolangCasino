@@ -84,7 +84,7 @@ func ValidateToken(c *gin.Context) (string, error) {
 
 
 // Функция для получения параметров игры из запроса
-func GetGameParams(c *gin.Context) GameParamsV2 {
+func GetGameParams(c *gin.Context) GameParams {
     var (
         guessEvenBet             float64
         guessOddBet              float64
@@ -201,6 +201,128 @@ func GetGameParams(c *gin.Context) GameParamsV2 {
         Err:                      nil,
     }
 }
+
+
+// Функция для получения параметров игры из запроса
+func GetGameParamsV2(c *gin.Context) GameParamsV2 {
+    var (
+        guessEvenBet             float64
+        guessOddBet              float64
+        guessRedBet              float64
+        guessBlackBet            float64
+        guessSector1st12Bet      float64
+        guessSector2nd12Bet      float64
+        guessSector3rd12Bet      float64
+        guessNumberBet           float64
+        guessOneToEighteenBet    float64
+        guessNineteenToThirtySixBet float64
+        guessFirst2To1Bet        float64
+        guessSecond2To1Bet       float64
+        guessThird2To1Bet        float64
+        err                      error
+    )
+    guessEvenBetStr := c.Query("even")
+    guessOddBetStr := c.Query("odd")
+    guessRedBetStr := c.Query("red")
+    guessBlackBetStr := c.Query("black")
+    guessSector1st12BetStr := c.Query("1st12")
+    guessSector2nd12BetStr := c.Query("2nd12")
+    guessSector3rd12BetStr := c.Query("3rd12")
+    guessNumberBetStr := c.Query("number")
+    guessNumberStr := c.Query("num")
+    guessOneToEighteenBetStr := c.Query("1To18")
+    guessNineteenToThirtySixBetStr := c.Query("19To36")
+    guessFirst2To1BetStr := c.Query("First2To1")
+    guessSecond2To1BetStr := c.Query("Second2To1")
+    guessThird2To1BetStr := c.Query("Third2To1")
+
+
+    // Функция для преобразования строки в float64
+    convertStringToFloat64 := func(str string) (float64, error) {
+        if str == "" {
+            return 0, nil // Возвращаем 0, если строка пустая
+        }
+        return strconv.ParseFloat(str, 64)
+    }
+
+    // Преобразование и обработка значений
+
+    guessNumberInt, _ := strconv.Atoi(guessNumberStr)
+
+    guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessOddBet, err = convertStringToFloat64(guessOddBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessRedBet, err = convertStringToFloat64(guessRedBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessBlackBet, err = convertStringToFloat64(guessBlackBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessSector1st12Bet, err = convertStringToFloat64(guessSector1st12BetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessSector2nd12Bet, err = convertStringToFloat64(guessSector2nd12BetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessSector3rd12Bet, err = convertStringToFloat64(guessSector3rd12BetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberBet, err = convertStringToFloat64(guessNumberBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessOneToEighteenBet, err = convertStringToFloat64(guessOneToEighteenBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNineteenToThirtySixBet, err = convertStringToFloat64(guessNineteenToThirtySixBetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessFirst2To1Bet, err = convertStringToFloat64(guessFirst2To1BetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessSecond2To1Bet, err = convertStringToFloat64(guessSecond2To1BetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessThird2To1Bet, err = convertStringToFloat64(guessThird2To1BetStr)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+
+    // Возвращаем структуру GameParams с заполненными значениями
+    return GameParamsV2{
+        GuessEvenBet:             guessEvenBet,
+        GuessOddBet:              guessOddBet,
+        GuessRedBet:              guessRedBet,
+        GuessBlackBet:            guessBlackBet,
+        GuessSector1st12Bet:      guessSector1st12Bet,
+        GuessSector2nd12Bet:      guessSector2nd12Bet,
+        GuessSector3rd12Bet:      guessSector3rd12Bet,
+        GuessNumberBet:           guessNumberBet,
+        GuessNumber:              guessNumberInt,  
+        GuessOneToEighteenBet:    guessOneToEighteenBet,
+        GuessNineteenToThirtySix: guessNineteenToThirtySixBet,
+        GuessFirst2To1Bet:        guessFirst2To1Bet,
+        GuessSecond2To1Bet:       guessSecond2To1Bet,
+        GuessThird2To1Bet:        guessThird2To1Bet,
+        Err:                      nil,
+    }
+}
+
+
 
 func InitializeUserRepository() (repositories.UserRepository, error){
     db := database.InitDB()

@@ -56,6 +56,17 @@ func (game *GameRoulette) CheckNumberBet(lengthOfBetsToNumbers int, numbersToBet
 	return float64(0)
 }
 
+// FIXME
+func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[[37]int]float64, dropped_number int) float64{
+	if lengthOfBetsToNumbers > 0{
+		if _, ok := numbersToBets[dropped_number]; ok{ 
+			return numbersToBets[dropped_number] * float64(35)
+		}
+	}
+	return float64(0)
+}
+
+
 func (game *GameRoulette) CheckSectorBet(lengthOfBetsToSectors int, sectorsToBets map[string]float64, dropped_sector string) float64{
 	if lengthOfBetsToSectors > 0{
 		if _, ok := sectorsToBets[dropped_sector]; ok{
@@ -431,21 +442,21 @@ func (game *GameRoulette) FindMinBet(
 }
 
 
-func (game *GameRoulette) GenerateRandomNumberByBets(
-	evenToBets map[string]float64,
-	oddToBets map[string]float64,
-	redToBets map[string]float64,
-	blackToBets map[string]float64,
-	sectorsToBets map[string]float64,
-	numbersToBets map[[37]int]float64,
-	oneToEighteenBets map[string]float64,
-	nineteenToThirtySixBets map[string]float64,
-	first2To1Bets map[string]float64,
-	second2To1Bets map[string]float64,
-	third2To1Bets map[string]float64,
-	numbers []int) int{
-	min_bet := game.FindMinBet()	
-}
+// func (game *GameRoulette) GenerateRandomNumberByBets(
+// 	evenToBets map[string]float64,
+// 	oddToBets map[string]float64,
+// 	redToBets map[string]float64,
+// 	blackToBets map[string]float64,
+// 	sectorsToBets map[string]float64,
+// 	numbersToBets map[[37]int]float64,
+// 	oneToEighteenBets map[string]float64,
+// 	nineteenToThirtySixBets map[string]float64,
+// 	first2To1Bets map[string]float64,
+// 	second2To1Bets map[string]float64,
+// 	third2To1Bets map[string]float64,
+// 	numbers []int) int{
+// 	min_bet := game.FindMinBet()	
+// }
 
 
 func (game *GameRoulette) VeryBadSpinRoulette(

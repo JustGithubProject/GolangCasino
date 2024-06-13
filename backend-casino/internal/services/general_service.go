@@ -143,9 +143,10 @@ func HandleVeryBadGameRequest(c *gin.Context){
     user_player.Balance = user.Balance
 
     // Получаем структуру с игровыми параметрами
-    gameParams := GetGameParams(c)
+    gameParams := GetGameParamsV2(c)
     fmt.Printf("GameParams: %v+\n", gameParams)
-    // Делаем ключи и прокидываем ставку для того чтобы передать в NormalPlay и UnFairPlay
+    
+    // Делаем ключи и прокидываем ставку для того чтобы передать в VeryBadPlay
     betMaps := InitBetsMapV2(gameParams)
     fmt.Printf("BetMaps: %v+\n", betMaps)
     if err != nil {
@@ -173,7 +174,7 @@ func HandleVeryBadGameRequest(c *gin.Context){
         return
     }
     var dropped_number int
-    currentBalance, dropped_number, err = user_player.UnFairPlay(
+    currentBalance, dropped_number, err = user_player.VeryBadPlay(
         betMaps.EvenToBets,
         betMaps.OddToBets,
         betMaps.RedToBets,
