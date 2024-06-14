@@ -57,10 +57,14 @@ func (game *GameRoulette) CheckNumberBet(lengthOfBetsToNumbers int, numbersToBet
 }
 
 // FIXME
-func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[[37]int]float64, dropped_number int) float64{
+func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[[37]int][37]float64, dropped_number int) float64{
 	if lengthOfBetsToNumbers > 0{
-		if _, ok := numbersToBets[dropped_number]; ok{ 
-			return numbersToBets[dropped_number] * float64(35)
+		for arrNums, arrBet := range numbersToBets{
+			for i := 0; i < 37; i++{
+				if dropped_number == arrNums[i]{
+					return arrBet[i] * 35.0
+				}
+			}
 		}
 	}
 	return float64(0)
@@ -378,7 +382,7 @@ func (game *GameRoulette) FindMinBet(
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numbersToBets map[[37]int]float64,
+	numbersToBets map[[37]int]float64, // FIXME
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,
@@ -489,7 +493,7 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 	dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
 	prize := 0.0
 
-	prize += game.CheckNumberBet(lengthOfBetsToNumbers, numbersToBets, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsToNumbers, numbersToBets, dropped_number)
 	prize += game.CheckSectorBet(lengthOfBetsToSectors, sectorsToBets, dropped_sector)
 	prize += game.CheckColorBet(lengthOfBetsToBlack, lengthOfBetsToRed, blackToBets, redToBets, dropped_number)
 	prize += game.CheckParityBet(lengthOfBetsToEven, lengthOfBetsToOdd, evenToBets, oddToBets, dropped_number)
