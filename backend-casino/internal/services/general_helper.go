@@ -336,6 +336,7 @@ func InitializeGameRepository() (repositories.GameRepository, error){
     return game_repository, nil
 }
 
+
 type GameParams struct {
     GuessEvenBet             float64
     GuessOddBet              float64
@@ -435,8 +436,41 @@ func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
     if gameParams.GuessSector3rd12Bet > 0 {
         betMaps.SectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
     }
+    // Fill array -1
+    for key, _ := range betMaps.NumberToBets{
+        for i := 0; i < 37; i++{
+            key[i] = -1
+        }
+    }
 
-    betMaps.NumberToBets[gameParams.GuessNumber] = gameParams.GuessNumberBet
+    // Count range to copy
+    counter := 0
+    for i := 0; i < 37 - 1; i++{
+        if gameParams.GuessNumber[i] == 0 && gameParams.GuessNumber[i + 1] == 0{
+            break
+        }
+        counter += 1
+    }
+    // {1, 2, 3, 0, 0, 0}
+    // i = 0; counter = 1
+    // i = 1; counter = 2
+    // i = 2; counter = 3
+    
+    // Copy normal number to key of betMaps.NumberToBets
+    for key, _ := range betMaps.NumberToBets{
+        for i := 0; i < counter; i++{
+            key[i] = gameParams.GuessNumber[i]
+        }
+    }
+
+    // Get the key(stupid way)
+    var resultKey [37]int
+    for key := range betMaps.NumberToBets{
+        resultKey = key
+        break
+    }
+
+    betMaps.NumberToBets[resultKey] = gameParams.GuessNumberBet
     betMaps.OneToEighteenBets["1to18"] = gameParams.GuessOneToEighteenBet
     betMaps.NineteenToThirtySixBets["19to36"] = gameParams.GuessNineteenToThirtySix
     betMaps.First2To1Bets["2to1"] = gameParams.GuessFirst2To1Bet

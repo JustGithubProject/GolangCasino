@@ -382,7 +382,7 @@ func (game *GameRoulette) FindMinBet(
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numbersToBets map[[37]int]float64, // FIXME
+	numbersToBets map[[37]int][37]float64, // FIXME
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,
