@@ -213,7 +213,7 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
         guessSector1st12Bet      float64
         guessSector2nd12Bet      float64
         guessSector3rd12Bet      float64
-        guessNumberBet           float64
+        guessNumberBet           [37]float64
         guessOneToEighteenBet    float64
         guessNineteenToThirtySixBet float64
         guessFirst2To1Bet        float64
@@ -221,6 +221,7 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
         guessThird2To1Bet        float64
         err                      error
     )
+
     guessEvenBetStr := c.Query("even")
     guessOddBetStr := c.Query("odd")
     guessRedBetStr := c.Query("red")
@@ -229,7 +230,28 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
     guessSector2nd12BetStr := c.Query("2nd12")
     guessSector3rd12BetStr := c.Query("3rd12")
     guessNumberBetStr := c.Query("number")
-    guessNumberStr := c.Query("num")
+    guessNumberCell_0 := c.Query("num_0")
+    guessNumberCell_1 := c.Query("num_1")
+    guessNumberCell_2 := c.Query("num_2")
+    guessNumberCell_3 := c.Query("num_3")
+    guessNumberCell_4 := c.Query("num_4")
+    guessNumberCell_5 := c.Query("num_5")
+    guessNumberCell_6 := c.Query("num_6")
+    guessNumberCell_7 := c.Query("num_7")
+    guessNumberCell_8 := c.Query("num_8")
+    guessNumberCell_9 := c.Query("num_9")
+    guessNumberCell_10 := c.Query("num_10")
+    guessNumberCell_11 := c.Query("num_11")
+    guessNumberCell_12 := c.Query("num_12")
+    guessNumberCell_13 := c.Query("num_13")
+    guessNumberCell_14 := c.Query("num_14")
+    guessNumberCell_15 := c.Query("num_15")
+    guessNumberCell_16 := c.Query("num_16")
+    guessNumberCell_17 := c.Query("num_17")
+    guessNumberCell_18 := c.Query("num_18")
+    guessNumberCell_19 := c.Query("num_19")
+    guessNumberCell_20 := c.Query("num_20")
+    // ...
     guessOneToEighteenBetStr := c.Query("1To18")
     guessNineteenToThirtySixBetStr := c.Query("19To36")
     guessFirst2To1BetStr := c.Query("First2To1")
@@ -247,7 +269,7 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
 
     // Преобразование и обработка значений
 
-    guessNumberInt, _ := strconv.Atoi(guessNumberStr)
+    guessNumberCell_0INT, _ := strconv.Atoi(guessNumberCell_0)
 
     guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
     if err != nil {
@@ -444,21 +466,21 @@ func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
     }
 
     // Count range to copy
-    counter := 0
-    for i := 0; i < 37 - 1; i++{
-        if gameParams.GuessNumber[i] == 0 && gameParams.GuessNumber[i + 1] == 0{
+    counter_by_bets := 0
+    for i := 0; i < 37; i++{
+        if gameParams.GuessNumberBet[i] <= 0.0{
             break
         }
-        counter += 1
+        counter_by_bets += 1
     }
+    // This will be correct way to count range
     // {1, 2, 3, 0, 0, 0}
-    // i = 0; counter = 1
-    // i = 1; counter = 2
-    // i = 2; counter = 3
+    // {20.0, 11.12, 13.0, 3.33, 0.0}
     
+
     // Copy normal number to key of betMaps.NumberToBets
     for key, _ := range betMaps.NumberToBets{
-        for i := 0; i < counter; i++{
+        for i := 0; i < counter_by_bets; i++{
             key[i] = gameParams.GuessNumber[i]
         }
     }

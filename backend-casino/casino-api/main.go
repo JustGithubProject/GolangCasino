@@ -80,6 +80,8 @@ func main() {
 	// common handlers(authenticated user)
 	r.POST("/spin-roulette-v1/", handlers.SpinRouletteHandler)
 	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler) // like rooms(6 different handlers)
+	r.POST("/spin-roulette-v3/", handlers.VeryBadSpinRouletteHandler)
+	
 	// Start the web server
 	r.Run(":8081")
 }
