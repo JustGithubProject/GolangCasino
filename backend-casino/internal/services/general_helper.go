@@ -229,9 +229,9 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
     guessSector1st12BetStr := c.Query("1st12")
     guessSector2nd12BetStr := c.Query("2nd12")
     guessSector3rd12BetStr := c.Query("3rd12")
-    guessNumberBetStr := c.Query("number")
-    guessNumberCell_0 := c.Query("num_0")
-    guessNumberCell_1 := c.Query("num_1")
+    // guessNumberBetStr := c.Query("number")
+    guessNumberCell_0 := c.Query("num_0") // ?num_0=82.122
+    guessNumberCell_1 := c.Query("num_1") 
     guessNumberCell_2 := c.Query("num_2")
     guessNumberCell_3 := c.Query("num_3")
     guessNumberCell_4 := c.Query("num_4")
@@ -251,7 +251,22 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
     guessNumberCell_18 := c.Query("num_18")
     guessNumberCell_19 := c.Query("num_19")
     guessNumberCell_20 := c.Query("num_20")
-    // ...
+    guessNumberCell_21 := c.Query("num_21")
+    guessNumberCell_22 := c.Query("num_22")
+    guessNumberCell_23 := c.Query("num_23")
+    guessNumberCell_24 := c.Query("num_24")
+    guessNumberCell_25 := c.Query("num_25")
+    guessNumberCell_26 := c.Query("num_26")
+    guessNumberCell_27 := c.Query("num_27")
+    guessNumberCell_28 := c.Query("num_28")
+    guessNumberCell_29 := c.Query("num_29")
+    guessNumberCell_30 := c.Query("num_30")
+    guessNumberCell_31 := c.Query("num_31")
+    guessNumberCell_32 := c.Query("num_32")
+    guessNumberCell_33 := c.Query("num_33")
+    guessNumberCell_34 := c.Query("num_34")
+    guessNumberCell_35 := c.Query("num_35")
+    guessNumberCell_36 := c.Query("num_36")
     guessOneToEighteenBetStr := c.Query("1To18")
     guessNineteenToThirtySixBetStr := c.Query("19To36")
     guessFirst2To1BetStr := c.Query("First2To1")
@@ -268,8 +283,155 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
     }
 
     // Преобразование и обработка значений
-
-    guessNumberCell_0INT, _ := strconv.Atoi(guessNumberCell_0)
+    guessNumberCell_0BET, err := convertStringToFloat64(guessNumberCell_0)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_1BET, err := convertStringToFloat64(guessNumberCell_1)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_2BET, err := convertStringToFloat64(guessNumberCell_2)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_3BET, err := convertStringToFloat64(guessNumberCell_3)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_4BET, err := convertStringToFloat64(guessNumberCell_4)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_5BET, err := convertStringToFloat64(guessNumberCell_5)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_6BET, err := convertStringToFloat64(guessNumberCell_6)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_7BET, err := convertStringToFloat64(guessNumberCell_7)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_8BET, err := convertStringToFloat64(guessNumberCell_8)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_9BET, err := convertStringToFloat64(guessNumberCell_9)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_10BET, err := convertStringToFloat64(guessNumberCell_10)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_11BET, err := convertStringToFloat64(guessNumberCell_11)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_12BET, err := convertStringToFloat64(guessNumberCell_12)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_13BET, err := convertStringToFloat64(guessNumberCell_13)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_14BET, err := convertStringToFloat64(guessNumberCell_14)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_15BET, err := convertStringToFloat64(guessNumberCell_15)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_16BET, err := convertStringToFloat64(guessNumberCell_16)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_17BET, err := convertStringToFloat64(guessNumberCell_17)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_18BET, err := convertStringToFloat64(guessNumberCell_18)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_19BET, err := convertStringToFloat64(guessNumberCell_19)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_20BET, err := convertStringToFloat64(guessNumberCell_20)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_21BET, err := convertStringToFloat64(guessNumberCell_21)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_22BET, err := convertStringToFloat64(guessNumberCell_22)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_23BET, err := convertStringToFloat64(guessNumberCell_23)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_24BET, err := convertStringToFloat64(guessNumberCell_24)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_25BET, err := convertStringToFloat64(guessNumberCell_25)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_26BET, err := convertStringToFloat64(guessNumberCell_26)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_27BET, err := convertStringToFloat64(guessNumberCell_27)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_28BET, err := convertStringToFloat64(guessNumberCell_28)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_29BET, err := convertStringToFloat64(guessNumberCell_29)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_30BET, err := convertStringToFloat64(guessNumberCell_30)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_31BET, err := convertStringToFloat64(guessNumberCell_31)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_32BET, err := convertStringToFloat64(guessNumberCell_32)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_33BET, err := convertStringToFloat64(guessNumberCell_33)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_34BET, err := convertStringToFloat64(guessNumberCell_34)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_35BET, err := convertStringToFloat64(guessNumberCell_35)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    guessNumberCell_36BET, err := convertStringToFloat64(guessNumberCell_36)
+    if err != nil {
+        return GameParamsV2{Err: err}
+    }
+    
 
     guessEvenBet, err = convertStringToFloat64(guessEvenBetStr)
     if err != nil {

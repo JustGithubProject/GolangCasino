@@ -142,7 +142,7 @@ function RouletteCardV2() {
     if (second12Bet) params.append('2nd12', second12Bet);
     if (third12Bet) params.append('3rd12', third12Bet);
     if (betAmount) params.append('number', betAmount);
-    if (selectedNumbers.length > 0) params.append('num', selectedNumbers.join(','));
+    if (selectedNumbers.length > 0) params.append('num', selectedNumbers.join(',')); // Теперь надо будет num_1, betNum1
     if (oneToEighteenBet) params.append('1To18', oneToEighteenBet);
     if (nineteenToThirtySixBet) params.append('19To36', nineteenToThirtySixBet);
     if (first2To1Bet) params.append('First2To1', first2To1Bet);
