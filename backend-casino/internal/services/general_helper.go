@@ -213,7 +213,6 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
         guessSector1st12Bet      float64
         guessSector2nd12Bet      float64
         guessSector3rd12Bet      float64
-        guessNumberBet           [37]float64
         guessOneToEighteenBet    float64
         guessNineteenToThirtySixBet float64
         guessFirst2To1Bet        float64
@@ -461,10 +460,6 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
     if err != nil {
         return GameParamsV2{Err: err}
     }
-    guessNumberBet, err = convertStringToFloat64(guessNumberBetStr)
-    if err != nil {
-        return GameParamsV2{Err: err}
-    }
     guessOneToEighteenBet, err = convertStringToFloat64(guessOneToEighteenBetStr)
     if err != nil {
         return GameParamsV2{Err: err}
@@ -495,8 +490,45 @@ func GetGameParamsV2(c *gin.Context) GameParamsV2 {
         GuessSector1st12Bet:      guessSector1st12Bet,
         GuessSector2nd12Bet:      guessSector2nd12Bet,
         GuessSector3rd12Bet:      guessSector3rd12Bet,
-        GuessNumberBet:           guessNumberBet,
-        GuessNumber:              guessNumberInt,  
+
+        GuessNumberCell_0Bet:     guessNumberCell_0BET,
+        GuessNumberCell_1Bet:     guessNumberCell_1BET,
+        GuessNumberCell_2Bet:     guessNumberCell_2BET,
+        GuessNumberCell_3Bet:     guessNumberCell_3BET,
+        GuessNumberCell_4Bet:     guessNumberCell_4BET,
+        GuessNumberCell_5Bet:     guessNumberCell_5BET,
+        GuessNumberCell_6Bet:     guessNumberCell_6BET,
+        GuessNumberCell_7Bet:     guessNumberCell_7BET,
+        GuessNumberCell_8Bet:     guessNumberCell_8BET,
+        GuessNumberCell_9Bet:     guessNumberCell_9BET,
+        GuessNumberCell_10Bet:    guessNumberCell_10BET,
+        GuessNumberCell_11Bet:    guessNumberCell_11BET,
+        GuessNumberCell_12Bet:    guessNumberCell_12BET,
+        GuessNumberCell_13Bet:    guessNumberCell_13BET,
+        GuessNumberCell_14Bet:    guessNumberCell_14BET,
+        GuessNumberCell_15Bet:    guessNumberCell_15BET,
+        GuessNumberCell_16Bet:    guessNumberCell_16BET,
+        GuessNumberCell_17Bet:    guessNumberCell_17BET,
+        GuessNumberCell_18Bet:    guessNumberCell_18BET,
+        GuessNumberCell_19Bet:    guessNumberCell_19BET,
+        GuessNumberCell_20Bet:    guessNumberCell_20BET,
+        GuessNumberCell_21Bet:    guessNumberCell_21BET,
+        GuessNumberCell_22Bet:    guessNumberCell_22BET,
+        GuessNumberCell_23Bet:    guessNumberCell_23BET,
+        GuessNumberCell_24Bet:    guessNumberCell_24BET,
+        GuessNumberCell_25Bet:    guessNumberCell_25BET,
+        GuessNumberCell_26Bet:    guessNumberCell_26BET,
+        GuessNumberCell_27Bet:    guessNumberCell_27BET,
+        GuessNumberCell_28Bet:    guessNumberCell_28BET,
+        GuessNumberCell_29Bet:    guessNumberCell_29BET,
+        GuessNumberCell_30Bet:    guessNumberCell_30BET,
+        GuessNumberCell_31Bet:    guessNumberCell_31BET,
+        GuessNumberCell_32Bet:    guessNumberCell_32BET,
+        GuessNumberCell_33Bet:    guessNumberCell_33BET,
+        GuessNumberCell_34Bet:    guessNumberCell_34BET,
+        GuessNumberCell_35Bet:    guessNumberCell_35BET,
+        GuessNumberCell_36Bet:    guessNumberCell_36BET,
+         
         GuessOneToEighteenBet:    guessOneToEighteenBet,
         GuessNineteenToThirtySix: guessNineteenToThirtySixBet,
         GuessFirst2To1Bet:        guessFirst2To1Bet,
@@ -548,8 +580,43 @@ type GameParamsV2 struct {
     GuessSector1st12Bet      float64
     GuessSector2nd12Bet      float64
     GuessSector3rd12Bet      float64
-    GuessNumberBet           [37]float64
-    GuessNumber              [37]int
+    GuessNumberCell_0Bet     float64
+    GuessNumberCell_1Bet     float64
+    GuessNumberCell_2Bet     float64
+    GuessNumberCell_3Bet     float64
+    GuessNumberCell_4Bet     float64
+    GuessNumberCell_5Bet     float64
+    GuessNumberCell_6Bet     float64
+    GuessNumberCell_7Bet     float64
+    GuessNumberCell_8Bet     float64
+    GuessNumberCell_9Bet     float64
+    GuessNumberCell_10Bet     float64
+    GuessNumberCell_11Bet     float64
+    GuessNumberCell_12Bet     float64
+    GuessNumberCell_13Bet     float64
+    GuessNumberCell_14Bet     float64
+    GuessNumberCell_15Bet     float64
+    GuessNumberCell_16Bet     float64
+    GuessNumberCell_17Bet     float64
+    GuessNumberCell_18Bet     float64
+    GuessNumberCell_19Bet     float64
+    GuessNumberCell_20Bet     float64
+    GuessNumberCell_21Bet     float64
+    GuessNumberCell_22Bet     float64
+    GuessNumberCell_23Bet     float64
+    GuessNumberCell_24Bet     float64
+    GuessNumberCell_25Bet     float64
+    GuessNumberCell_26Bet     float64
+    GuessNumberCell_27Bet     float64
+    GuessNumberCell_28Bet     float64
+    GuessNumberCell_29Bet     float64
+    GuessNumberCell_30Bet     float64
+    GuessNumberCell_31Bet     float64
+    GuessNumberCell_32Bet     float64
+    GuessNumberCell_33Bet     float64
+    GuessNumberCell_34Bet     float64
+    GuessNumberCell_35Bet     float64
+    GuessNumberCell_36Bet     float64
     GuessOneToEighteenBet    float64
     GuessNineteenToThirtySix float64
     GuessFirst2To1Bet        float64
@@ -581,7 +648,43 @@ type BetMapsV2 struct {
     RedToBets              map[string]float64
     BlackToBets            map[string]float64
     SectorsToBets          map[string]float64
-    NumberToBets           map[[37]int][37]float64
+    NumberCell_0           map[string]float64
+    NumberCell_1           map[string]float64
+    NumberCell_2           map[string]float64
+    NumberCell_3           map[string]float64
+    NumberCell_4           map[string]float64
+    NumberCell_5           map[string]float64
+    NumberCell_6           map[string]float64
+    NumberCell_7           map[string]float64
+    NumberCell_8           map[string]float64
+    NumberCell_9           map[string]float64
+    NumberCell_10          map[string]float64
+    NumberCell_11          map[string]float64
+    NumberCell_12          map[string]float64
+    NumberCell_13          map[string]float64
+    NumberCell_14          map[string]float64
+    NumberCell_15          map[string]float64
+    NumberCell_16          map[string]float64
+    NumberCell_17          map[string]float64
+    NumberCell_18          map[string]float64
+    NumberCell_19          map[string]float64
+    NumberCell_20          map[string]float64
+    NumberCell_21          map[string]float64
+    NumberCell_22          map[string]float64
+    NumberCell_23          map[string]float64
+    NumberCell_24          map[string]float64
+    NumberCell_25          map[string]float64
+    NumberCell_26          map[string]float64
+    NumberCell_27          map[string]float64
+    NumberCell_28          map[string]float64
+    NumberCell_29          map[string]float64
+    NumberCell_30          map[string]float64
+    NumberCell_31          map[string]float64
+    NumberCell_32          map[string]float64
+    NumberCell_33          map[string]float64
+    NumberCell_34          map[string]float64
+    NumberCell_35          map[string]float64
+    NumberCell_36          map[string]float64
     OneToEighteenBets      map[string]float64
     NineteenToThirtySixBets map[string]float64
     First2To1Bets          map[string]float64
@@ -597,7 +700,43 @@ func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
         RedToBets:               make(map[string]float64),
         BlackToBets:             make(map[string]float64),
         SectorsToBets:           make(map[string]float64),
-        NumberToBets:            make(map[[37]int][37]float64),
+        NumberCell_0:            make(map[string]float64),
+        NumberCell_1:            make(map[string]float64),
+        NumberCell_2:            make(map[string]float64),
+        NumberCell_3:            make(map[string]float64),
+        NumberCell_4:            make(map[string]float64),
+        NumberCell_5:            make(map[string]float64),
+        NumberCell_6:            make(map[string]float64),
+        NumberCell_7:            make(map[string]float64),
+        NumberCell_8:            make(map[string]float64),
+        NumberCell_9:            make(map[string]float64),
+        NumberCell_10:           make(map[string]float64),
+        NumberCell_11:           make(map[string]float64),
+        NumberCell_12:           make(map[string]float64),
+        NumberCell_13:           make(map[string]float64),
+        NumberCell_14:           make(map[string]float64),
+        NumberCell_15:           make(map[string]float64),
+        NumberCell_16:           make(map[string]float64),
+        NumberCell_17:           make(map[string]float64),
+        NumberCell_18:           make(map[string]float64),
+        NumberCell_19:           make(map[string]float64),
+        NumberCell_20:           make(map[string]float64),
+        NumberCell_21:           make(map[string]float64),
+        NumberCell_22:           make(map[string]float64),
+        NumberCell_23:           make(map[string]float64),
+        NumberCell_24:           make(map[string]float64),
+        NumberCell_25:           make(map[string]float64),
+        NumberCell_26:           make(map[string]float64),
+        NumberCell_27:           make(map[string]float64),
+        NumberCell_28:           make(map[string]float64),
+        NumberCell_29:           make(map[string]float64),
+        NumberCell_30:           make(map[string]float64),
+        NumberCell_31:           make(map[string]float64),
+        NumberCell_32:           make(map[string]float64),
+        NumberCell_33:           make(map[string]float64),
+        NumberCell_34:           make(map[string]float64),
+        NumberCell_35:           make(map[string]float64),
+        NumberCell_36:           make(map[string]float64),
         OneToEighteenBets:       make(map[string]float64),
         NineteenToThirtySixBets: make(map[string]float64),
         First2To1Bets:           make(map[string]float64),
