@@ -759,41 +759,45 @@ func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
     if gameParams.GuessSector3rd12Bet > 0 {
         betMaps.SectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
     }
-    // Fill array -1
-    for key, _ := range betMaps.NumberToBets{
-        for i := 0; i < 37; i++{
-            key[i] = -1
-        }
-    }
 
-    // Count range to copy
-    counter_by_bets := 0
-    for i := 0; i < 37; i++{
-        if gameParams.GuessNumberBet[i] <= 0.0{
-            break
-        }
-        counter_by_bets += 1
-    }
-    // This will be correct way to count range
-    // {1, 2, 3, 0, 0, 0}
-    // {20.0, 11.12, 13.0, 3.33, 0.0}
-    
+    betMaps.NumberCell_0["num_0"] = gameParams.GuessNumberCell_0Bet
+    betMaps.NumberCell_1["num_1"] = gameParams.GuessNumberCell_1Bet
+    betMaps.NumberCell_2["num_2"] = gameParams.GuessNumberCell_2Bet
+    betMaps.NumberCell_3["num_3"] = gameParams.GuessNumberCell_3Bet
+    betMaps.NumberCell_4["num_4"] = gameParams.GuessNumberCell_4Bet
+    betMaps.NumberCell_5["num_5"] = gameParams.GuessNumberCell_5Bet
+    betMaps.NumberCell_6["num_6"] = gameParams.GuessNumberCell_6Bet
+    betMaps.NumberCell_7["num_7"] = gameParams.GuessNumberCell_7Bet
+    betMaps.NumberCell_8["num_8"] = gameParams.GuessNumberCell_8Bet
+    betMaps.NumberCell_9["num_9"] = gameParams.GuessNumberCell_9Bet
+    betMaps.NumberCell_10["num_10"] = gameParams.GuessNumberCell_10Bet
+    betMaps.NumberCell_11["num_11"] = gameParams.GuessNumberCell_11Bet
+    betMaps.NumberCell_12["num_12"] = gameParams.GuessNumberCell_12Bet
+    betMaps.NumberCell_13["num_13"] = gameParams.GuessNumberCell_13Bet
+    betMaps.NumberCell_14["num_14"] = gameParams.GuessNumberCell_14Bet
+    betMaps.NumberCell_15["num_15"] = gameParams.GuessNumberCell_15Bet
+    betMaps.NumberCell_16["num_16"] = gameParams.GuessNumberCell_16Bet
+    betMaps.NumberCell_17["num_17"] = gameParams.GuessNumberCell_17Bet
+    betMaps.NumberCell_18["num_18"] = gameParams.GuessNumberCell_18Bet
+    betMaps.NumberCell_19["num_19"] = gameParams.GuessNumberCell_19Bet
+    betMaps.NumberCell_20["num_20"] = gameParams.GuessNumberCell_20Bet
+    betMaps.NumberCell_21["num_21"] = gameParams.GuessNumberCell_21Bet
+    betMaps.NumberCell_22["num_22"] = gameParams.GuessNumberCell_22Bet
+    betMaps.NumberCell_23["num_23"] = gameParams.GuessNumberCell_23Bet
+    betMaps.NumberCell_24["num_24"] = gameParams.GuessNumberCell_24Bet
+    betMaps.NumberCell_25["num_25"] = gameParams.GuessNumberCell_25Bet
+    betMaps.NumberCell_26["num_26"] = gameParams.GuessNumberCell_26Bet
+    betMaps.NumberCell_27["num_27"] = gameParams.GuessNumberCell_27Bet
+    betMaps.NumberCell_28["num_28"] = gameParams.GuessNumberCell_28Bet
+    betMaps.NumberCell_29["num_29"] = gameParams.GuessNumberCell_29Bet
+    betMaps.NumberCell_30["num_30"] = gameParams.GuessNumberCell_30Bet
+    betMaps.NumberCell_31["num_31"] = gameParams.GuessNumberCell_31Bet
+    betMaps.NumberCell_32["num_32"] = gameParams.GuessNumberCell_32Bet
+    betMaps.NumberCell_33["num_33"] = gameParams.GuessNumberCell_33Bet
+    betMaps.NumberCell_34["num_34"] = gameParams.GuessNumberCell_34Bet
+    betMaps.NumberCell_35["num_35"] = gameParams.GuessNumberCell_35Bet
+    betMaps.NumberCell_36["num_36"] = gameParams.GuessNumberCell_36Bet
 
-    // Copy normal number to key of betMaps.NumberToBets
-    for key, _ := range betMaps.NumberToBets{
-        for i := 0; i < counter_by_bets; i++{
-            key[i] = gameParams.GuessNumber[i]
-        }
-    }
-
-    // Get the key(stupid way)
-    var resultKey [37]int
-    for key := range betMaps.NumberToBets{
-        resultKey = key
-        break
-    }
-
-    betMaps.NumberToBets[resultKey] = gameParams.GuessNumberBet
     betMaps.OneToEighteenBets["1to18"] = gameParams.GuessOneToEighteenBet
     betMaps.NineteenToThirtySixBets["19to36"] = gameParams.GuessNineteenToThirtySix
     betMaps.First2To1Bets["2to1"] = gameParams.GuessFirst2To1Bet
