@@ -57,10 +57,10 @@ func (game *GameRoulette) CheckNumberBet(lengthOfBetsToNumbers int, numbersToBet
 }
 
 // FIXME
-func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[string]float64, dropped_number int) float64{
+func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[int]float64, dropped_number int) float64{
 	if lengthOfBetsToNumbers > 0{
-		if _, ok := numbersToBets[]; ok{
-			return numbersToBets[] * float64(35)
+		if _, ok := numbersToBets[dropped_number]; ok{
+			return numbersToBets[dropped_number] * float64(35)
 		}
 	}
 	return float64(0)
@@ -467,43 +467,43 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numberCell_0 map[string]float64,
-	numberCell_1 map[string]float64,
-	numberCell_2 map[string]float64,
-	numberCell_3 map[string]float64,
-	numberCell_4 map[string]float64,
-	numberCell_5 map[string]float64,
-	numberCell_6 map[string]float64,
-	numberCell_7 map[string]float64,
-	numberCell_8 map[string]float64,
-	numberCell_9 map[string]float64,
-	numberCell_10 map[string]float64,
-	numberCell_11 map[string]float64,
-	numberCell_12 map[string]float64,
-	numberCell_13 map[string]float64,
-	numberCell_14 map[string]float64,
-	numberCell_15 map[string]float64,
-	numberCell_16 map[string]float64,
-	numberCell_17 map[string]float64,
-	numberCell_18 map[string]float64,
-	numberCell_19 map[string]float64,
-	numberCell_20 map[string]float64,
-	numberCell_21 map[string]float64,
-	numberCell_22 map[string]float64,
-	numberCell_23 map[string]float64,
-	numberCell_24 map[string]float64,
-	numberCell_25 map[string]float64,
-	numberCell_26 map[string]float64,
-	numberCell_27 map[string]float64,
-	numberCell_28 map[string]float64,
-	numberCell_29 map[string]float64,
-	numberCell_30 map[string]float64,
-	numberCell_31 map[string]float64,
-	numberCell_32 map[string]float64,
-	numberCell_33 map[string]float64,
-	numberCell_34 map[string]float64,
-	numberCell_35  map[string]float64,
-	numberCell_36 map[string]float64,
+	numberCell_0 map[int]float64,
+	numberCell_1 map[int]float64,
+	numberCell_2 map[int]float64,
+	numberCell_3 map[int]float64,
+	numberCell_4 map[int]float64,
+	numberCell_5 map[int]float64,
+	numberCell_6 map[int]float64,
+	numberCell_7 map[int]float64,
+	numberCell_8 map[int]float64,
+	numberCell_9 map[int]float64,
+	numberCell_10 map[int]float64,
+	numberCell_11 map[int]float64,
+	numberCell_12 map[int]float64,
+	numberCell_13 map[int]float64,
+	numberCell_14 map[int]float64,
+	numberCell_15 map[int]float64,
+	numberCell_16 map[int]float64,
+	numberCell_17 map[int]float64,
+	numberCell_18 map[int]float64,
+	numberCell_19 map[int]float64,
+	numberCell_20 map[int]float64,
+	numberCell_21 map[int]float64,
+	numberCell_22 map[int]float64,
+	numberCell_23 map[int]float64,
+	numberCell_24 map[int]float64,
+	numberCell_25 map[int]float64,
+	numberCell_26 map[int]float64,
+	numberCell_27 map[int]float64,
+	numberCell_28 map[int]float64,
+	numberCell_29 map[int]float64,
+	numberCell_30 map[int]float64,
+	numberCell_31 map[int]float64,
+	numberCell_32 map[int]float64,
+	numberCell_33 map[int]float64,
+	numberCell_34 map[int]float64,
+	numberCell_35  map[int]float64,
+	numberCell_36 map[int]float64,
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,
@@ -512,7 +512,46 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 	) (float64, int, error){
 
 	lengthOfBetsToSectors := len(sectorsToBets)
+
+	lengthOfBetsNumberCell_0 := len(numberCell_0)
+	lengthOfBetsNumberCell_1 := len(numberCell_1)
+	lengthOfBetsNumberCell_2 := len(numberCell_2)
+	lengthOfBetsNumberCell_3 := len(numberCell_3)
+	lengthOfBetsNumberCell_4 := len(numberCell_4)
+	lengthOfBetsNumberCell_5 := len(numberCell_5)
+	lengthOfBetsNumberCell_6 := len(numberCell_6)
+	lengthOfBetsNumberCell_7 := len(numberCell_7)
+	lengthOfBetsNumberCell_8 := len(numberCell_8)
+	lengthOfBetsNumberCell_9 := len(numberCell_9)
+	lengthOfBetsNumberCell_10 := len(numberCell_10)
+	lengthOfBetsNumberCell_11 := len(numberCell_11)
+	lengthOfBetsNumberCell_12 := len(numberCell_12)
+	lengthOfBetsNumberCell_13 := len(numberCell_13)
+	lengthOfBetsNumberCell_14 := len(numberCell_14)
+	lengthOfBetsNumberCell_15 := len(numberCell_15)
+	lengthOfBetsNumberCell_16 := len(numberCell_16)
+	lengthOfBetsNumberCell_17 := len(numberCell_17)
+	lengthOfBetsNumberCell_18 := len(numberCell_18)
+	lengthOfBetsNumberCell_19 := len(numberCell_19)
+	lengthOfBetsNumberCell_20 := len(numberCell_20)
+	lengthOfBetsNumberCell_21 := len(numberCell_21)
+	lengthOfBetsNumberCell_22 := len(numberCell_22)
+	lengthOfBetsNumberCell_23 := len(numberCell_23)
+	lengthOfBetsNumberCell_24 := len(numberCell_24)
+	lengthOfBetsNumberCell_25 := len(numberCell_25)
+	lengthOfBetsNumberCell_26 := len(numberCell_26)
+	lengthOfBetsNumberCell_27 := len(numberCell_27)
+	lengthOfBetsNumberCell_28 := len(numberCell_28)
+	lengthOfBetsNumberCell_29 := len(numberCell_29)
+	lengthOfBetsNumberCell_30 := len(numberCell_30)
+	lengthOfBetsNumberCell_31 := len(numberCell_31)
+	lengthOfBetsNumberCell_32 := len(numberCell_32)
+	lengthOfBetsNumberCell_33 := len(numberCell_33)
+	lengthOfBetsNumberCell_34 := len(numberCell_34)
+	lengthOfBetsNumberCell_35 := len(numberCell_35)
+	lengthOfBetsNumberCell_36 := len(numberCell_36)
 	
+
 	lengthOfBetsToRed := len(redToBets)
 	lengthOfBetsToBlack := len(blackToBets)
 	lengthOfBetsToEven := len(evenToBets)
@@ -529,6 +568,47 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 
 	
 	prize += game.CheckSectorBet(lengthOfBetsToSectors, sectorsToBets, dropped_sector)
+
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_0, numberCell_0, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_1, numberCell_1, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_2, numberCell_2, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_3, numberCell_3, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_4, numberCell_4, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_5, numberCell_5, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_6, numberCell_6, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_7, numberCell_7, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_8, numberCell_8, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_9, numberCell_9, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_10, numberCell_10, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_11, numberCell_11, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_12, numberCell_12, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_13, numberCell_13, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_14, numberCell_14, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_15, numberCell_15, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_16, numberCell_16, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_17, numberCell_17, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_18, numberCell_18, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_19, numberCell_19, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_20, numberCell_20, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_21, numberCell_21, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_22, numberCell_22, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_23, numberCell_23, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_24, numberCell_24, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_25, numberCell_25, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_26, numberCell_26, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_27, numberCell_27, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_28, numberCell_28, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_29, numberCell_29, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_30, numberCell_30, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_31, numberCell_31, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_32, numberCell_32, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_33, numberCell_33, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_34, numberCell_34, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_35, numberCell_35, dropped_number)
+	prize += game.CheckNumberBetV2(lengthOfBetsNumberCell_36, numberCell_36, dropped_number)
+
+
+
 	prize += game.CheckColorBet(lengthOfBetsToBlack, lengthOfBetsToRed, blackToBets, redToBets, dropped_number)
 	prize += game.CheckParityBet(lengthOfBetsToEven, lengthOfBetsToOdd, evenToBets, oddToBets, dropped_number)
 	prize += game.Check1To18Bet(lengthOfBetsOneToEighteen, oneToEighteenBets, dropped_number)
