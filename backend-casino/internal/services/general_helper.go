@@ -648,43 +648,43 @@ type BetMapsV2 struct {
     RedToBets              map[string]float64
     BlackToBets            map[string]float64
     SectorsToBets          map[string]float64
-    NumberCell_0           map[string]float64
-    NumberCell_1           map[string]float64
-    NumberCell_2           map[string]float64
-    NumberCell_3           map[string]float64
-    NumberCell_4           map[string]float64
-    NumberCell_5           map[string]float64
-    NumberCell_6           map[string]float64
-    NumberCell_7           map[string]float64
-    NumberCell_8           map[string]float64
-    NumberCell_9           map[string]float64
-    NumberCell_10          map[string]float64
-    NumberCell_11          map[string]float64
-    NumberCell_12          map[string]float64
-    NumberCell_13          map[string]float64
-    NumberCell_14          map[string]float64
-    NumberCell_15          map[string]float64
-    NumberCell_16          map[string]float64
-    NumberCell_17          map[string]float64
-    NumberCell_18          map[string]float64
-    NumberCell_19          map[string]float64
-    NumberCell_20          map[string]float64
-    NumberCell_21          map[string]float64
-    NumberCell_22          map[string]float64
-    NumberCell_23          map[string]float64
-    NumberCell_24          map[string]float64
-    NumberCell_25          map[string]float64
-    NumberCell_26          map[string]float64
-    NumberCell_27          map[string]float64
-    NumberCell_28          map[string]float64
-    NumberCell_29          map[string]float64
-    NumberCell_30          map[string]float64
-    NumberCell_31          map[string]float64
-    NumberCell_32          map[string]float64
-    NumberCell_33          map[string]float64
-    NumberCell_34          map[string]float64
-    NumberCell_35          map[string]float64
-    NumberCell_36          map[string]float64
+    NumberCell_0           map[int]float64
+    NumberCell_1           map[int]float64
+    NumberCell_2           map[int]float64
+    NumberCell_3           map[int]float64
+    NumberCell_4           map[int]float64
+    NumberCell_5           map[int]float64
+    NumberCell_6           map[int]float64
+    NumberCell_7           map[int]float64
+    NumberCell_8           map[int]float64
+    NumberCell_9           map[int]float64
+    NumberCell_10          map[int]float64
+    NumberCell_11          map[int]float64
+    NumberCell_12          map[int]float64
+    NumberCell_13          map[int]float64
+    NumberCell_14          map[int]float64
+    NumberCell_15          map[int]float64
+    NumberCell_16          map[int]float64
+    NumberCell_17          map[int]float64
+    NumberCell_18          map[int]float64
+    NumberCell_19          map[int]float64
+    NumberCell_20          map[int]float64
+    NumberCell_21          map[int]float64
+    NumberCell_22          map[int]float64
+    NumberCell_23          map[int]float64
+    NumberCell_24          map[int]float64
+    NumberCell_25          map[int]float64
+    NumberCell_26          map[int]float64
+    NumberCell_27          map[int]float64
+    NumberCell_28          map[int]float64
+    NumberCell_29          map[int]float64
+    NumberCell_30          map[int]float64
+    NumberCell_31          map[int]float64
+    NumberCell_32          map[int]float64
+    NumberCell_33          map[int]float64
+    NumberCell_34          map[int]float64
+    NumberCell_35          map[int]float64
+    NumberCell_36          map[int]float64
     OneToEighteenBets      map[string]float64
     NineteenToThirtySixBets map[string]float64
     First2To1Bets          map[string]float64
@@ -700,43 +700,43 @@ func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
         RedToBets:               make(map[string]float64),
         BlackToBets:             make(map[string]float64),
         SectorsToBets:           make(map[string]float64),
-        NumberCell_0:            make(map[string]float64),
-        NumberCell_1:            make(map[string]float64),
-        NumberCell_2:            make(map[string]float64),
-        NumberCell_3:            make(map[string]float64),
-        NumberCell_4:            make(map[string]float64),
-        NumberCell_5:            make(map[string]float64),
-        NumberCell_6:            make(map[string]float64),
-        NumberCell_7:            make(map[string]float64),
-        NumberCell_8:            make(map[string]float64),
-        NumberCell_9:            make(map[string]float64),
-        NumberCell_10:           make(map[string]float64),
-        NumberCell_11:           make(map[string]float64),
-        NumberCell_12:           make(map[string]float64),
-        NumberCell_13:           make(map[string]float64),
-        NumberCell_14:           make(map[string]float64),
-        NumberCell_15:           make(map[string]float64),
-        NumberCell_16:           make(map[string]float64),
-        NumberCell_17:           make(map[string]float64),
-        NumberCell_18:           make(map[string]float64),
-        NumberCell_19:           make(map[string]float64),
-        NumberCell_20:           make(map[string]float64),
-        NumberCell_21:           make(map[string]float64),
-        NumberCell_22:           make(map[string]float64),
-        NumberCell_23:           make(map[string]float64),
-        NumberCell_24:           make(map[string]float64),
-        NumberCell_25:           make(map[string]float64),
-        NumberCell_26:           make(map[string]float64),
-        NumberCell_27:           make(map[string]float64),
-        NumberCell_28:           make(map[string]float64),
-        NumberCell_29:           make(map[string]float64),
-        NumberCell_30:           make(map[string]float64),
-        NumberCell_31:           make(map[string]float64),
-        NumberCell_32:           make(map[string]float64),
-        NumberCell_33:           make(map[string]float64),
-        NumberCell_34:           make(map[string]float64),
-        NumberCell_35:           make(map[string]float64),
-        NumberCell_36:           make(map[string]float64),
+        NumberCell_0:            make(map[int]float64),
+        NumberCell_1:            make(map[int]float64),
+        NumberCell_2:            make(map[int]float64),
+        NumberCell_3:            make(map[int]float64),
+        NumberCell_4:            make(map[int]float64),
+        NumberCell_5:            make(map[int]float64),
+        NumberCell_6:            make(map[int]float64),
+        NumberCell_7:            make(map[int]float64),
+        NumberCell_8:            make(map[int]float64),
+        NumberCell_9:            make(map[int]float64),
+        NumberCell_10:           make(map[int]float64),
+        NumberCell_11:           make(map[int]float64),
+        NumberCell_12:           make(map[int]float64),
+        NumberCell_13:           make(map[int]float64),
+        NumberCell_14:           make(map[int]float64),
+        NumberCell_15:           make(map[int]float64),
+        NumberCell_16:           make(map[int]float64),
+        NumberCell_17:           make(map[int]float64),
+        NumberCell_18:           make(map[int]float64),
+        NumberCell_19:           make(map[int]float64),
+        NumberCell_20:           make(map[int]float64),
+        NumberCell_21:           make(map[int]float64),
+        NumberCell_22:           make(map[int]float64),
+        NumberCell_23:           make(map[int]float64),
+        NumberCell_24:           make(map[int]float64),
+        NumberCell_25:           make(map[int]float64),
+        NumberCell_26:           make(map[int]float64),
+        NumberCell_27:           make(map[int]float64),
+        NumberCell_28:           make(map[int]float64),
+        NumberCell_29:           make(map[int]float64),
+        NumberCell_30:           make(map[int]float64),
+        NumberCell_31:           make(map[int]float64),
+        NumberCell_32:           make(map[int]float64),
+        NumberCell_33:           make(map[int]float64),
+        NumberCell_34:           make(map[int]float64),
+        NumberCell_35:           make(map[int]float64),
+        NumberCell_36:           make(map[int]float64),
         OneToEighteenBets:       make(map[string]float64),
         NineteenToThirtySixBets: make(map[string]float64),
         First2To1Bets:           make(map[string]float64),
@@ -760,43 +760,43 @@ func InitBetsMapV2(gameParams GameParamsV2) BetMapsV2 {
         betMaps.SectorsToBets["3 rd 12"] = gameParams.GuessSector3rd12Bet
     }
 
-    betMaps.NumberCell_0["num_0"] = gameParams.GuessNumberCell_0Bet
-    betMaps.NumberCell_1["num_1"] = gameParams.GuessNumberCell_1Bet
-    betMaps.NumberCell_2["num_2"] = gameParams.GuessNumberCell_2Bet
-    betMaps.NumberCell_3["num_3"] = gameParams.GuessNumberCell_3Bet
-    betMaps.NumberCell_4["num_4"] = gameParams.GuessNumberCell_4Bet
-    betMaps.NumberCell_5["num_5"] = gameParams.GuessNumberCell_5Bet
-    betMaps.NumberCell_6["num_6"] = gameParams.GuessNumberCell_6Bet
-    betMaps.NumberCell_7["num_7"] = gameParams.GuessNumberCell_7Bet
-    betMaps.NumberCell_8["num_8"] = gameParams.GuessNumberCell_8Bet
-    betMaps.NumberCell_9["num_9"] = gameParams.GuessNumberCell_9Bet
-    betMaps.NumberCell_10["num_10"] = gameParams.GuessNumberCell_10Bet
-    betMaps.NumberCell_11["num_11"] = gameParams.GuessNumberCell_11Bet
-    betMaps.NumberCell_12["num_12"] = gameParams.GuessNumberCell_12Bet
-    betMaps.NumberCell_13["num_13"] = gameParams.GuessNumberCell_13Bet
-    betMaps.NumberCell_14["num_14"] = gameParams.GuessNumberCell_14Bet
-    betMaps.NumberCell_15["num_15"] = gameParams.GuessNumberCell_15Bet
-    betMaps.NumberCell_16["num_16"] = gameParams.GuessNumberCell_16Bet
-    betMaps.NumberCell_17["num_17"] = gameParams.GuessNumberCell_17Bet
-    betMaps.NumberCell_18["num_18"] = gameParams.GuessNumberCell_18Bet
-    betMaps.NumberCell_19["num_19"] = gameParams.GuessNumberCell_19Bet
-    betMaps.NumberCell_20["num_20"] = gameParams.GuessNumberCell_20Bet
-    betMaps.NumberCell_21["num_21"] = gameParams.GuessNumberCell_21Bet
-    betMaps.NumberCell_22["num_22"] = gameParams.GuessNumberCell_22Bet
-    betMaps.NumberCell_23["num_23"] = gameParams.GuessNumberCell_23Bet
-    betMaps.NumberCell_24["num_24"] = gameParams.GuessNumberCell_24Bet
-    betMaps.NumberCell_25["num_25"] = gameParams.GuessNumberCell_25Bet
-    betMaps.NumberCell_26["num_26"] = gameParams.GuessNumberCell_26Bet
-    betMaps.NumberCell_27["num_27"] = gameParams.GuessNumberCell_27Bet
-    betMaps.NumberCell_28["num_28"] = gameParams.GuessNumberCell_28Bet
-    betMaps.NumberCell_29["num_29"] = gameParams.GuessNumberCell_29Bet
-    betMaps.NumberCell_30["num_30"] = gameParams.GuessNumberCell_30Bet
-    betMaps.NumberCell_31["num_31"] = gameParams.GuessNumberCell_31Bet
-    betMaps.NumberCell_32["num_32"] = gameParams.GuessNumberCell_32Bet
-    betMaps.NumberCell_33["num_33"] = gameParams.GuessNumberCell_33Bet
-    betMaps.NumberCell_34["num_34"] = gameParams.GuessNumberCell_34Bet
-    betMaps.NumberCell_35["num_35"] = gameParams.GuessNumberCell_35Bet
-    betMaps.NumberCell_36["num_36"] = gameParams.GuessNumberCell_36Bet
+    betMaps.NumberCell_0[0] = gameParams.GuessNumberCell_0Bet
+    betMaps.NumberCell_1[1] = gameParams.GuessNumberCell_1Bet
+    betMaps.NumberCell_2[2] = gameParams.GuessNumberCell_2Bet
+    betMaps.NumberCell_3[3] = gameParams.GuessNumberCell_3Bet
+    betMaps.NumberCell_4[4] = gameParams.GuessNumberCell_4Bet
+    betMaps.NumberCell_5[5] = gameParams.GuessNumberCell_5Bet
+    betMaps.NumberCell_6[6] = gameParams.GuessNumberCell_6Bet
+    betMaps.NumberCell_7[7] = gameParams.GuessNumberCell_7Bet
+    betMaps.NumberCell_8[8] = gameParams.GuessNumberCell_8Bet
+    betMaps.NumberCell_9[9] = gameParams.GuessNumberCell_9Bet
+    betMaps.NumberCell_10[10] = gameParams.GuessNumberCell_10Bet
+    betMaps.NumberCell_11[11] = gameParams.GuessNumberCell_11Bet
+    betMaps.NumberCell_12[12] = gameParams.GuessNumberCell_12Bet
+    betMaps.NumberCell_13[13] = gameParams.GuessNumberCell_13Bet
+    betMaps.NumberCell_14[14] = gameParams.GuessNumberCell_14Bet
+    betMaps.NumberCell_15[15] = gameParams.GuessNumberCell_15Bet
+    betMaps.NumberCell_16[16] = gameParams.GuessNumberCell_16Bet
+    betMaps.NumberCell_17[17] = gameParams.GuessNumberCell_17Bet
+    betMaps.NumberCell_18[18] = gameParams.GuessNumberCell_18Bet
+    betMaps.NumberCell_19[19] = gameParams.GuessNumberCell_19Bet
+    betMaps.NumberCell_20[20] = gameParams.GuessNumberCell_20Bet
+    betMaps.NumberCell_21[21] = gameParams.GuessNumberCell_21Bet
+    betMaps.NumberCell_22[22] = gameParams.GuessNumberCell_22Bet
+    betMaps.NumberCell_23[23] = gameParams.GuessNumberCell_23Bet
+    betMaps.NumberCell_24[24] = gameParams.GuessNumberCell_24Bet
+    betMaps.NumberCell_25[25] = gameParams.GuessNumberCell_25Bet
+    betMaps.NumberCell_26[26] = gameParams.GuessNumberCell_26Bet
+    betMaps.NumberCell_27[27] = gameParams.GuessNumberCell_27Bet
+    betMaps.NumberCell_28[28] = gameParams.GuessNumberCell_28Bet
+    betMaps.NumberCell_29[29] = gameParams.GuessNumberCell_29Bet
+    betMaps.NumberCell_30[30] = gameParams.GuessNumberCell_30Bet
+    betMaps.NumberCell_31[31] = gameParams.GuessNumberCell_31Bet
+    betMaps.NumberCell_32[32] = gameParams.GuessNumberCell_32Bet
+    betMaps.NumberCell_33[33] = gameParams.GuessNumberCell_33Bet
+    betMaps.NumberCell_34[34] = gameParams.GuessNumberCell_34Bet
+    betMaps.NumberCell_35[35] = gameParams.GuessNumberCell_35Bet
+    betMaps.NumberCell_36[36] = gameParams.GuessNumberCell_36Bet
 
     betMaps.OneToEighteenBets["1to18"] = gameParams.GuessOneToEighteenBet
     betMaps.NineteenToThirtySixBets["19to36"] = gameParams.GuessNineteenToThirtySix

@@ -13,43 +13,43 @@ func (user *UserPlayer) getTotalBetV2(
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numberCell_0 map[string]float64,
-	numberCell_1 map[string]float64,
-	numberCell_2 map[string]float64,
-	numberCell_3 map[string]float64,
-	numberCell_4 map[string]float64,
-	numberCell_5 map[string]float64,
-	numberCell_6 map[string]float64,
-	numberCell_7 map[string]float64,
-	numberCell_8 map[string]float64,
-	numberCell_9 map[string]float64,
-	numberCell_10 map[string]float64,
-	numberCell_11 map[string]float64,
-	numberCell_12 map[string]float64,
-	numberCell_13 map[string]float64,
-	numberCell_14 map[string]float64,
-	numberCell_15 map[string]float64,
-	numberCell_16 map[string]float64,
-	numberCell_17 map[string]float64,
-	numberCell_18 map[string]float64,
-	numberCell_19 map[string]float64,
-	numberCell_20 map[string]float64,
-	numberCell_21 map[string]float64,
-	numberCell_22 map[string]float64,
-	numberCell_23 map[string]float64,
-	numberCell_24 map[string]float64,
-	numberCell_25 map[string]float64,
-	numberCell_26 map[string]float64,
-	numberCell_27 map[string]float64,
-	numberCell_28 map[string]float64,
-	numberCell_29 map[string]float64,
-	numberCell_30 map[string]float64,
-	numberCell_31 map[string]float64,
-	numberCell_32 map[string]float64,
-	numberCell_33 map[string]float64,
-	numberCell_34 map[string]float64,
-	numberCell_35  map[string]float64,
-	numberCell_36 map[string]float64,
+	numberCell_0 map[int]float64,
+	numberCell_1 map[int]float64,
+	numberCell_2 map[int]float64,
+	numberCell_3 map[int]float64,
+	numberCell_4 map[int]float64,
+	numberCell_5 map[int]float64,
+	numberCell_6 map[int]float64,
+	numberCell_7 map[int]float64,
+	numberCell_8 map[int]float64,
+	numberCell_9 map[int]float64,
+	numberCell_10 map[int]float64,
+	numberCell_11 map[int]float64,
+	numberCell_12 map[int]float64,
+	numberCell_13 map[int]float64,
+	numberCell_14 map[int]float64,
+	numberCell_15 map[int]float64,
+	numberCell_16 map[int]float64,
+	numberCell_17 map[int]float64,
+	numberCell_18 map[int]float64,
+	numberCell_19 map[int]float64,
+	numberCell_20 map[int]float64,
+	numberCell_21 map[int]float64,
+	numberCell_22 map[int]float64,
+	numberCell_23 map[int]float64,
+	numberCell_24 map[int]float64,
+	numberCell_25 map[int]float64,
+	numberCell_26 map[int]float64,
+	numberCell_27 map[int]float64,
+	numberCell_28 map[int]float64,
+	numberCell_29 map[int]float64,
+	numberCell_30 map[int]float64,
+	numberCell_31 map[int]float64,
+	numberCell_32 map[int]float64,
+	numberCell_33 map[int]float64,
+	numberCell_34 map[int]float64,
+	numberCell_35  map[int]float64,
+	numberCell_36 map[int]float64,
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,
@@ -64,43 +64,43 @@ func (user *UserPlayer) getTotalBetV2(
 	total += user.sumMapValues(redToBets)
 	total += user.sumMapValues(blackToBets)
 	total += user.sumMapValues(sectorsToBets)
-	total += user.sumMapValues(numberCell_0)
-	total += user.sumMapValues(numberCell_1)
-	total += user.sumMapValues(numberCell_2)
-	total += user.sumMapValues(numberCell_3)
-	total += user.sumMapValues(numberCell_4)
-	total += user.sumMapValues(numberCell_5)
-	total += user.sumMapValues(numberCell_6)
-	total += user.sumMapValues(numberCell_7)
-	total += user.sumMapValues(numberCell_8)
-	total += user.sumMapValues(numberCell_9)
-	total += user.sumMapValues(numberCell_10)
-	total += user.sumMapValues(numberCell_11)
-	total += user.sumMapValues(numberCell_12)
-	total += user.sumMapValues(numberCell_13)
-	total += user.sumMapValues(numberCell_14)
-	total += user.sumMapValues(numberCell_15)
-	total += user.sumMapValues(numberCell_16)
-	total += user.sumMapValues(numberCell_17)
-	total += user.sumMapValues(numberCell_18)
-	total += user.sumMapValues(numberCell_19)
-	total += user.sumMapValues(numberCell_20)
-	total += user.sumMapValues(numberCell_21)
-	total += user.sumMapValues(numberCell_22)
-	total += user.sumMapValues(numberCell_23)
-	total += user.sumMapValues(numberCell_24)
-	total += user.sumMapValues(numberCell_25)
-	total += user.sumMapValues(numberCell_26)
-	total += user.sumMapValues(numberCell_27)
-	total += user.sumMapValues(numberCell_28)
-	total += user.sumMapValues(numberCell_29)
-	total += user.sumMapValues(numberCell_30)
-	total += user.sumMapValues(numberCell_31)
-	total += user.sumMapValues(numberCell_32)
-	total += user.sumMapValues(numberCell_33)
-	total += user.sumMapValues(numberCell_34)
-	total += user.sumMapValues(numberCell_35)
-	total += user.sumMapValues(numberCell_36)
+	total += user.sumMapValuesForNumbers(numberCell_0)
+	total += user.sumMapValuesForNumbers(numberCell_1)
+	total += user.sumMapValuesForNumbers(numberCell_2)
+	total += user.sumMapValuesForNumbers(numberCell_3)
+	total += user.sumMapValuesForNumbers(numberCell_4)
+	total += user.sumMapValuesForNumbers(numberCell_5)
+	total += user.sumMapValuesForNumbers(numberCell_6)
+	total += user.sumMapValuesForNumbers(numberCell_7)
+	total += user.sumMapValuesForNumbers(numberCell_8)
+	total += user.sumMapValuesForNumbers(numberCell_9)
+	total += user.sumMapValuesForNumbers(numberCell_10)
+	total += user.sumMapValuesForNumbers(numberCell_11)
+	total += user.sumMapValuesForNumbers(numberCell_12)
+	total += user.sumMapValuesForNumbers(numberCell_13)
+	total += user.sumMapValuesForNumbers(numberCell_14)
+	total += user.sumMapValuesForNumbers(numberCell_15)
+	total += user.sumMapValuesForNumbers(numberCell_16)
+	total += user.sumMapValuesForNumbers(numberCell_17)
+	total += user.sumMapValuesForNumbers(numberCell_18)
+	total += user.sumMapValuesForNumbers(numberCell_19)
+	total += user.sumMapValuesForNumbers(numberCell_20)
+	total += user.sumMapValuesForNumbers(numberCell_21)
+	total += user.sumMapValuesForNumbers(numberCell_22)
+	total += user.sumMapValuesForNumbers(numberCell_23)
+	total += user.sumMapValuesForNumbers(numberCell_24)
+	total += user.sumMapValuesForNumbers(numberCell_25)
+	total += user.sumMapValuesForNumbers(numberCell_26)
+	total += user.sumMapValuesForNumbers(numberCell_27)
+	total += user.sumMapValuesForNumbers(numberCell_28)
+	total += user.sumMapValuesForNumbers(numberCell_29)
+	total += user.sumMapValuesForNumbers(numberCell_30)
+	total += user.sumMapValuesForNumbers(numberCell_31)
+	total += user.sumMapValuesForNumbers(numberCell_32)
+	total += user.sumMapValuesForNumbers(numberCell_33)
+	total += user.sumMapValuesForNumbers(numberCell_34)
+	total += user.sumMapValuesForNumbers(numberCell_35)
+	total += user.sumMapValuesForNumbers(numberCell_36)
 	total += user.sumMapValues(oneToEighteenBets)
 	total += user.sumMapValues(nineteenToThirtySixBets)
 	total += user.sumMapValues(first2To1Bets)
@@ -116,43 +116,43 @@ func (user *UserPlayer) VeryBadPlay(
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numberCell_0 map[string]float64,
-	numberCell_1 map[string]float64,
-	numberCell_2 map[string]float64,
-	numberCell_3 map[string]float64,
-	numberCell_4 map[string]float64,
-	numberCell_5 map[string]float64,
-	numberCell_6 map[string]float64,
-	numberCell_7 map[string]float64,
-	numberCell_8 map[string]float64,
-	numberCell_9 map[string]float64,
-	numberCell_10 map[string]float64,
-	numberCell_11 map[string]float64,
-	numberCell_12 map[string]float64,
-	numberCell_13 map[string]float64,
-	numberCell_14 map[string]float64,
-	numberCell_15 map[string]float64,
-	numberCell_16 map[string]float64,
-	numberCell_17 map[string]float64,
-	numberCell_18 map[string]float64,
-	numberCell_19 map[string]float64,
-	numberCell_20 map[string]float64,
-	numberCell_21 map[string]float64,
-	numberCell_22 map[string]float64,
-	numberCell_23 map[string]float64,
-	numberCell_24 map[string]float64,
-	numberCell_25 map[string]float64,
-	numberCell_26 map[string]float64,
-	numberCell_27 map[string]float64,
-	numberCell_28 map[string]float64,
-	numberCell_29 map[string]float64,
-	numberCell_30 map[string]float64,
-	numberCell_31 map[string]float64,
-	numberCell_32 map[string]float64,
-	numberCell_33 map[string]float64,
-	numberCell_34 map[string]float64,
-	numberCell_35  map[string]float64,
-	numberCell_36 map[string]float64,
+	numberCell_0 map[int]float64,
+	numberCell_1 map[int]float64,
+	numberCell_2 map[int]float64,
+	numberCell_3 map[int]float64,
+	numberCell_4 map[int]float64,
+	numberCell_5 map[int]float64,
+	numberCell_6 map[int]float64,
+	numberCell_7 map[int]float64,
+	numberCell_8 map[int]float64,
+	numberCell_9 map[int]float64,
+	numberCell_10 map[int]float64,
+	numberCell_11 map[int]float64,
+	numberCell_12 map[int]float64,
+	numberCell_13 map[int]float64,
+	numberCell_14 map[int]float64,
+	numberCell_15 map[int]float64,
+	numberCell_16 map[int]float64,
+	numberCell_17 map[int]float64,
+	numberCell_18 map[int]float64,
+	numberCell_19 map[int]float64,
+	numberCell_20 map[int]float64,
+	numberCell_21 map[int]float64,
+	numberCell_22 map[int]float64,
+	numberCell_23 map[int]float64,
+	numberCell_24 map[int]float64,
+	numberCell_25 map[int]float64,
+	numberCell_26 map[int]float64,
+	numberCell_27 map[int]float64,
+	numberCell_28 map[int]float64,
+	numberCell_29 map[int]float64,
+	numberCell_30 map[int]float64,
+	numberCell_31 map[int]float64,
+	numberCell_32 map[int]float64,
+	numberCell_33 map[int]float64,
+	numberCell_34 map[int]float64,
+	numberCell_35  map[int]float64,
+	numberCell_36 map[int]float64,
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,

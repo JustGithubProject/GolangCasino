@@ -57,14 +57,10 @@ func (game *GameRoulette) CheckNumberBet(lengthOfBetsToNumbers int, numbersToBet
 }
 
 // FIXME
-func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[[37]int][37]float64, dropped_number int) float64{
+func (game *GameRoulette) CheckNumberBetV2(lengthOfBetsToNumbers int, numbersToBets map[string]float64, dropped_number int) float64{
 	if lengthOfBetsToNumbers > 0{
-		for arrNums, arrBet := range numbersToBets{
-			for i := 0; i < 37; i++{
-				if dropped_number == arrNums[i]{
-					return arrBet[i] * 35.0
-				}
-			}
+		if _, ok := numbersToBets[]; ok{
+			return numbersToBets[] * float64(35)
 		}
 	}
 	return float64(0)
@@ -463,13 +459,51 @@ func (game *GameRoulette) FindMinBet(
 // }
 
 
+
+
 func (game *GameRoulette) VeryBadSpinRoulette(
 	evenToBets map[string]float64,
 	oddToBets map[string]float64,
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numbersToBets map[[37]int][37]float64,
+	numberCell_0 map[string]float64,
+	numberCell_1 map[string]float64,
+	numberCell_2 map[string]float64,
+	numberCell_3 map[string]float64,
+	numberCell_4 map[string]float64,
+	numberCell_5 map[string]float64,
+	numberCell_6 map[string]float64,
+	numberCell_7 map[string]float64,
+	numberCell_8 map[string]float64,
+	numberCell_9 map[string]float64,
+	numberCell_10 map[string]float64,
+	numberCell_11 map[string]float64,
+	numberCell_12 map[string]float64,
+	numberCell_13 map[string]float64,
+	numberCell_14 map[string]float64,
+	numberCell_15 map[string]float64,
+	numberCell_16 map[string]float64,
+	numberCell_17 map[string]float64,
+	numberCell_18 map[string]float64,
+	numberCell_19 map[string]float64,
+	numberCell_20 map[string]float64,
+	numberCell_21 map[string]float64,
+	numberCell_22 map[string]float64,
+	numberCell_23 map[string]float64,
+	numberCell_24 map[string]float64,
+	numberCell_25 map[string]float64,
+	numberCell_26 map[string]float64,
+	numberCell_27 map[string]float64,
+	numberCell_28 map[string]float64,
+	numberCell_29 map[string]float64,
+	numberCell_30 map[string]float64,
+	numberCell_31 map[string]float64,
+	numberCell_32 map[string]float64,
+	numberCell_33 map[string]float64,
+	numberCell_34 map[string]float64,
+	numberCell_35  map[string]float64,
+	numberCell_36 map[string]float64,
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,
@@ -478,7 +512,7 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 	) (float64, int, error){
 
 	lengthOfBetsToSectors := len(sectorsToBets)
-	lengthOfBetsToNumbers := len(numbersToBets)
+	
 	lengthOfBetsToRed := len(redToBets)
 	lengthOfBetsToBlack := len(blackToBets)
 	lengthOfBetsToEven := len(evenToBets)
@@ -493,7 +527,7 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 	dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
 	prize := 0.0
 
-	prize += game.CheckNumberBetV2(lengthOfBetsToNumbers, numbersToBets, dropped_number)
+	
 	prize += game.CheckSectorBet(lengthOfBetsToSectors, sectorsToBets, dropped_sector)
 	prize += game.CheckColorBet(lengthOfBetsToBlack, lengthOfBetsToRed, blackToBets, redToBets, dropped_number)
 	prize += game.CheckParityBet(lengthOfBetsToEven, lengthOfBetsToOdd, evenToBets, oddToBets, dropped_number)
