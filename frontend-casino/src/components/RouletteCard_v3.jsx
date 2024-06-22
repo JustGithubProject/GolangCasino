@@ -17,7 +17,7 @@ import BetFormToggle from './BetFormToggle';
 
 const { Text } = Typography;
 
-function RouletteCard() {
+function RouletteCardV3() {
   const [selectedNumbers, setSelectedNumbers] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [betValues, setBetValues] = useState({
@@ -71,12 +71,14 @@ function RouletteCard() {
     setBetValues((prevValues) => ({
       ...prevValues,
       betAmount: (parseInt(prevValues.betAmount) || 0) + amount,
+      [`betAmount_${number}`]: (parseInt(prevValues[`betAmount_${number}`]) || 0) + amount,
     }));
     const index = selectedNumbers.indexOf(number);
     if (index === -1) {
       setSelectedNumbers([...selectedNumbers, number]);
     }
   };
+  
 
   const handleColorClick = (color) => {
     setSelectedColor(color);
@@ -120,20 +122,20 @@ function RouletteCard() {
 
   const handleSubmit = async () => {
     const {
-      betAmount, evenBet, oddBet, redBet, blackBet,
-      first12Bet, second12Bet, third12Bet, oneToEighteenBet,
-      nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet,
+      evenBet, oddBet, redBet, blackBet, first12Bet, second12Bet, third12Bet,
+      oneToEighteenBet, nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet,
     } = betValues;
-
-    if (!betAmount && !evenBet && !oddBet && !redBet && !blackBet && !first12Bet &&
-      !second12Bet && !third12Bet && !oneToEighteenBet && !nineteenToThirtySixBet &&
+  
+    if (!evenBet && !oddBet && !redBet && !blackBet && !first12Bet &&
+      !second12Bet && !third12Bet && selectedNumbers.length === 0 &&
+      !oneToEighteenBet && !nineteenToThirtySixBet &&
       !first2To1Bet && !second2To1Bet && !third2To1Bet) {
       message.error('Please place at least one bet.');
       return;
     }
-
+  
     const params = new URLSearchParams();
-
+  
     if (evenBet) params.append('even', evenBet);
     if (oddBet) params.append('odd', oddBet);
     if (redBet) params.append('red', redBet);
@@ -141,29 +143,30 @@ function RouletteCard() {
     if (first12Bet) params.append('1st12', first12Bet);
     if (second12Bet) params.append('2nd12', second12Bet);
     if (third12Bet) params.append('3rd12', third12Bet);
-    if (betAmount) params.append('number', betAmount);
-    if (selectedNumbers.length > 0) params.append('num', selectedNumbers.join(','));
+    selectedNumbers.forEach((number) => {
+      params.append(`num_${number}`, betValues[`betAmount_${number}`] || 1);
+    });
     if (oneToEighteenBet) params.append('1To18', oneToEighteenBet);
     if (nineteenToThirtySixBet) params.append('19To36', nineteenToThirtySixBet);
     if (first2To1Bet) params.append('First2To1', first2To1Bet);
     if (second2To1Bet) params.append('Second2To1', second2To1Bet);
     if (third2To1Bet) params.append('Third2To1', third2To1Bet);
-
-    const url = `http://localhost:8081/spin-roulette-v1/?${params.toString()}`;
-
+  
+    const url = `http://localhost:8081/spin-roulette-v3/?${params.toString()}`;
+  
     console.log('URL:', url);
-
+  
     try {
       setIsSpinning(true);
       const response = await fetchWithAuth(url, {
         method: 'POST',
         body: JSON.stringify({}),
       });
-
+  
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
+  
       const data = await response.json();
       console.log(data);
       setSpinResult(data.dropped_number);
@@ -179,6 +182,8 @@ function RouletteCard() {
       setIsSpinning(false);
     }
   };
+  
+  
 
   const calculateWinnings = (droppedNumber) => {
     let winnings = 0;
@@ -275,7 +280,7 @@ function RouletteCard() {
           </div>
           {/* {showBetForm && (
             <div style={styles.betFormContainer}>
-              <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
+              <BetFormV3 betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
             </div>
           )}
           <BetFormToggle showBetForm={showBetForm} toggleBetForm={toggleBetForm} /> */}
@@ -447,4 +452,4 @@ const styles = {
   },
 };
 
-export default RouletteCard;
+export default RouletteCardV3;
