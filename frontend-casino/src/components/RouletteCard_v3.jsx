@@ -300,7 +300,7 @@ const styles = {
     background: `url(${backgroundImage}) no-repeat center center fixed`,
     backgroundSize: 'cover',
     padding: '20px',
-    paddingTop: '150px', 
+    paddingTop: '150px',
   },
   content: {
     display: 'flex',
@@ -315,19 +315,20 @@ const styles = {
     padding: '32px',
     borderRadius: '24px',
     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+    marginBottom: '20px', // Add margin for spacing between cards
   },
   header: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '10px 20px',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: '15px 20px', // Increase padding for a more balanced look
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Slightly darker for better contrast
     borderRadius: '24px',
     marginBottom: '20px',
   },
   headerText: {
-    fontSize: '20px',
+    fontSize: '22px', // Slightly larger font for better readability
     fontWeight: 'bold',
     color: '#fff',
   },
@@ -399,6 +400,7 @@ const styles = {
     borderRadius: '24px',
     padding: '32px',
     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+    marginBottom: '20px', // Add margin for spacing between form and other elements
   },
   closeButton: {
     position: 'absolute',
@@ -419,6 +421,7 @@ const styles = {
     color: 'white',
     transition: 'background 0.3s ease, transform 0.3s ease',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+    padding: '10px 20px', // Added padding for a more defined button size
   },
   submitButtonContainer: {
     display: 'flex',
@@ -451,5 +454,6 @@ const styles = {
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
   },
 };
+
 
 export default RouletteCardV3;

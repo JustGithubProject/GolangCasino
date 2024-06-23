@@ -31,8 +31,9 @@ const Login = () => {
       const token = data.token;
       localStorage.setItem('token', token);
 
-      setSuccess('Login successful!');
+      setSuccess('Вы успешно вошли в систему!');
       navigate('/');
+      window.location.reload(); // Reload the page
     } catch (err) {
       setError('Login failed. Please try again.');
     }

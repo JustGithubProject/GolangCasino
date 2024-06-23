@@ -34,6 +34,7 @@ const Register = () => {
 
       setSuccess('Registration successful!');
       navigate('/');
+      window.location.reload(); 
     } catch (err) {
       setError('Registration failed. Please try again.');
     }
