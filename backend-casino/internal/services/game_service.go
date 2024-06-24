@@ -378,86 +378,175 @@ func (game *GameRoulette) FindMinBet(
 	redToBets map[string]float64,
 	blackToBets map[string]float64,
 	sectorsToBets map[string]float64,
-	numbersToBets map[[37]int][37]float64, // FIXME
+	numberCell_0 map[int]float64,
+	numberCell_1 map[int]float64,
+	numberCell_2 map[int]float64,
+	numberCell_3 map[int]float64,
+	numberCell_4 map[int]float64,
+	numberCell_5 map[int]float64,
+	numberCell_6 map[int]float64,
+	numberCell_7 map[int]float64,
+	numberCell_8 map[int]float64,
+	numberCell_9 map[int]float64,
+	numberCell_10 map[int]float64,
+	numberCell_11 map[int]float64,
+	numberCell_12 map[int]float64,
+	numberCell_13 map[int]float64,
+	numberCell_14 map[int]float64,
+	numberCell_15 map[int]float64,
+	numberCell_16 map[int]float64,
+	numberCell_17 map[int]float64,
+	numberCell_18 map[int]float64,
+	numberCell_19 map[int]float64,
+	numberCell_20 map[int]float64,
+	numberCell_21 map[int]float64,
+	numberCell_22 map[int]float64,
+	numberCell_23 map[int]float64,
+	numberCell_24 map[int]float64,
+	numberCell_25 map[int]float64,
+	numberCell_26 map[int]float64,
+	numberCell_27 map[int]float64,
+	numberCell_28 map[int]float64,
+	numberCell_29 map[int]float64,
+	numberCell_30 map[int]float64,
+	numberCell_31 map[int]float64,
+	numberCell_32 map[int]float64,
+	numberCell_33 map[int]float64,
+	numberCell_34 map[int]float64,
+	numberCell_35  map[int]float64,
+	numberCell_36 map[int]float64,
 	oneToEighteenBets map[string]float64,
 	nineteenToThirtySixBets map[string]float64,
 	first2To1Bets map[string]float64,
 	second2To1Bets map[string]float64,
-	third2To1Bets map[string]float64,) (float64, string){
+	third2To1Bets map[string]float64,
+	) (float64, string){
+	
 	
 	evenBet := evenToBets["even"]
 	oddBet := oddToBets["odd"]
 	redBet := redToBets["red"]
 	blackBet := blackToBets["black"]
-	sectorsBetFirst := sectorsToBets["1 st 12"]
-	sectorsBetSecond := sectorsToBets["2 nd 12"]
-	sectorsBetThird := sectorsToBets["3 rd 12"]
-	// Еще должно быть numbersToBets ТУТ(ключ может быть массивом)
-	oneToEighteenBet := oneToEighteenBets["1to18"]
-	nineteenToThirtySixBet := nineteenToThirtySixBets["19to36"]
-	first2To1Bet := first2To1Bets["2to1"]
-	second2To1Bet := second2To1Bets["2to1"]
-	third2To1Bet := third2To1Bets["2to1"]
-	
-	var bets = [13]float64{
+	sector1st12Bet := sectorsToBets["1st12"]
+	sector2nd12Bet := sectorsToBets["2nd12"]
+	sector3rd12Bet := sectorsToBets["3rd12"]
+	numberCell_0Bet := numberCell_0[0]
+	numberCell_1Bet := numberCell_1[1]
+	numberCell_2Bet := numberCell_2[2]
+	numberCell_3Bet := numberCell_3[3]
+	numberCell_4Bet := numberCell_4[4]
+	numberCell_5Bet := numberCell_5[5]
+	numberCell_6Bet := numberCell_6[6]
+	numberCell_7Bet := numberCell_7[7]
+	numberCell_8Bet := numberCell_8[8]
+	numberCell_9Bet := numberCell_9[9]
+	numberCell_10Bet := numberCell_10[10]
+	numberCell_11Bet := numberCell_11[11]
+	numberCell_12Bet := numberCell_12[12]
+	numberCell_13Bet := numberCell_13[13]
+	numberCell_14Bet := numberCell_14[14]
+	numberCell_15Bet := numberCell_15[15]
+	numberCell_16Bet := numberCell_16[16]
+	numberCell_17Bet := numberCell_17[17]
+	numberCell_18Bet := numberCell_18[18]
+	numberCell_19Bet := numberCell_19[19]
+	numberCell_20Bet := numberCell_20[20]
+	numberCell_21Bet := numberCell_21[21]
+	numberCell_22Bet := numberCell_22[22]
+	numberCell_23Bet := numberCell_23[23]
+	numberCell_24Bet := numberCell_24[24]
+	numberCell_25Bet := numberCell_25[25]
+	numberCell_26Bet := numberCell_26[26]
+	numberCell_27Bet := numberCell_27[27]
+	numberCell_28Bet := numberCell_28[28]
+	numberCell_29Bet := numberCell_29[29]
+	numberCell_30Bet := numberCell_30[30]
+	numberCell_31Bet := numberCell_31[31]
+	numberCell_32Bet := numberCell_32[32]
+	numberCell_33Bet := numberCell_33[33]
+	numberCell_34Bet := numberCell_34[34]
+	numberCell_35Bet := numberCell_35[35]
+	numberCell_36Bet := numberCell_36[36]
+	oneToEighteenBet := oneToEighteenBets["1To18"]
+	nineteenToThirtySixBet := nineteenToThirtySixBets["19To36"]
+	first2To1Bet := first2To1Bets["First2To1"]
+	second2To1Bet := second2To1Bets["Second2To1"]
+	third2To1Bet := third2To1Bets["Third2To1"]
+
+
+	bets := [49]float64{
 		evenBet,
 		oddBet,
 		redBet,
 		blackBet,
-		sectorsBetFirst,
-		sectorsBetSecond,
-		sectorsBetThird,
-		sectorsBetThird,
+		sector1st12Bet,
+		sector2nd12Bet,
+		sector3rd12Bet,
+		numberCell_0Bet,
+		numberCell_1Bet,
+		numberCell_2Bet,
+		numberCell_3Bet,
+		numberCell_4Bet,
+		numberCell_5Bet,
+		numberCell_6Bet,
+		numberCell_7Bet,
+		numberCell_8Bet,
+		numberCell_9Bet,
+		numberCell_10Bet,
+		numberCell_11Bet,
+		numberCell_12Bet,
+		numberCell_13Bet,
+		numberCell_14Bet,
+		numberCell_15Bet,
+		numberCell_16Bet,
+		numberCell_17Bet,
+		numberCell_18Bet,
+		numberCell_19Bet,
+		numberCell_20Bet,
+		numberCell_21Bet,
+		numberCell_22Bet,
+		numberCell_23Bet,
+		numberCell_24Bet,
+		numberCell_25Bet,
+		numberCell_26Bet,
+		numberCell_27Bet,
+		numberCell_28Bet,
+		numberCell_29Bet,
+		numberCell_30Bet,
+		numberCell_31Bet,
+		numberCell_32Bet,
+		numberCell_33Bet,
+		numberCell_34Bet,
+		numberCell_35Bet,
+		numberCell_36Bet,
 		oneToEighteenBet,
 		nineteenToThirtySixBet,
 		first2To1Bet,
 		second2To1Bet,
 		third2To1Bet,
 	}
-	minBet := bets[0]
-	minIndex := 0
-	for i := 1; i < 13; i++{
-		if bets[i] < minBet{
+	minBet := float64(1000000)
+	minBetIndex := 0
+	for i := 0; i < len(bets); i++{
+		if bets[i] > 0 && bets[i] < minBet{
+			minBetIndex = i
 			minBet = bets[i]
-			minIndex = i
 		}
 	}
-	var fields = [13]string{
-		"even",
-		"odd",
-		"red",
-		"black",
-		"1 st 12",
-		"2 nd 12",
-		"3 rd 12",
-		"1to18",
-		"19to36",
-		"2to1",
-		"2to1",
-		"2to1",
+
+	switch minBetIndex{
+	case 0:
+		return bets[minBetIndex], "even"
+	case 1:
+		return bets[minBetIndex], "odd"
+	case 2:
+		return bets[minBetIndex], "red"
+	// ...
 	}
-	minField := fields[minIndex]
-	fmt.Println(minField) 
-	return minBet, minField
+	
+
+
 }
-
-
-// func (game *GameRoulette) GenerateRandomNumberByBets(
-// 	evenToBets map[string]float64,
-// 	oddToBets map[string]float64,
-// 	redToBets map[string]float64,
-// 	blackToBets map[string]float64,
-// 	sectorsToBets map[string]float64,
-// 	numbersToBets map[[37]int]float64,
-// 	oneToEighteenBets map[string]float64,
-// 	nineteenToThirtySixBets map[string]float64,
-// 	first2To1Bets map[string]float64,
-// 	second2To1Bets map[string]float64,
-// 	third2To1Bets map[string]float64,
-// 	numbers []int) int{
-// 	min_bet := game.FindMinBet()	
-// }
-
 
 
 
