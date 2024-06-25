@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 
@@ -541,11 +542,108 @@ func (game *GameRoulette) FindMinBet(
 		return bets[minBetIndex], "odd"
 	case 2:
 		return bets[minBetIndex], "red"
-	// ...
+	case 3:
+		return bets[minBetIndex], "black"
+	case 4:
+		return bets[minBetIndex], "1st12"
+	case 5:
+		return bets[minBetIndex], "2nd12"
+	case 6:
+		return bets[minBetIndex], "3rd12"
+	case 7:
+		return bets[minBetIndex], "num_0"
+	case 8:
+		return bets[minBetIndex], "num_1"
+	case 9:
+		return bets[minBetIndex], "num_2"
+	case 10:
+		return bets[minBetIndex], "num_3"
+	case 11:
+		return bets[minBetIndex], "num_4"
+	case 12:
+		return bets[minBetIndex], "num_5"
+	case 13:
+		return bets[minBetIndex], "num_6"
+	case 14:
+		return bets[minBetIndex], "num_7"
+	case 15:
+		return bets[minBetIndex], "num_8"
+	case 16:
+		return bets[minBetIndex], "num_9"
+	case 17:
+		return bets[minBetIndex], "num_10"
+	case 18:
+		return bets[minBetIndex], "num_11"
+	case 19:
+		return bets[minBetIndex], "num_12"
+	case 20:
+		return bets[minBetIndex], "num_13"
+	case 21:
+		return bets[minBetIndex], "num_14"
+	case 22:
+		return bets[minBetIndex], "num_15"
+	case 23:
+		return bets[minBetIndex], "num_16"
+	case 24:
+		return bets[minBetIndex], "num_17"
+	case 25:
+		return bets[minBetIndex], "num_18"
+	case 26:
+		return bets[minBetIndex], "num_19"
+	case 27:
+		return bets[minBetIndex], "num_20"
+	case 28:
+		return bets[minBetIndex], "num_21"
+	case 29:
+		return bets[minBetIndex], "num_22"
+	case 30:
+		return bets[minBetIndex], "num_23"
+	case 31:
+		return bets[minBetIndex], "num_24"
+	case 32:
+		return bets[minBetIndex], "num_25"
+	case 33:
+		return bets[minBetIndex], "num_26"
+	case 34:
+		return bets[minBetIndex], "num_27"
+	case 35:
+		return bets[minBetIndex], "num_28"
+	case 36:
+		return bets[minBetIndex], "num_29"
+	case 37:
+		return bets[minBetIndex], "num_30"
+	case 38:
+		return bets[minBetIndex], "num_31"
+	case 39:
+		return bets[minBetIndex], "num_32"
+	case 40:
+		return bets[minBetIndex], "num_33"
+	case 41:
+		return bets[minBetIndex], "num_34"
+	case 42:
+		return bets[minBetIndex], "num_35"
+	case 43:
+		return bets[minBetIndex], "num_36"
+	case 44:
+		return bets[minBetIndex], "1To18"
+	case 45:
+		return bets[minBetIndex], "19To36"
+	case 46:
+		return bets[minBetIndex], "First2To1"
+	case 47:
+		return bets[minBetIndex], "Second2To1"
+	case 48:
+		return bets[minBetIndex], "Third2To1"
+	default:
+		return 0.0, "unknown"
 	}
-	
+}
 
 
+func (game *GameRoulette) GetCurrentMinuteToGenerateBet() int{
+	currentTime := time.Now()
+	minute := currentTime.Minute()
+	return minute
 }
 
 
@@ -650,6 +748,11 @@ func (game *GameRoulette) VeryBadSpinRoulette(
 	lengthOfBetsFirst2To1 := len(first2To1Bets)
 	lengthOfBetsSecond2To1 := len(second2To1Bets)
 	lengthofBetsThird2To1 := len(third2To1Bets)
+	
+	// if game.GetCurrentMinuteToGenerateBet() == 59{
+	// 	minBet := game.FindMinBet()
+	// }
+	
 
 	dropped_number := game.GenerateRandomNumberFromArray(game.Numbers)
 	dropped_sector := game.GenerateRandomSectorFromArray(dropped_number)
