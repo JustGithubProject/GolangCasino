@@ -187,40 +187,61 @@ function RouletteCardV3() {
 
   const calculateWinnings = (droppedNumber) => {
     let winnings = 0;
+  
+    // Check individual number bets
     if (selectedNumbers.includes(droppedNumber)) {
-      winnings += (parseInt(betValues.betAmount) || 0) * 36;
+      winnings += (parseInt(betValues[`betAmount_${droppedNumber}`]) || 0) * 36;
     }
-    if ((droppedNumber % 2 === 0 && betValues.evenBet) || (droppedNumber % 2 !== 0 && betValues.oddBet)) {
+  
+    // Check even/odd bets
+    if (droppedNumber % 2 === 0 && betValues.evenBet) {
       winnings += (parseInt(betValues.evenBet) || 0) * 2;
+    }
+    if (droppedNumber % 2 !== 0 && betValues.oddBet) {
       winnings += (parseInt(betValues.oddBet) || 0) * 2;
     }
-    if ((droppedNumber <= 18 && betValues.oneToEighteenBet) || (droppedNumber >= 19 && betValues.nineteenToThirtySixBet)) {
+  
+    // Check 1 to 18 and 19 to 36 bets
+    if (droppedNumber <= 18 && betValues.oneToEighteenBet) {
       winnings += (parseInt(betValues.oneToEighteenBet) || 0) * 2;
+    }
+    if (droppedNumber >= 19 && betValues.nineteenToThirtySixBet) {
       winnings += (parseInt(betValues.nineteenToThirtySixBet) || 0) * 2;
     }
-    if ((droppedNumber >= 1 && droppedNumber <= 12 && betValues.first12Bet) ||
-      (droppedNumber >= 13 && droppedNumber <= 24 && betValues.second12Bet) ||
-      (droppedNumber >= 25 && droppedNumber <= 36 && betValues.third12Bet)) {
+  
+    // Check 1st 12, 2nd 12, and 3rd 12 bets
+    if (droppedNumber >= 1 && droppedNumber <= 12 && betValues.first12Bet) {
       winnings += (parseInt(betValues.first12Bet) || 0) * 3;
+    }
+    if (droppedNumber >= 13 && droppedNumber <= 24 && betValues.second12Bet) {
       winnings += (parseInt(betValues.second12Bet) || 0) * 3;
+    }
+    if (droppedNumber >= 25 && droppedNumber <= 36 && betValues.third12Bet) {
       winnings += (parseInt(betValues.third12Bet) || 0) * 3;
     }
-    if ((droppedNumber % 3 === 1 && betValues.first2To1Bet) ||
-      (droppedNumber % 3 === 2 && betValues.second2To1Bet) ||
-      (droppedNumber % 3 === 0 && betValues.third2To1Bet)) {
+  
+    // Check 2 to 1 bets
+    if (droppedNumber % 3 === 1 && betValues.first2To1Bet) {
       winnings += (parseInt(betValues.first2To1Bet) || 0) * 3;
+    }
+    if (droppedNumber % 3 === 2 && betValues.second2To1Bet) {
       winnings += (parseInt(betValues.second2To1Bet) || 0) * 3;
+    }
+    if (droppedNumber % 3 === 0 && betValues.third2To1Bet) {
       winnings += (parseInt(betValues.third2To1Bet) || 0) * 3;
     }
-    if (selectedColor && (selectedColor === 'red' || selectedColor === 'black')) {
-      const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-      const isRed = redNumbers.includes(droppedNumber);
-      if ((selectedColor === 'red' && isRed) || (selectedColor === 'black' && !isRed)) {
-        winnings += (parseInt(betValues.redBet) || 0) * 2;
-        winnings += (parseInt(betValues.blackBet) || 0) * 2;
-      }
+  
+    // Check color bets
+    const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+    const isRed = redNumbers.includes(droppedNumber);
+  
+    if (selectedColor === 'red' && isRed && betValues.redBet) {
+      winnings += (parseInt(betValues.redBet) || 0) * 2;
     }
-
+    if (selectedColor === 'black' && !isRed && betValues.blackBet) {
+      winnings += (parseInt(betValues.blackBet) || 0) * 2;
+    }
+  
     setResultMessage(winnings > 0 ? `Вы выиграли: ₽${winnings}` : 'Вы не выиграли');
   };
 
