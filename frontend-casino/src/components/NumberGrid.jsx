@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
 
-function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick, reset, setSelectedCoin }) {
+function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick, handleColorClick, handleSectorClick, reset, setSelectedCoin, totalBetAmount, setTotalBetAmount, newReset}) {
     const [selectedCoin, setLocalSelectedCoin] = useState(1);
     const [bets, setBets] = useState({});
-    const [totalBetAmount, setTotalBetAmount] = useState(0);
+    // const [totalBetAmount, setTotalBetAmount] = useState(0);
 
     const handleNumberBet = (number) => {
         handleNumberClick(number, selectedCoin);
@@ -12,6 +12,8 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
             ...prevBets,
             [number]: (prevBets[number] || 0) + selectedCoin,
         }));
+        console.log(selectedCoin)
+        setTotalBetAmount(totalBetAmount + selectedCoin);
     };
 
     const handleSectorButtonClick = (sector) => {
@@ -20,6 +22,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
             ...prevBets,
             [sector]: (prevBets[sector] || 0) + selectedCoin,
         }));
+        setTotalBetAmount(totalBetAmount + selectedCoin)
     };
 
     const handleColorButtonClick = (color) => {
@@ -28,6 +31,7 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
             ...prevBets,
             [color]: (prevBets[color] || 0) + selectedCoin,
         }));
+        setTotalBetAmount(totalBetAmount + selectedCoin)
     };
 
     const getButtonStyle = (number) => ({
@@ -63,19 +67,18 @@ function NumberGrid({ numbers, selectedNumbers, selectedColor, handleNumberClick
 
     const resetBets = () => {
         setBets({});
-        setTotalBetAmount(0);
     };
 
     useEffect(() => {
-        if (reset) {
+        if (newReset) {
             resetBets();
         }
-    }, [reset]);
+    }, [newReset]);
 
-    useEffect(() => {
-        const total = Object.values(bets).reduce((sum, bet) => sum + bet, 0);
-        setTotalBetAmount(total);
-    }, [bets]);
+    // useEffect(() => {
+    //     const total = Object.values(bets).reduce((sum, bet) => sum + bet, 0);
+    //     setTotalBetAmount(total);
+    // }, [bets]);
 
     return (
         <div style={styles.container}>

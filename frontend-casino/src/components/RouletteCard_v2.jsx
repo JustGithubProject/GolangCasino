@@ -44,6 +44,7 @@ function RouletteCardV2() {
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
 
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {

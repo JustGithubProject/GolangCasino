@@ -43,6 +43,8 @@ function RouletteCardV3() {
   const [showBetForm, setShowBetForm] = useState(false);
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
+  const [totalBetAmount, setTotalBetAmount] = useState(0);
+  const [newReset, setNewReset] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -265,6 +267,8 @@ function RouletteCardV3() {
     });
     setSpinResult(null);
     setResultMessage(null);
+    setTotalBetAmount(0);
+    setNewReset(true);
   };
 
   const toggleBetForm = () => {
@@ -297,6 +301,9 @@ function RouletteCardV3() {
               handleSectorClick={handleSectorClick}
               reset={handleReset}
               setSelectedCoin={setSelectedCoin}
+              totalBetAmount={totalBetAmount}
+              setTotalBetAmount={setTotalBetAmount}
+              newReset={newReset}
             />
           </div>
           {/* {showBetForm && (
