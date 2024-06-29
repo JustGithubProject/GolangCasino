@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import RouletteCard from './components/RouletteCard';
-import RouletteCardV2 from './components/RouletteCard_v2'
-import RouletteCardV3 from './components/RouletteCard_v3'
+import RouletteCard from './components/rooms/RouletteCard';
+import RouletteCardV2 from './components/rooms/RouletteCard_v2'
+import RouletteCardV3 from './components/rooms/RouletteCard_v3'
 import Login from './components/auth_components/Login'
 import Register from './components/auth_components/Register'
 import Home from './components/Home'

@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Typography, Spin, message } from 'antd';
-import BetForm from './BetForm';
-import NumberGrid from './NumberGrid';
+import BetForm from '../BetForm';
+import NumberGrid from '../NumberGrid';
 import { CSSTransition } from 'react-transition-group';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import * as jwtDecodeModule from 'jwt-decode';
-import { fetchWithAuth } from './auth_components/fetchWrapper';
+import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import './styles.css';
-import Header from './Header';  // Import the Header component
+import Header from '../Header';  // Import the Header component
 import backgroundImage from '../images/casinoImage_2.png';
 
-import BalanceDisplay from './BalanceDisplay';  
-import ResultOverlay from './ResultOverlay'; 
-import BetButton from './BetButton';  
-import BetFormToggle from './BetFormToggle'; 
+import BalanceDisplay from '../BalanceDisplay';  
+import ResultOverlay from '../ResultOverlay'; 
+import BetButton from '../BetButton';  
+import BetFormToggle from '../BetFormToggle'; 
 
 const { Text } = Typography;
 
-function RouletteCardV3() {
+function RouletteCardV2() {
   const [selectedNumbers, setSelectedNumbers] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [betValues, setBetValues] = useState({
@@ -43,9 +43,8 @@ function RouletteCardV3() {
   const [showBetForm, setShowBetForm] = useState(false);
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
-  const [totalBetAmount, setTotalBetAmount] = useState(0);
-  const [newReset, setNewReset] = useState(false);
 
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -73,14 +72,12 @@ function RouletteCardV3() {
     setBetValues((prevValues) => ({
       ...prevValues,
       betAmount: (parseInt(prevValues.betAmount) || 0) + amount,
-      [`betAmount_${number}`]: (parseInt(prevValues[`betAmount_${number}`]) || 0) + amount,
     }));
     const index = selectedNumbers.indexOf(number);
     if (index === -1) {
       setSelectedNumbers([...selectedNumbers, number]);
     }
   };
-  
 
   const handleColorClick = (color) => {
     setSelectedColor(color);
@@ -124,20 +121,20 @@ function RouletteCardV3() {
 
   const handleSubmit = async () => {
     const {
-      evenBet, oddBet, redBet, blackBet, first12Bet, second12Bet, third12Bet,
-      oneToEighteenBet, nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet,
+      betAmount, evenBet, oddBet, redBet, blackBet,
+      first12Bet, second12Bet, third12Bet, oneToEighteenBet,
+      nineteenToThirtySixBet, first2To1Bet, second2To1Bet, third2To1Bet,
     } = betValues;
-  
-    if (!evenBet && !oddBet && !redBet && !blackBet && !first12Bet &&
-      !second12Bet && !third12Bet && selectedNumbers.length === 0 &&
-      !oneToEighteenBet && !nineteenToThirtySixBet &&
+
+    if (!betAmount && !evenBet && !oddBet && !redBet && !blackBet && !first12Bet &&
+      !second12Bet && !third12Bet && !oneToEighteenBet && !nineteenToThirtySixBet &&
       !first2To1Bet && !second2To1Bet && !third2To1Bet) {
       message.error('Please place at least one bet.');
       return;
     }
-  
+
     const params = new URLSearchParams();
-  
+
     if (evenBet) params.append('even', evenBet);
     if (oddBet) params.append('odd', oddBet);
     if (redBet) params.append('red', redBet);
@@ -145,30 +142,29 @@ function RouletteCardV3() {
     if (first12Bet) params.append('1st12', first12Bet);
     if (second12Bet) params.append('2nd12', second12Bet);
     if (third12Bet) params.append('3rd12', third12Bet);
-    selectedNumbers.forEach((number) => {
-      params.append(`num_${number}`, betValues[`betAmount_${number}`] || 1);
-    });
+    if (betAmount) params.append('number', betAmount);
+    if (selectedNumbers.length > 0) params.append('num', selectedNumbers.join(',')); // Теперь надо будет num_1, betNum1
     if (oneToEighteenBet) params.append('1To18', oneToEighteenBet);
     if (nineteenToThirtySixBet) params.append('19To36', nineteenToThirtySixBet);
     if (first2To1Bet) params.append('First2To1', first2To1Bet);
     if (second2To1Bet) params.append('Second2To1', second2To1Bet);
     if (third2To1Bet) params.append('Third2To1', third2To1Bet);
-  
-    const url = `http://localhost:8081/spin-roulette-v3/?${params.toString()}`;
-  
+
+    const url = `http://localhost:8081/spin-roulette-v2/?${params.toString()}`;
+
     console.log('URL:', url);
-  
+
     try {
       setIsSpinning(true);
       const response = await fetchWithAuth(url, {
         method: 'POST',
         body: JSON.stringify({}),
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const data = await response.json();
       console.log(data);
       setSpinResult(data.dropped_number);
@@ -184,66 +180,43 @@ function RouletteCardV3() {
       setIsSpinning(false);
     }
   };
-  
-  
 
   const calculateWinnings = (droppedNumber) => {
     let winnings = 0;
-  
-    // Check individual number bets
     if (selectedNumbers.includes(droppedNumber)) {
-      winnings += (parseInt(betValues[`betAmount_${droppedNumber}`]) || 0) * 36;
+      winnings += (parseInt(betValues.betAmount) || 0) * 36;
     }
-  
-    // Check even/odd bets
-    if (droppedNumber % 2 === 0 && betValues.evenBet) {
+    if ((droppedNumber % 2 === 0 && betValues.evenBet) || (droppedNumber % 2 !== 0 && betValues.oddBet)) {
       winnings += (parseInt(betValues.evenBet) || 0) * 2;
-    }
-    if (droppedNumber % 2 !== 0 && betValues.oddBet) {
       winnings += (parseInt(betValues.oddBet) || 0) * 2;
     }
-  
-    // Check 1 to 18 and 19 to 36 bets
-    if (droppedNumber <= 18 && betValues.oneToEighteenBet) {
+    if ((droppedNumber <= 18 && betValues.oneToEighteenBet) || (droppedNumber >= 19 && betValues.nineteenToThirtySixBet)) {
       winnings += (parseInt(betValues.oneToEighteenBet) || 0) * 2;
-    }
-    if (droppedNumber >= 19 && betValues.nineteenToThirtySixBet) {
       winnings += (parseInt(betValues.nineteenToThirtySixBet) || 0) * 2;
     }
-  
-    // Check 1st 12, 2nd 12, and 3rd 12 bets
-    if (droppedNumber >= 1 && droppedNumber <= 12 && betValues.first12Bet) {
+    if ((droppedNumber >= 1 && droppedNumber <= 12 && betValues.first12Bet) ||
+      (droppedNumber >= 13 && droppedNumber <= 24 && betValues.second12Bet) ||
+      (droppedNumber >= 25 && droppedNumber <= 36 && betValues.third12Bet)) {
       winnings += (parseInt(betValues.first12Bet) || 0) * 3;
-    }
-    if (droppedNumber >= 13 && droppedNumber <= 24 && betValues.second12Bet) {
       winnings += (parseInt(betValues.second12Bet) || 0) * 3;
-    }
-    if (droppedNumber >= 25 && droppedNumber <= 36 && betValues.third12Bet) {
       winnings += (parseInt(betValues.third12Bet) || 0) * 3;
     }
-  
-    // Check 2 to 1 bets
-    if (droppedNumber % 3 === 1 && betValues.first2To1Bet) {
+    if ((droppedNumber % 3 === 1 && betValues.first2To1Bet) ||
+      (droppedNumber % 3 === 2 && betValues.second2To1Bet) ||
+      (droppedNumber % 3 === 0 && betValues.third2To1Bet)) {
       winnings += (parseInt(betValues.first2To1Bet) || 0) * 3;
-    }
-    if (droppedNumber % 3 === 2 && betValues.second2To1Bet) {
       winnings += (parseInt(betValues.second2To1Bet) || 0) * 3;
-    }
-    if (droppedNumber % 3 === 0 && betValues.third2To1Bet) {
       winnings += (parseInt(betValues.third2To1Bet) || 0) * 3;
     }
-  
-    // Check color bets
-    const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-    const isRed = redNumbers.includes(droppedNumber);
-  
-    if (selectedColor === 'red' && isRed && betValues.redBet) {
-      winnings += (parseInt(betValues.redBet) || 0) * 2;
+    if (selectedColor && (selectedColor === 'red' || selectedColor === 'black')) {
+      const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+      const isRed = redNumbers.includes(droppedNumber);
+      if ((selectedColor === 'red' && isRed) || (selectedColor === 'black' && !isRed)) {
+        winnings += (parseInt(betValues.redBet) || 0) * 2;
+        winnings += (parseInt(betValues.blackBet) || 0) * 2;
+      }
     }
-    if (selectedColor === 'black' && !isRed && betValues.blackBet) {
-      winnings += (parseInt(betValues.blackBet) || 0) * 2;
-    }
-  
+
     setResultMessage(winnings > 0 ? `Вы выиграли: ₽${winnings}` : 'Вы не выиграли');
   };
 
@@ -267,8 +240,6 @@ function RouletteCardV3() {
     });
     setSpinResult(null);
     setResultMessage(null);
-    setTotalBetAmount(0);
-    setNewReset(true);
   };
 
   const toggleBetForm = () => {
@@ -301,18 +272,14 @@ function RouletteCardV3() {
               handleSectorClick={handleSectorClick}
               reset={handleReset}
               setSelectedCoin={setSelectedCoin}
-              totalBetAmount={totalBetAmount}
-              setTotalBetAmount={setTotalBetAmount}
-              newReset={newReset}
-              setNewReset={setNewReset}
             />
           </div>
-          {/* {showBetForm && (
+          {showBetForm && (
             <div style={styles.betFormContainer}>
-              <BetFormV3 betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
+              <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
             </div>
           )}
-          <BetFormToggle showBetForm={showBetForm} toggleBetForm={toggleBetForm} /> */}
+          <BetFormToggle showBetForm={showBetForm} toggleBetForm={toggleBetForm} />
           <BetButton isSpinning={isSpinning} handleSubmit={handleSubmit} handleReset={handleReset} />
         </Card>
       </div>
@@ -329,7 +296,7 @@ const styles = {
     background: `url(${backgroundImage}) no-repeat center center fixed`,
     backgroundSize: 'cover',
     padding: '20px',
-    paddingTop: '150px',
+    paddingTop: '150px', 
   },
   content: {
     display: 'flex',
@@ -344,20 +311,19 @@ const styles = {
     padding: '32px',
     borderRadius: '24px',
     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
-    marginBottom: '20px', // Add margin for spacing between cards
   },
   header: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '15px 20px', // Increase padding for a more balanced look
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Slightly darker for better contrast
+    padding: '10px 20px',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderRadius: '24px',
     marginBottom: '20px',
   },
   headerText: {
-    fontSize: '22px', // Slightly larger font for better readability
+    fontSize: '20px',
     fontWeight: 'bold',
     color: '#fff',
   },
@@ -429,7 +395,6 @@ const styles = {
     borderRadius: '24px',
     padding: '32px',
     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
-    marginBottom: '20px', // Add margin for spacing between form and other elements
   },
   closeButton: {
     position: 'absolute',
@@ -450,7 +415,6 @@ const styles = {
     color: 'white',
     transition: 'background 0.3s ease, transform 0.3s ease',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-    padding: '10px 20px', // Added padding for a more defined button size
   },
   submitButtonContainer: {
     display: 'flex',
@@ -484,5 +448,4 @@ const styles = {
   },
 };
 
-
-export default RouletteCardV3;
+export default RouletteCardV2;

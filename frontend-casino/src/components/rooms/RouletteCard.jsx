@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Typography, Spin, message } from 'antd';
-import BetForm from './BetForm';
-import NumberGrid from './NumberGrid';
+import BetForm from '../BetForm';
+import NumberGrid from '../NumberGrid';
 import { CSSTransition } from 'react-transition-group';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import * as jwtDecodeModule from 'jwt-decode';
-import { fetchWithAuth } from './auth_components/fetchWrapper';
+import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import './styles.css';
-import Header from './Header';  // Import the Header component
+import Header from '../Header';  // Import the Header component
 import backgroundImage from '../images/casinoImage_2.png';
 
-import BalanceDisplay from './BalanceDisplay';  
-import ResultOverlay from './ResultOverlay'; 
-import BetButton from './BetButton';  
-import BetFormToggle from './BetFormToggle'; 
+import BalanceDisplay from '../BalanceDisplay';  
+import ResultOverlay from '../ResultOverlay'; 
+import BetButton from '../BetButton';  
+import BetFormToggle from '../BetFormToggle'; 
 
 const { Text } = Typography;
 
-function RouletteCardV2() {
+function RouletteCard() {
   const [selectedNumbers, setSelectedNumbers] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [betValues, setBetValues] = useState({
@@ -44,7 +44,6 @@ function RouletteCardV2() {
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
 
-  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -143,14 +142,14 @@ function RouletteCardV2() {
     if (second12Bet) params.append('2nd12', second12Bet);
     if (third12Bet) params.append('3rd12', third12Bet);
     if (betAmount) params.append('number', betAmount);
-    if (selectedNumbers.length > 0) params.append('num', selectedNumbers.join(',')); // Теперь надо будет num_1, betNum1
+    if (selectedNumbers.length > 0) params.append('num', selectedNumbers.join(','));
     if (oneToEighteenBet) params.append('1To18', oneToEighteenBet);
     if (nineteenToThirtySixBet) params.append('19To36', nineteenToThirtySixBet);
     if (first2To1Bet) params.append('First2To1', first2To1Bet);
     if (second2To1Bet) params.append('Second2To1', second2To1Bet);
     if (third2To1Bet) params.append('Third2To1', third2To1Bet);
 
-    const url = `http://localhost:8081/spin-roulette-v2/?${params.toString()}`;
+    const url = `http://localhost:8081/spin-roulette-v1/?${params.toString()}`;
 
     console.log('URL:', url);
 
@@ -274,12 +273,12 @@ function RouletteCardV2() {
               setSelectedCoin={setSelectedCoin}
             />
           </div>
-          {showBetForm && (
+          {/* {showBetForm && (
             <div style={styles.betFormContainer}>
               <BetForm betValues={betValues} handleBetChange={handleBetChange} reset={handleReset} />
             </div>
           )}
-          <BetFormToggle showBetForm={showBetForm} toggleBetForm={toggleBetForm} />
+          <BetFormToggle showBetForm={showBetForm} toggleBetForm={toggleBetForm} /> */}
           <BetButton isSpinning={isSpinning} handleSubmit={handleSubmit} handleReset={handleReset} />
         </Card>
       </div>
@@ -448,4 +447,4 @@ const styles = {
   },
 };
 
-export default RouletteCardV2;
+export default RouletteCard;
