@@ -304,6 +304,7 @@ function RouletteCardV3() {
               totalBetAmount={totalBetAmount}
               setTotalBetAmount={setTotalBetAmount}
               newReset={newReset}
+              setNewReset={setNewReset}
             />
           </div>
           {/* {showBetForm && (
