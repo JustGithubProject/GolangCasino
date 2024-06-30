@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
+    "github.com/JustGithubProject/GolangCasino/backend-casino/internal/services/slots"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +19,6 @@ func UnfairSpinRouletteHandler(c *gin.Context){
 func VeryBadSpinRouletteHandler(c *gin.Context){
     services.HandleVeryBadGameRequest(c)
 }
-
 
 func CreateGameHandler(c *gin.Context) {
     services.HandleCreateGame(c)
@@ -37,4 +37,9 @@ func UpdateGameHandler(c *gin.Context) {
 
 func DeleteGameHandler(c *gin.Context) {
     services.HandleDeleteGame(c)
+}
+
+// Slots
+func SweetBonanzaSlotHandler(c *gin.Context){
+    slots.
 }
