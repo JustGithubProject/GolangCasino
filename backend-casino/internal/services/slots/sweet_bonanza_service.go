@@ -29,7 +29,7 @@ func CreatePlayingField() [][]int{
 }
 
 
-func CheckBananasPlayed(playingField [][]int, symbol int) float32{
+func CheckBananasPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -50,7 +50,7 @@ func CheckBananasPlayed(playingField [][]int, symbol int) float32{
 	return 0.0
 }
 
-func CheckGrapesPlayed(playingField [][]int, symbol int) float32{
+func CheckGrapesPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -72,7 +72,7 @@ func CheckGrapesPlayed(playingField [][]int, symbol int) float32{
 }
 
 
-func CheckWatermelonPlayed(playingField [][]int, symbol int) float32{
+func CheckWatermelonPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -95,7 +95,7 @@ func CheckWatermelonPlayed(playingField [][]int, symbol int) float32{
 
 
 
-func CheckPlumPlayed(playingField [][]int, symbol int) float32{
+func CheckPlumPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -116,7 +116,7 @@ func CheckPlumPlayed(playingField [][]int, symbol int) float32{
 	return 0.0
 }
 
-func CheckApplePlayed(playingField [][]int, symbol int) float32{
+func CheckApplePlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -137,7 +137,7 @@ func CheckApplePlayed(playingField [][]int, symbol int) float32{
 	return 0.0
 }
 
-func CheckBlueCandyPlayed(playingField [][]int, symbol int) float32{
+func CheckBlueCandyPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -158,7 +158,7 @@ func CheckBlueCandyPlayed(playingField [][]int, symbol int) float32{
 	return 0.0
 }
 
-func CheckGreenCandyPlayed(playingField [][]int, symbol int) float32{
+func CheckGreenCandyPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -180,7 +180,7 @@ func CheckGreenCandyPlayed(playingField [][]int, symbol int) float32{
 }
 
 
-func CheckPurpleCandyPlayed(playingField [][]int, symbol int) float32{
+func CheckPurpleCandyPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -202,7 +202,7 @@ func CheckPurpleCandyPlayed(playingField [][]int, symbol int) float32{
 }
 
 
-func CheckRedCandyPlayed(playingField [][]int, symbol int) float32{
+func CheckRedCandyPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -223,7 +223,7 @@ func CheckRedCandyPlayed(playingField [][]int, symbol int) float32{
 	return 0.0
 }
 
-func CheckScatterPlayed(playingField [][]int, symbol int) float32{
+func CheckScatterPlayed(playingField [][]int, symbol int) float64{
 	countAppearance := 0
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -246,8 +246,51 @@ func CheckScatterPlayed(playingField [][]int, symbol int) float32{
 
 
 
-func CalculatePayments(playingField [][]int){
-	// Checking if the bananas played
-	payoutX := CheckBananasPlayed(playingField, 1)
-	// ...
+func CalculatePayments(playingField [][]int, bet float64, balance float64) float64{
+	// Checking if symbols played
+	payoutBananasX := CheckBananasPlayed(playingField, 1)
+	payoutGrapesX := CheckGrapesPlayed(playingField, 2)
+	payoutWatermelonX := CheckWatermelonPlayed(playingField, 3)
+	payoutPlumX := CheckPlumPlayed(playingField, 4)
+	payoutAppleX := CheckApplePlayed(playingField, 5)
+	payoutBlueCandyX := CheckBlueCandyPlayed(playingField, 6)
+	payoutGreenCandyX := CheckGreenCandyPlayed(playingField, 7)
+	payoutPurpleCandyX := CheckPurpleCandyPlayed(playingField, 8)
+	payoutRedCandyX := CheckRedCandyPlayed(playingField, 9)
+	payoutScatterX := CheckScatterPlayed(playingField, 10)
+	
+
+	// New balance = Initial balance − Bet + Win
+	if payoutBananasX > 0.0{
+		balance = balance - bet + (bet * payoutBananasX) 
+	}
+	if payoutGrapesX > 0.0{
+		balance = balance - bet + (bet * payoutGrapesX)
+	}
+	if payoutWatermelonX > 0.0{
+		balance = balance - bet + (bet * payoutWatermelonX)
+	}
+	if payoutPlumX > 0.0{
+		balance = balance - bet + (bet * payoutPlumX)
+	}
+	if payoutAppleX > 0.0 {
+		balance = balance - bet + (bet * payoutAppleX)
+	}
+	if payoutBlueCandyX > 0.0{
+		balance = balance - bet + (bet * payoutBlueCandyX)
+	}
+	if payoutGreenCandyX > 0.0{
+		balance = balance - bet + (bet * payoutGreenCandyX)
+	}
+	if payoutPurpleCandyX > 0.0{
+		balance = balance - bet + (bet * payoutPurpleCandyX)
+	}
+	if payoutRedCandyX > 0.0{
+		balance = balance - bet + (bet * payoutRedCandyX)
+	}
+	if payoutScatterX > 0.0{
+		balance = balance - bet + (bet * payoutScatterX)
+	}
+	return balance
+
 }
