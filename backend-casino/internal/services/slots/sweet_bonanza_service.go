@@ -12,7 +12,15 @@ type GameSymbols struct {
 	PurpleCandy int // 8
 	RedCandy int // 9
 	Scatter int // 10
-	Bonbonnieres int // 11
+
+	// It will appear in the free spin
+	Bomb2X int // 11
+	Bomb3X int // 12
+	Bomb5X int // 13
+	Bomb10X int // 14
+	Bomb25X int // 15
+	Bomb50X int // 16
+	Bomb100X int // 17
 }
 
 
@@ -27,6 +35,8 @@ func CreatePlayingField() [][]int{
     }
 	return playingField
 }
+
+
 
 
 func CheckBananasPlayed(playingField [][]int, symbol int) float64{
@@ -245,6 +255,92 @@ func CheckScatterPlayed(playingField [][]int, symbol int) float64{
 }
 
 
+func CheckBomb2XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 2.0
+}
+
+
+func CheckBomb3XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 3.0
+}
+
+func CheckBomb5XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 5.0
+}
+
+
+func CheckBomb10XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 10.0
+}
+
+func CheckBomb25XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 25.0
+}
+
+func CheckBomb50XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 50.0
+}
+
+func CheckBomb100XPlayed(playingField [][]int, symbol int) float64{
+	countAppearance := 0
+	for i := 0; i < 5; i++{
+		for j := 0; j < 6; j++{
+			if playingField[i][j] == symbol{
+				countAppearance += 1
+			}
+		}
+	}
+	return float64(countAppearance) * 100.0
+}
+
 
 func CalculatePayments(playingField [][]int, bet float64, balance float64) float64{
 	// Checking if symbols played
@@ -294,3 +390,8 @@ func CalculatePayments(playingField [][]int, bet float64, balance float64) float
 	return balance
 
 }
+
+
+func BonusMode(playingField [][]int, bet float64){
+
+} 
