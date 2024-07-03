@@ -342,7 +342,7 @@ func CheckBomb100XPlayed(playingField [][]int, symbol int) float64{
 }
 
 
-func CalculatePayments(playingField [][]int, bet float64, balance float64) float64{
+func CalculatePaymentsNormalMode(playingField [][]int, bet float64, balance float64) float64{
 	// Checking if symbols played
 	payoutBananasX := CheckBananasPlayed(playingField, 1)
 	payoutGrapesX := CheckGrapesPlayed(playingField, 2)
@@ -355,43 +355,128 @@ func CalculatePayments(playingField [][]int, bet float64, balance float64) float
 	payoutRedCandyX := CheckRedCandyPlayed(playingField, 9)
 	payoutScatterX := CheckScatterPlayed(playingField, 10)
 	
+    // Calculate total payout
+    totalPayout := 0.0
+    if payoutBananasX > 0.0 {
+        totalPayout += bet * payoutBananasX
+    }
+    if payoutGrapesX > 0.0 {
+        totalPayout += bet * payoutGrapesX
+    }
+    if payoutWatermelonX > 0.0 {
+        totalPayout += bet * payoutWatermelonX
+    }
+    if payoutPlumX > 0.0 {
+        totalPayout += bet * payoutPlumX
+    }
+    if payoutAppleX > 0.0 {
+        totalPayout += bet * payoutAppleX
+    }
+    if payoutBlueCandyX > 0.0 {
+        totalPayout += bet * payoutBlueCandyX
+    }
+    if payoutGreenCandyX > 0.0 {
+        totalPayout += bet * payoutGreenCandyX
+    }
+    if payoutPurpleCandyX > 0.0 {
+        totalPayout += bet * payoutPurpleCandyX
+    }
+    if payoutRedCandyX > 0.0 {
+        totalPayout += bet * payoutRedCandyX
+    }
+    if payoutScatterX > 0.0 {
+        totalPayout += bet * payoutScatterX
+    }
+
 
 	// New balance = Initial balance − Bet + Win
-	if payoutBananasX > 0.0{
-		balance = balance - bet + (bet * payoutBananasX) 
-	}
-	if payoutGrapesX > 0.0{
-		balance = balance - bet + (bet * payoutGrapesX)
-	}
-	if payoutWatermelonX > 0.0{
-		balance = balance - bet + (bet * payoutWatermelonX)
-	}
-	if payoutPlumX > 0.0{
-		balance = balance - bet + (bet * payoutPlumX)
-	}
-	if payoutAppleX > 0.0 {
-		balance = balance - bet + (bet * payoutAppleX)
-	}
-	if payoutBlueCandyX > 0.0{
-		balance = balance - bet + (bet * payoutBlueCandyX)
-	}
-	if payoutGreenCandyX > 0.0{
-		balance = balance - bet + (bet * payoutGreenCandyX)
-	}
-	if payoutPurpleCandyX > 0.0{
-		balance = balance - bet + (bet * payoutPurpleCandyX)
-	}
-	if payoutRedCandyX > 0.0{
-		balance = balance - bet + (bet * payoutRedCandyX)
-	}
-	if payoutScatterX > 0.0{
-		balance = balance - bet + (bet * payoutScatterX)
-	}
+	balance = balance - bet + totalPayout
+
 	return balance
 
 }
 
 
-func BonusMode(playingField [][]int, bet float64){
+func CalculatePaymentsBonusMode(playingField [][]int, bet float64, balance float64) float64{
+	payoutBananasX := CheckBananasPlayed(playingField, 1)
+	payoutGrapesX := CheckGrapesPlayed(playingField, 2)
+	payoutWatermelonX := CheckWatermelonPlayed(playingField, 3)
+	payoutPlumX := CheckPlumPlayed(playingField, 4)
+	payoutAppleX := CheckApplePlayed(playingField, 5)
+	payoutBlueCandyX := CheckBlueCandyPlayed(playingField, 6)
+	payoutGreenCandyX := CheckGreenCandyPlayed(playingField, 7)
+	payoutPurpleCandyX := CheckPurpleCandyPlayed(playingField, 8)
+	payoutRedCandyX := CheckRedCandyPlayed(playingField, 9)
+	payoutScatterX := CheckScatterPlayed(playingField, 10)
+	payoutBomb2X := CheckBomb2XPlayed(playingField, 11)
+	payoutBomb3X := CheckBomb3XPlayed(playingField, 12)
+	payoutBomb5X := CheckBomb5XPlayed(playingField, 13)
+	payoutBomb10X := CheckBomb10XPlayed(playingField, 14)
+	payoutBomb25X := CheckBomb25XPlayed(playingField, 15)
+	payoutBomb50X := CheckBomb50XPlayed(playingField, 16)
+	payoutBomb100X := CheckBomb100XPlayed(playingField, 17)
 
+
+	totalPayout := 0.0
+    if payoutBananasX > 0.0 {
+        totalPayout += bet * payoutBananasX
+    }
+    if payoutGrapesX > 0.0 {
+        totalPayout += bet * payoutGrapesX
+    }
+    if payoutWatermelonX > 0.0 {
+        totalPayout += bet * payoutWatermelonX
+    }
+    if payoutPlumX > 0.0 {
+        totalPayout += bet * payoutPlumX
+    }
+    if payoutAppleX > 0.0 {
+        totalPayout += bet * payoutAppleX
+    }
+    if payoutBlueCandyX > 0.0 {
+        totalPayout += bet * payoutBlueCandyX
+    }
+    if payoutGreenCandyX > 0.0 {
+        totalPayout += bet * payoutGreenCandyX
+    }
+    if payoutPurpleCandyX > 0.0 {
+        totalPayout += bet * payoutPurpleCandyX
+    }
+    if payoutRedCandyX > 0.0 {
+        totalPayout += bet * payoutRedCandyX
+    }
+    if payoutScatterX > 0.0 {
+        totalPayout += bet * payoutScatterX
+    }
+
+
+	totalBomb := 0.0
+
+	if payoutBomb2X > 0.0{
+		totalBomb += payoutBomb2X
+	}
+	if payoutBomb3X > 0.0{
+		totalBomb += payoutBomb3X
+	}
+	if payoutBomb5X > 0.0{
+		totalBomb += payoutBomb5X
+	}
+	if payoutBomb10X > 0.0{
+		totalBomb += payoutBomb10X
+	}
+	if payoutBomb25X > 0.0{
+		totalBomb += payoutBomb25X
+	}
+	if payoutBomb50X > 0.0{
+		totalBomb += payoutBomb50X
+	}
+	if payoutBomb100X > 0.0{
+		totalBomb += payoutBomb100X
+	}
+
+	finalPayout := totalPayout * totalBomb
+
+	// New balance = Initial balance + Total Win
+	balance = balance + finalPayout
+	return balance
 } 
