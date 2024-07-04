@@ -1,5 +1,10 @@
 package slots
 
+import (
+	"math/rand"
+	"time"
+)
+
 // Each game element will be an integer
 type GameSymbols struct {
 	Banana int // 1
@@ -480,3 +485,57 @@ func CalculatePaymentsBonusMode(playingField [][]int, bet float64, balance float
 	balance = balance + finalPayout
 	return balance
 } 
+
+func WeightedRandomChoice(values []int, weights []float64) int {
+    if len(values) != len(weights) {
+        panic("Values and weights must be the same length")
+    }
+
+    // Weight to invert
+    invWeights := make([]float64, len(weights))
+    for i, w := range weights {
+        invWeights[i] = 1.0 / w
+    }
+
+    // Make a list of cumulative sums
+    cumSum := make([]float64, len(invWeights))
+    cumSum[0] = invWeights[0]
+    for i := 1; i < len(invWeights); i++ {
+        cumSum[i] = cumSum[i-1] + invWeights[i]
+    }
+
+    // Generate a random number
+    rand.Seed(time.Now().UnixNano())
+    r := rand.Float64() * cumSum[len(cumSum)-1]
+
+    // Находим элемент, соответствующий случайному числу
+    for i, cs := range cumSum {
+        if r < cs {
+            return values[i]
+        }
+    }
+
+    return values[len(values)-1] 
+}
+
+func GenerateRandomNumberNormalMode() int{
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+    weights := []float64{10.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 450.0, 500.0}
+	randomNumber := WeightedRandomChoice(values, weights)
+
+}
+
+func GenerateRandomNumberBonusMode(){
+	rand.Seed(time.Now().UnixNano())
+
+}
+
+
+func GeneratePlayingField(){
+
+}
+
+
+func SweetBonanzaSpin(){
+
+}
