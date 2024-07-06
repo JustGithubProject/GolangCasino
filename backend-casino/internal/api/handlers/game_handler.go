@@ -41,5 +41,5 @@ func DeleteGameHandler(c *gin.Context) {
 
 // Slots
 func SweetBonanzaSlotHandler(c *gin.Context){
-    slots.
+    slots.SweetBonanzaHandle(c)
 }
