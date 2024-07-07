@@ -35,8 +35,8 @@ func SweetBonanzaHandle(c *gin.Context) {
 	convertedSpinBet, _ := strconv.ParseFloat(spinBetStr, 64)
 
 	// we do not take first var because it's not bonus mode
-	_, currentBalance := SweetBonanzaSpin(false, convertedSpinBet, user.Balance)
-
+	currentPlayingField, currentBalance := SweetBonanzaSpin(false, convertedSpinBet, user.Balance)
+    fmt.Println(currentPlayingField)
 	user.Balance = currentBalance
     err = user_repository.UpdateBalanceUser(user)
     if err != nil {

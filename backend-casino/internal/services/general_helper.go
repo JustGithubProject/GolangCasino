@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -57,27 +56,22 @@ func ValidateToken(c *gin.Context) (string, error) {
     }
     
     tokenString := tokenParts[1]
-    fmt.Println("Dropped 55")
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         return []byte("secret-key"), nil
     })
-    fmt.Println("Dropped 60")
     // Тут дропается код
     if err != nil || !token.Valid {
         return "", errors.New("Invalid token")
     }
-    fmt.Println("Dropped 64")
     claims, ok := token.Claims.(jwt.MapClaims)
     if !ok {
         return "", errors.New("Invalid token claims")
     }
-    fmt.Println("Dropped 69")
+
     username, ok := claims["username"].(string)
-    fmt.Println(username)
     if !ok {
         return "", errors.New("Invalid user ID in token")
     }
-    fmt.Println("Dropped 74")
 
     return username, nil
 }

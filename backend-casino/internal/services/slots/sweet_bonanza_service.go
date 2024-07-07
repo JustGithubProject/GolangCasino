@@ -522,15 +522,15 @@ func GenerateRandomNumberNormalMode() int{
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
     weights := []float64{
 		10.0,
+		15.0,
+		20.0,
+		22.0,
+		23.0,
+		24.0,
+		30.0,
 		50.0,
-		100.0,
-		150.0,
+		50.0,
 		200.0,
-		250.0,
-		300.0,
-		350.0,
-		450.0,
-		500.0,
 	}
 	randomNumber := WeightedRandomChoice(values, weights)
 	return randomNumber
@@ -554,8 +554,8 @@ func GenerateRandomNumberBonusMode() int{
 		650.0,
 		700.0,
 		750.0,
-		800.0,
-		850.0,
+		10000.0,
+		100000.0,
 	}
 	randomNumber := WeightedRandomChoice(values, weights)
 	return randomNumber
@@ -563,6 +563,7 @@ func GenerateRandomNumberBonusMode() int{
 
 
 func GeneratePlayingFieldNormalMode() [][]int{
+	rand.Seed(time.Now().UnixNano())
 	playingField := CreatePlayingField()
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -573,6 +574,7 @@ func GeneratePlayingFieldNormalMode() [][]int{
 }
 
 func GeneratePlayingFieldBonusMode() [][]int{
+	rand.Seed(time.Now().UnixNano())
 	playingField := CreatePlayingField()
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
