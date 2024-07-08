@@ -505,7 +505,6 @@ func WeightedRandomChoice(values []int, weights []float64) int {
     }
 
     // Generate a random number
-    rand.Seed(time.Now().UnixNano())
     r := rand.Float64() * cumSum[len(cumSum)-1]
 
     // Находим элемент, соответствующий случайному числу
@@ -518,44 +517,26 @@ func WeightedRandomChoice(values []int, weights []float64) int {
     return values[len(values)-1] 
 }
 
-func GenerateRandomNumberNormalMode() int{
+func GenerateRandomNumberNormalMode() int {
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-    weights := []float64{
-		10.0,
-		15.0,
-		20.0,
-		22.0,
-		23.0,
-		24.0,
-		30.0,
-		50.0,
-		50.0,
-		200.0,
+	weights := []float64{
+		5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 350.0, 400.0, 450.0,
 	}
 	randomNumber := WeightedRandomChoice(values, weights)
 	return randomNumber
 }
 
-func GenerateRandomNumberBonusMode() int{
-	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 16, 17}
-    weights := []float64{
-		10.0,
-		50.0,
-		100.0,
-		150.0,
-		200.0,
-		250.0,
-		300.0,
-		350.0,
-		450.0,
-		500.0,
-		550.0,
-		600.0,
-		650.0,
-		700.0,
-		750.0,
-		10000.0,
-		100000.0,
+func init() {
+	rand.Seed(time.Now().UnixNano()) 
+}
+
+
+
+func GenerateRandomNumberBonusMode() int {
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+	weights := []float64{
+		10.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 450.0, 500.0,
+		550.0, 600.0, 650.0, 700.0, 750.0, 10000.0, 100000.0,
 	}
 	randomNumber := WeightedRandomChoice(values, weights)
 	return randomNumber
@@ -563,7 +544,6 @@ func GenerateRandomNumberBonusMode() int{
 
 
 func GeneratePlayingFieldNormalMode() [][]int{
-	rand.Seed(time.Now().UnixNano())
 	playingField := CreatePlayingField()
 	for i := 0; i < 5; i++{
 		for j := 0; j < 6; j++{
@@ -573,11 +553,10 @@ func GeneratePlayingFieldNormalMode() [][]int{
 	return playingField
 }
 
-func GeneratePlayingFieldBonusMode() [][]int{
-	rand.Seed(time.Now().UnixNano())
+func GeneratePlayingFieldBonusMode() [][]int {
 	playingField := CreatePlayingField()
-	for i := 0; i < 5; i++{
-		for j := 0; j < 6; j++{
+	for i := 0; i < 5; i++ {
+		for j := 0; j < 6; j++ {
 			playingField[i][j] = GenerateRandomNumberBonusMode()
 		}
 	}
@@ -586,7 +565,7 @@ func GeneratePlayingFieldBonusMode() [][]int{
 
 
 func SweetBonanzaSpin(isBonusMode bool, bet float64, balance float64) ([][]int, float64) {
-	if isBonusMode{
+	if isBonusMode {
 		currentPlayingField := GeneratePlayingFieldBonusMode()
 		currentBalance := CalculatePaymentsBonusMode(currentPlayingField, bet, balance)
 		return currentPlayingField, currentBalance
