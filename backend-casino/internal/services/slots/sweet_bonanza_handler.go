@@ -11,7 +11,7 @@ import (
 
 
 func SweetBonanzaHandle(c *gin.Context) {
-	username, err := services.ValidateToken(c)
+    username, err := services.ValidateToken(c)
     if err != nil {
         fmt.Println("С токеном проблемы?")
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
@@ -31,17 +31,17 @@ func SweetBonanzaHandle(c *gin.Context) {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
         return
     }
-	spinBetStr := c.Query("spinBet")
-	convertedSpinBet, _ := strconv.ParseFloat(spinBetStr, 64)
+    spinBetStr := c.Query("spinBet")
+    convertedSpinBet, _ := strconv.ParseFloat(spinBetStr, 64)
 
-	// we do not take first var because it's not bonus mode
-	currentPlayingField, currentBalance := SweetBonanzaSpin(false, convertedSpinBet, user.Balance)
+    currentPlayingField, currentBalance := SweetBonanzaSpin(false, convertedSpinBet, user.Balance)
     fmt.Println(currentPlayingField)
-	user.Balance = currentBalance
+    user.Balance = currentBalance
     err = user_repository.UpdateBalanceUser(user)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
         return
     }
-    c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user})
+    c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user, "playingField": currentPlayingField, "balance": currentBalance})
 }
+

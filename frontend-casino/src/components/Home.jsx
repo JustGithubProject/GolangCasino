@@ -218,23 +218,23 @@ const Home = () => {
       </div>
       <div style={mainStyle}>
         {isAuthenticated ? (
-          <div style={cardGridStyle}>
-            {[...Array(6)].map((_, index) => (
-              <div key={index} style={{ textAlign: 'center' }}>
-                <div style={cardStyle}>
-                  <Link
-                    to={`/room/roulette/${index + 1}`}
-                    style={cardButtonStyle}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    Играть
-                  </Link>
-                </div>
-                <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
-              </div>
-            ))}
+   <div style={cardGridStyle}>
+      {[...Array(6)].map((_, index) => (
+        <div key={index} style={{ textAlign: 'center' }}>
+          <div style={cardStyle}>
+            <Link
+              to={index === 4 ? '/room/slot/sweetbonanza' : `/room/roulette/${index + 1}`}
+              style={cardButtonStyle}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              Играть
+            </Link>
           </div>
+          <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
+        </div>
+      ))}
+    </div>
         ) : (
           <div style={formContainerStyle}>
             <div style={tabStyle}>

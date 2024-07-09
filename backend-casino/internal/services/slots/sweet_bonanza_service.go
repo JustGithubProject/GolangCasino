@@ -520,7 +520,7 @@ func WeightedRandomChoice(values []int, weights []float64) int {
 func GenerateRandomNumberNormalMode() int {
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	weights := []float64{
-		5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 350.0, 400.0, 450.0,
+		5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 15.0, 350.0, 400.0, 450.0,
 	}
 	randomNumber := WeightedRandomChoice(values, weights)
 	return randomNumber
