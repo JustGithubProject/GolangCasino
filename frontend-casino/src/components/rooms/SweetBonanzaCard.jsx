@@ -1,8 +1,8 @@
-// SweetBonanzaCard.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import backgroundImage from '../../images/casinoImage_2.png';
+import Header from '../Header'; // Импортируем Header
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,13 +14,17 @@ const Wrapper = styled.div`
   background-image: url(${backgroundImage});
   background-size: cover;
   background-position: center;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  padding-top: 80px; /* Учитываем высоту хедера */
 `;
 
 const GameBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
-  background: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
+  background: rgba(255, 255, 255, 0.8); /* полупрозрачный белый фон */
   padding: 10px;
   border-radius: 10px;
 `;
@@ -93,9 +97,10 @@ const SweetBonanzaCard = () => {
     setGameBoard(generateRandomGameBoard());
   }, []);
 
+
   const handleSpin = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/room/slot/sweetbonanza?spinBet=10');
+      const response = await axios.post('http://localhost:8081/spin-slot-v1/?spinBet=10');
       const { playingField, balance } = response.data;
       setGameBoard(playingField);
       setBalance(balance);
@@ -105,20 +110,23 @@ const SweetBonanzaCard = () => {
   };
 
   return (
-    <Wrapper>
-      <GameBoard>
-        {gameBoard.flat().map((symbolId, index) => {
-          const symbol = symbols.find(s => s.id === symbolId);
-          return (
-            <Symbol key={index} color={symbol.color}>
-              {symbol.emoji}
-            </Symbol>
-          );
-        })}
-      </GameBoard>
-      <Button onClick={handleSpin}>Spin</Button>
-      <p>Balance: ${balance}</p>
-    </Wrapper>
+    <>
+      <Header username="User" balance={balance} handleLogout={() => {}} />
+      <Wrapper>
+        <GameBoard>
+          {gameBoard.flat().map((symbolId, index) => {
+            const symbol = symbols.find(s => s.id === symbolId);
+            return (
+              <Symbol key={index} color={symbol.color}>
+                {symbol.emoji}
+              </Symbol>
+            );
+          })}
+        </GameBoard>
+        <Button onClick={handleSpin}>Spin</Button>
+        <p>Balance: ${balance}</p>
+      </Wrapper>
+    </>
   );
 };
 
