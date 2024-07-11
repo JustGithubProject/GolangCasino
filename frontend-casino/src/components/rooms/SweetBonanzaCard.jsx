@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../images/casinoImage_2.png';
-import Header from '../Header'; // Импортируем Header
+import Header from '../Header';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,16 +17,37 @@ const Wrapper = styled.div`
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
-  padding-top: 80px; /* Учитываем высоту хедера */
+  padding-top: 80px;
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 `;
 
 const GameBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
-  background: rgba(255, 255, 255, 0.8); /* полупрозрачный белый фон */
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px;
   border-radius: 10px;
+  animation: ${fadeIn} 0.5s ease-in;
+  margin-top: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+`;
+
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 `;
 
 const Symbol = styled.div`
@@ -39,6 +60,12 @@ const Symbol = styled.div`
   border-radius: 10px;
   font-size: 24px;
   color: #fff;
+  animation: ${bounce} 1s infinite;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const Button = styled.button`
@@ -49,10 +76,31 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 18px;
+  transition: background 0.3s ease, transform 0.3s ease;
 
   &:hover {
     background: #218838;
+    transform: scale(1.05);
   }
+`;
+
+const BalanceText = styled.p`
+  margin-top: 10px;
+  font-size: 18px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: ${fadeIn} 0.5s ease-in;
+`;
+
+const Title = styled.h1`
+  color: #fff;
+  margin-top: 20px;
+  font-size: 36px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
 
 const symbols = [
@@ -97,7 +145,6 @@ const SweetBonanzaCard = () => {
     setGameBoard(generateRandomGameBoard());
   }, []);
 
-
   const handleSpin = async () => {
     try {
       const response = await axios.post('http://localhost:8081/spin-slot-v1/?spinBet=10');
@@ -113,6 +160,7 @@ const SweetBonanzaCard = () => {
     <>
       <Header username="User" balance={balance} handleLogout={() => {}} />
       <Wrapper>
+        <Title>Sweet Bonanza</Title>
         <GameBoard>
           {gameBoard.flat().map((symbolId, index) => {
             const symbol = symbols.find(s => s.id === symbolId);
@@ -124,7 +172,7 @@ const SweetBonanzaCard = () => {
           })}
         </GameBoard>
         <Button onClick={handleSpin}>Spin</Button>
-        <p>Balance: ${balance}</p>
+        <BalanceText>Balance: ${balance}</BalanceText>
       </Wrapper>
     </>
   );
