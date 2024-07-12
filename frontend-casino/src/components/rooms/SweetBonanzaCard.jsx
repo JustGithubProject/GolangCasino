@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../images/casinoImage_2.png';
 import Header from '../Header';
+import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,6 +19,8 @@ const Wrapper = styled.div`
   width: 100vw;
   box-sizing: border-box;
   padding-top: 80px;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 `;
 
 const fadeIn = keyframes`
@@ -33,12 +36,13 @@ const GameBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   padding: 20px;
   border-radius: 10px;
   animation: ${fadeIn} 0.5s ease-in;
   margin-top: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border: 2px solid #ffdf00;
 `;
 
 const bounce = keyframes`
@@ -73,7 +77,7 @@ const Button = styled.button`
   padding: 10px 20px;
   background: #28a745;
   color: #fff;
-  border: none;
+  border: 2px solid #fff;
   border-radius: 5px;
   cursor: pointer;
   font-size: 18px;
@@ -82,17 +86,19 @@ const Button = styled.button`
   &:hover {
     background: #218838;
     transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
 const BalanceText = styled.p`
   margin-top: 10px;
-  font-size: 18px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.5);
+  font-size: 20px;
+  color: #ffdf00;
+  background: rgba(0, 0, 0, 0.7);
   padding: 10px 20px;
   border-radius: 5px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  border: 2px solid #FFD700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   animation: ${fadeIn} 0.5s ease-in;
 `;
 
@@ -100,7 +106,19 @@ const Title = styled.h1`
   color: #fff;
   margin-top: 20px;
   font-size: 36px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px #FFD700;
+  border: 2px solid #FFD700;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.6);
+`;
+
+const InnerWrapper = styled.div`
+  border: 2px solid #FFD700; // Цвет рамки
+  border-radius: 10px; // Радиус углов
+  padding: 20px; // Внутренний отступ
+  background: rgba(255, 255, 255, 0.2); // Полупрозрачный фон
+  backdrop-filter: blur(5px); // Размытие фона
 `;
 
 const symbols = [
@@ -147,7 +165,12 @@ const SweetBonanzaCard = () => {
 
   const handleSpin = async () => {
     try {
-      const response = await axios.post('http://localhost:8081/spin-slot-v1/?spinBet=10');
+      const url = "http://localhost:8081/spin-slot-v1/?spinBet=10"
+      const response = await fetchWithAuth(url, {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      console.log('Response:', response.data); 
       const { playingField, balance } = response.data;
       setGameBoard(playingField);
       setBalance(balance);
@@ -161,18 +184,20 @@ const SweetBonanzaCard = () => {
       <Header username="User" balance={balance} handleLogout={() => {}} />
       <Wrapper>
         <Title>Sweet Bonanza</Title>
-        <GameBoard>
-          {gameBoard.flat().map((symbolId, index) => {
-            const symbol = symbols.find(s => s.id === symbolId);
-            return (
-              <Symbol key={index} color={symbol.color}>
-                {symbol.emoji}
-              </Symbol>
-            );
-          })}
-        </GameBoard>
-        <Button onClick={handleSpin}>Spin</Button>
-        <BalanceText>Balance: ${balance}</BalanceText>
+        <InnerWrapper>
+          <GameBoard>
+            {gameBoard.flat().map((symbolId, index) => {
+              const symbol = symbols.find(s => s.id === symbolId);
+              return (
+                <Symbol key={index} color={symbol.color}>
+                  {symbol.emoji}
+                </Symbol>
+              );
+            })}
+          </GameBoard>
+          <Button onClick={handleSpin}>Spin</Button>
+          <BalanceText>Balance: ${balance}</BalanceText>
+        </InnerWrapper>
       </Wrapper>
     </>
   );
