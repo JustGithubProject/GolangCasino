@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../images/casinoImage_2.png';
 import Header from '../Header';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
+import * as jwtDecodeModule from 'jwt-decode';
 
 const Wrapper = styled.div`
   display: flex;
@@ -156,12 +157,33 @@ const generateRandomGameBoard = () => {
 
 const SweetBonanzaCard = () => {
   const [gameBoard, setGameBoard] = useState(generateRandomGameBoard());
-  const [balance, setBalance] = useState(0);
+  const [username, setUsername] = useState(null);
+  const [balance, setBalance] = useState(null);
 
   useEffect(() => {
     // Initialize game board with random symbols
     setGameBoard(generateRandomGameBoard());
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecodeModule.jwtDecode(token);
+      const username = decodedToken.username;
+      setUsername(username);
+      fetchUserBalance(username);
+    }
   }, []);
+
+  const fetchUserBalance = async (username) => {
+    try {
+      const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setBalance(data.Balance);
+    } catch (error) {
+      console.error('Error fetching user balance:', error);
+    }
+  };
 
   const handleSpin = async () => {
     try {
@@ -181,7 +203,10 @@ const SweetBonanzaCard = () => {
 
   return (
     <>
-      <Header username="User" balance={balance} handleLogout={() => {}} />
+      <Header username={username} balance={balance} handleLogout={() => {
+        localStorage.removeItem('token');
+        window.location.reload();
+      }} />
       <Wrapper>
         <Title>Sweet Bonanza</Title>
         <InnerWrapper>
