@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../images/casinoImage_2.png';
 import Header from '../Header';
@@ -24,13 +23,10 @@ const Wrapper = styled.div`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 `;
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+const spinAnimation = keyframes`
+  0% { transform: rotate(0); }
+  50% { transform: rotate(10deg); }
+  100% { transform: rotate(0); }
 `;
 
 const GameBoard = styled.div`
@@ -40,10 +36,10 @@ const GameBoard = styled.div`
   background: rgba(255, 255, 255, 0.9);
   padding: 20px;
   border-radius: 10px;
-  animation: ${fadeIn} 0.5s ease-in;
   margin-top: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   border: 2px solid #ffdf00;
+  animation: ${props => props.isSpinning ? spinAnimation : 'none'} 0.5s ease-in-out;
 `;
 
 const bounce = keyframes`
@@ -100,7 +96,6 @@ const BalanceText = styled.p`
   border-radius: 5px;
   border: 2px solid #FFD700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  animation: ${fadeIn} 0.5s ease-in;
 `;
 
 const Title = styled.h1`
@@ -115,11 +110,11 @@ const Title = styled.h1`
 `;
 
 const InnerWrapper = styled.div`
-  border: 2px solid #FFD700; // Цвет рамки
-  border-radius: 10px; // Радиус углов
-  padding: 20px; // Внутренний отступ
-  background: rgba(255, 255, 255, 0.2); // Полупрозрачный фон
-  backdrop-filter: blur(5px); // Размытие фона
+  border: 2px solid #FFD700;
+  border-radius: 10px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
 `;
 
 const symbols = [
@@ -159,10 +154,9 @@ const SweetBonanzaCard = () => {
   const [gameBoard, setGameBoard] = useState(generateRandomGameBoard());
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   useEffect(() => {
-    // Initialize game board with random symbols
-    setGameBoard(generateRandomGameBoard());
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = jwtDecodeModule.jwtDecode(token);
@@ -186,19 +180,33 @@ const SweetBonanzaCard = () => {
   };
 
   const handleSpin = async () => {
-    try {
-      const url = "http://localhost:8081/spin-slot-v1/?spinBet=10"
-      const response = await fetchWithAuth(url, {
-        method: 'POST',
-        body: JSON.stringify({}),
-      });
-      console.log('Response:', response.data); 
-      const { playingField, balance } = response.data;
-      setGameBoard(playingField);
-      setBalance(balance);
-    } catch (error) {
-      console.error('Error fetching spin data:', error);
-    }
+    setIsSpinning(true);
+    setGameBoard(generateRandomGameBoard());
+
+    setTimeout(async () => {
+      try {
+        const url = "http://localhost:8081/spin-slot-v1/?spinBet=10";
+        const response = await fetchWithAuth(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const { playingField, balance } = await response.json();
+        setGameBoard(playingField);
+        setBalance(balance);
+      } catch (error) {
+        console.error('Error fetching spin data:', error);
+      } finally {
+        setIsSpinning(false);
+      }
+    }, 500);
   };
 
   return (
@@ -210,7 +218,7 @@ const SweetBonanzaCard = () => {
       <Wrapper>
         <Title>Sweet Bonanza</Title>
         <InnerWrapper>
-          <GameBoard>
+          <GameBoard isSpinning={isSpinning}>
             {gameBoard.flat().map((symbolId, index) => {
               const symbol = symbols.find(s => s.id === symbolId);
               return (
