@@ -12,3 +12,6 @@ go run backend-casino/casino-api/main.go
 cd frontend-casino
 npm run dev
 ```
+
+![Uploading image.png…]()
+
