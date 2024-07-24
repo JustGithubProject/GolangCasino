@@ -117,6 +117,18 @@ const InnerWrapper = styled.div`
   backdrop-filter: blur(5px);
 `;
 
+const BetInput = styled.input`
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 18px;
+  border: 2px solid #FFD700;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  width: 80px;
+  text-align: center;
+`;
+
 const symbols = [
   { id: 1, name: 'Banana', emoji: '🍌', color: '#FFE135' },
   { id: 2, name: 'Grapes', emoji: '🍇', color: '#6F2DA8' },
@@ -155,6 +167,7 @@ const SweetBonanzaCard = () => {
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [bet, setBet] = useState(10);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -180,12 +193,17 @@ const SweetBonanzaCard = () => {
   };
 
   const handleSpin = async () => {
+    if (bet <= 0) {
+      alert('Ставка должна быть больше нуля');
+      return;
+    }
+
     setIsSpinning(true);
     setGameBoard(generateRandomGameBoard());
 
     setTimeout(async () => {
       try {
-        const url = "http://localhost:8081/spin-slot-v1/?spinBet=10";
+        const url = `http://localhost:8081/spin-slot-v1/?spinBet=${bet}`;
         const response = await fetchWithAuth(url, {
           method: 'POST',
           headers: {
@@ -228,6 +246,12 @@ const SweetBonanzaCard = () => {
               );
             })}
           </GameBoard>
+          <BetInput
+            type="number"
+            value={bet}
+            onChange={e => setBet(Number(e.target.value))}
+            min="1"
+          />
           <Button onClick={handleSpin}>Spin</Button>
           <BalanceText>Balance: ${balance}</BalanceText>
         </InnerWrapper>
