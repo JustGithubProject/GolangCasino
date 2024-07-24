@@ -5,7 +5,6 @@ import Header from '../Header';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
 
-// Styled components
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,6 +23,12 @@ const Wrapper = styled.div`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 `;
 
+const spinAnimation = keyframes`
+  0% { transform: rotate(0); }
+  50% { transform: rotate(10deg); }
+  100% { transform: rotate(0); }
+`;
+
 const GameBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -35,6 +40,15 @@ const GameBoard = styled.div`
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   border: 2px solid #ffdf00;
   animation: ${props => props.isSpinning ? spinAnimation : 'none'} 0.5s ease-in-out;
+`;
+
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 `;
 
 const Symbol = styled.div`
@@ -103,23 +117,6 @@ const InnerWrapper = styled.div`
   backdrop-filter: blur(5px);
 `;
 
-// Keyframe animations
-const spinAnimation = keyframes`
-  0% { transform: rotate(0); }
-  50% { transform: rotate(10deg); }
-  100% { transform: rotate(0); }
-`;
-
-const bounce = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-`;
-
-// Constants
 const symbols = [
   { id: 1, name: 'Banana', emoji: '🍌', color: '#FFE135' },
   { id: 2, name: 'Grapes', emoji: '🍇', color: '#6F2DA8' },
@@ -140,7 +137,6 @@ const symbols = [
   { id: 17, name: 'Bomb100X', emoji: '💣', color: '#4B0082' }
 ];
 
-// Function to generate random game board
 const generateRandomGameBoard = () => {
   const gameBoard = [];
   for (let i = 0; i < 5; i++) {
@@ -154,14 +150,12 @@ const generateRandomGameBoard = () => {
   return gameBoard;
 };
 
-// Component definition
 const SweetBonanzaCard = () => {
   const [gameBoard, setGameBoard] = useState(generateRandomGameBoard());
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
 
-  // Fetch username and balance on component mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -172,7 +166,6 @@ const SweetBonanzaCard = () => {
     }
   }, []);
 
-  // Fetch user balance function
   const fetchUserBalance = async (username) => {
     try {
       const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
@@ -186,7 +179,6 @@ const SweetBonanzaCard = () => {
     }
   };
 
-  // Handle spin button click
   const handleSpin = async () => {
     setIsSpinning(true);
     setGameBoard(generateRandomGameBoard());
@@ -217,17 +209,12 @@ const SweetBonanzaCard = () => {
     }, 500);
   };
 
-  // Render component
   return (
     <>
-      <Header
-        username={username}
-        balance={balance}
-        handleLogout={() => {
-          localStorage.removeItem('token');
-          window.location.reload();
-        }}
-      />
+      <Header username={username} balance={balance} handleLogout={() => {
+        localStorage.removeItem('token');
+        window.location.reload();
+      }} />
       <Wrapper>
         <Title>Sweet Bonanza</Title>
         <InnerWrapper>

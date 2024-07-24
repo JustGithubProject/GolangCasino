@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 	"github.com/gin-gonic/gin"
+
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 )
-
-
-
 
 func RegisterHandler(c *gin.Context) {
 	services.HandleUserRegister(c)
