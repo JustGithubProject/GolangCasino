@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/paypal"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 )
 
@@ -80,6 +81,12 @@ func main() {
 	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler) // like rooms(6 different handlers)
 	r.POST("/spin-roulette-v3/", handlers.VeryBadSpinRouletteHandler)
 	r.POST("/spin-slot-v1/", handlers.SweetBonanzaSlotHandler)
+
+
+	// paypal handlers
+	r.POST("/create-payment", paypal_handlers.CreatePayment)
+	r.POST("/execute-payment", paypal_handlers.ExecutePayment)
+
 	
 	// Start the web server
 	r.Run(":8081")
