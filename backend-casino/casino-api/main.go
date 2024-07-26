@@ -84,8 +84,8 @@ func main() {
 
 
 	// paypal handlers
-	r.POST("/create-payment", paypal_handlers.CreatePayment)
-	r.POST("/execute-payment", paypal_handlers.ExecutePayment)
+	r.POST("/paypal/get-access-token", paypal_handlers.PaypalGetAccessTokenHandler)
+
 
 	
 	// Start the web server

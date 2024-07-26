@@ -1,77 +1,63 @@
 package paypal_handlers
 
 import (
-    "github.com/gin-gonic/gin"
-    "github.com/plutov/paypal/v4"
+	"bytes"
+	"encoding/json"
+    "encoding/base64"
+    "io/ioutil"
     "log"
-    "net/http"
-    "os"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
+// Getting vars from .env file
 var clientID string = os.Getenv("PAYPAL_CLIENT_ID")
 var paypalSecret string = os.Getenv("PAYPAL_SECRET")
 
 
-func CreatePayment(c *gin.Context) {
+func PaypalGetAccessTokenHandler(c *gin.Context) {
+    paypalURL := "https://api.sandbox.paypal.com/v1/oauth2/token"
+    data := url.Values{}
+    auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + paypalSecret))
+    data.Set("grant_type", "client_credentials")
 
-	// Getting vars from .env file
-	clientID := os.Getenv("PAYPAL_CLIENT_ID")
-	paypalSecret := os.Getenv("PAYPAL_SECRET")
-
-    client, err := paypal.NewClient(clientID, paypalSecret, paypal.APIBaseSandBox)
+    req, err := http.NewRequest(http.MethodPost, paypalURL, strings.NewReader(data.Encode()))
     if err != nil {
-        log.Fatal(err)
+        c.JSON(http.StatusBadRequest, gin.H{"message": "failure to create connection"})
+        return
     }
-    client.SetLog(os.Stdout)
+    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+    req.Header.Set("Authorization", "Basic "+ auth)
 
-    order, err := client.CreateOrder(paypal.Order{
-        Intent: "CAPTURE",
-        PurchaseUnits: []paypal.PurchaseUnit{
-            {
-                Amount: &paypal.Amount{
-                    Currency: "USD",
-                    Total:    "10.00", 
-                },
-            },
-        },
-        ApplicationContext: &paypal.ApplicationContext{
-            ReturnUrl: "http://localhost:8080/execute-payment",
-            CancelUrl: "http://localhost:8080",
-        },
-    })
+    client := &http.Client{}
+    resp, err := client.Do(req)
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Something went wrong"})
+        return
+    }
+    defer resp.Body.Close()
+
+    if resp.StatusCode != http.StatusOK {
+        c.JSON(resp.StatusCode, gin.H{"message": "Failed to get access token", "status": resp.Status})
         return
     }
 
-    for _, link := range order.Links {
-        if link.Rel == "approve" {
-            c.Redirect(http.StatusFound, link.Href)
-            return
-        }
-    }
-    c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to create payment"})
-}
-
-func ExecutePayment(c *gin.Context) {
-    client, err := paypal.NewClient("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET", paypal.APIBaseSandBox)
+    body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
-        log.Fatal(err)
-    }
-    client.SetLog(os.Stdout)
-
-    orderID := c.Query("token")
-    if orderID == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Order ID not provided"})
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
         return
     }
 
-    capture, err := client.CaptureOrder(orderID)
+    var result map[string]interface{}
+    err = json.Unmarshal(body, &result)
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to unmarshal JSON"})
         return
     }
 
-	// TODO: update balance of user (model)
-    c.JSON(http.StatusOK, gin.H{"message": "Payment successful", "capture": capture})
+    c.JSON(http.StatusOK, gin.H{"access_token": result["access_token"]})
 }
