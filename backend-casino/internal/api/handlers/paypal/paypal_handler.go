@@ -68,8 +68,8 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 	paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
     // Getting amount of money and currency to execute payment using paypal method
-    total := c.Query("Total")
-    currency := c.Query("Currency")
+    total := c.PostForm("Total")
+    currency := c.PostForm("Currency")
 
 	paymentData := map[string]interface{}{
 		"intent": "sale",
@@ -155,15 +155,15 @@ func CreateCreditCardPaymentHandler(c *gin.Context) {
     paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
     // Getting needed data to do payment
-    numberCard := c.Query("numberCard")
-    typeCard := c.Query("typeCard")
-    expireMonthCard := c.Query("expireMonthCard")
-    expireYearCard := c.Query("expireYearCard")
-    cvv2 := c.Query("cvv2")
-    firstName := c.Query("firstName")
-    lastName := c.Query("lastName")
-    total := c.Query("total")
-    currency := c.Query("currency")
+    numberCard := c.PostForm("numberCard")
+    typeCard := c.PostForm("typeCard")
+    expireMonthCard := c.PostForm("expireMonthCard")
+    expireYearCard := c.PostForm("expireYearCard")
+    cvv2 := c.PostForm("cvv2")
+    firstName := c.PostForm("firstName")
+    lastName := c.PostForm("lastName")
+    total := c.PostForm("total")
+    currency := c.PostForm("currency")
 
     paymentData := map[string]interface{}{
         "intent": "sale",
