@@ -5,7 +5,6 @@ import (
 	"encoding/json"
     "encoding/base64"
     "io/ioutil"
-    "log"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,30 +18,218 @@ var clientID string = os.Getenv("PAYPAL_CLIENT_ID")
 var paypalSecret string = os.Getenv("PAYPAL_SECRET")
 
 
-func PaypalGetAccessTokenHandler(c *gin.Context) {
-    paypalURL := "https://api.sandbox.paypal.com/v1/oauth2/token"
-    data := url.Values{}
-    auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + paypalSecret))
-    data.Set("grant_type", "client_credentials")
+func PaypalGetAccessToken() (string, error) {
+	paypalURL := "https://api.sandbox.paypal.com/v1/oauth2/token"
+	data := url.Values{}
+	auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + paypalSecret))
+	data.Set("grant_type", "client_credentials")
 
-    req, err := http.NewRequest(http.MethodPost, paypalURL, strings.NewReader(data.Encode()))
+	req, err := http.NewRequest(http.MethodPost, paypalURL, strings.NewReader(data.Encode()))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Authorization", "Basic "+auth)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	var result map[string]interface{}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return "", err
+	}
+
+	return result["access_token"].(string), nil
+}
+
+
+func CreatePaypalPaymentHandler(c *gin.Context) {
+    // Getting accessToken to do API request to PAYPAL
+	accessToken, err := PaypalGetAccessToken()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
+		return
+	}
+
+	paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
+
+    // Getting amount of money and currency to execute payment using paypal method
+    total := c.Query("Total")
+    currency := c.Query("Currency")
+
+	paymentData := map[string]interface{}{
+		"intent": "sale",
+		"redirect_urls": map[string]string{
+			"return_url": "http://127.0.0.1:5173/",
+			"cancel_url": "http://127.0.0.1:5173/",
+		},
+		"payer": map[string]string{
+			"payment_method": "paypal",
+		},
+		"transactions": []map[string]interface{}{
+			{
+				"amount": map[string]string{
+					"total":    total,
+					"currency": currency,
+				},
+				"description": "This is the payment transaction description.",
+			},
+		},
+	}
+
+    // Convert to json paymentData
+	paymentJSON, err := json.Marshal(paymentData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to marshal payment data"})
+		return
+	}
+    
+     // POST Request to endpoint of PayPal API to create payment using paypal method
+	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
+		return
+	}
+
+    // Set needed headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+		body, _ := ioutil.ReadAll(resp.Body)
+		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
+		return
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
+		return
+	}
+
+
+    // Convert JSON to golang map
+	var result map[string]interface{}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to unmarshal JSON"})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+
+
+func CreateCreditCardPaymentHandler(c *gin.Context) {
+
+    // Getting accessToken to do API request to PAYPAL
+    accessToken, err := PaypalGetAccessToken()
     if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"message": "failure to create connection"})
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
         return
     }
-    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-    req.Header.Set("Authorization", "Basic "+ auth)
+
+    paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
+
+    // Getting needed data to do payment
+    numberCard := c.Query("numberCard")
+    typeCard := c.Query("typeCard")
+    expireMonthCard := c.Query("expireMonthCard")
+    expireYearCard := c.Query("expireYearCard")
+    cvv2 := c.Query("cvv2")
+    firstName := c.Query("firstName")
+    lastName := c.Query("lastName")
+    total := c.Query("total")
+    currency := c.Query("currency")
+
+    paymentData := map[string]interface{}{
+        "intent": "sale",
+        "payer": map[string]interface{}{
+            "payment_method": "credit_card",
+            "funding_instruments": []map[string]interface{}{
+                {
+                    "credit_card": map[string]interface{}{
+                        "number":       numberCard,
+                        "type":        typeCard,
+                        "expire_month": expireMonthCard,
+                        "expire_year":  expireYearCard,
+                        "cvv2":         cvv2,
+                        "first_name":   firstName,
+                        "last_name":    lastName,
+                        "billing_address": map[string]string{
+                            "line1":       "52 N Main ST",
+                            "city":        "Johnstown",
+                            "state":       "OH",
+                            "postal_code": "43210",
+                            "country_code": "US",
+                        },
+                    },
+                },
+            },
+        },
+        "transactions": []map[string]interface{}{
+            {
+                "amount": map[string]string{
+                    "total":    total,
+                    "currency": currency,
+                },
+                "description": "This is the payment transaction description.",
+            },
+        },
+    }
+
+    // Convert to JSON
+    paymentJSON, err := json.Marshal(paymentData)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to marshal payment data"})
+        return
+    }
+
+    // POST Request to endpoint of PayPal API to create payment using credit card
+    req, err := http.NewRequest(http.MethodPost, paymentURL, bytes.NewBuffer(paymentJSON))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
+        return
+    }
+
+    // Set needed headers
+    req.Header.Set("Content-Type", "application/json")
+    req.Header.Set("Authorization", "Bearer "+accessToken)
 
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"message": "Something went wrong"})
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
         return
     }
     defer resp.Body.Close()
 
-    if resp.StatusCode != http.StatusOK {
-        c.JSON(resp.StatusCode, gin.H{"message": "Failed to get access token", "status": resp.Status})
+    if resp.StatusCode != http.StatusCreated {
+        body, _ := ioutil.ReadAll(resp.Body)
+        c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
         return
     }
 
@@ -59,5 +246,5 @@ func PaypalGetAccessTokenHandler(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"access_token": result["access_token"]})
+    c.JSON(http.StatusOK, result)
 }
