@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Typography, Spin, message } from 'antd';
-import BetForm from '../BetForm';
+import BetForm from '../betforms/BetForm';
 import NumberGrid from '../NumberGrid';
 import { CSSTransition } from 'react-transition-group';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import './styles.css';
-import Header from '../Header';  // Import the Header component
+import Header from '../header/Header';  // Import the Header component
 import backgroundImage from '../../images/casinoImage_2.png';
 
 import BalanceDisplay from '../BalanceDisplay';  
 import ResultOverlay from '../ResultOverlay'; 
-import BetButton from '../BetButton';  
-import BetFormToggle from '../BetFormToggle'; 
+import BetButton from '../betforms/BetButton';  
+import BetFormToggle from '../betforms/BetFormToggle'; 
 
 const { Text } = Typography;
 

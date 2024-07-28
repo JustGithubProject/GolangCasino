@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faHome } from '@fortawesome/free-solid-svg-icons';
 
+
 const Header = ({ username, balance, handleLogout }) => {
   const [showBalance, setShowBalance] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);

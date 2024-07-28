@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../images/casinoImage_2.png';
-import Header from '../Header';
+import Header from '../header/Header';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
 
@@ -10,15 +10,16 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   background: linear-gradient(to bottom, #ff416c, #ff4b2b);
-  padding: 20px;
-  border-radius: 10px;
   background-image: url(${backgroundImage});
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  min-width: 100vw;
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
-  padding-top: 80px;
+  padding: 80px 20px 20px 20px;
   border: 2px solid #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 `;
