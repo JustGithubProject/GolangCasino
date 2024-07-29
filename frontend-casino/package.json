@@ -23,7 +23,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.23.1",
     "react-transition-group": "^4.4.5",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.12"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

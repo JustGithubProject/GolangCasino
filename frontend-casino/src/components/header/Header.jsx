@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faHome } from '@fortawesome/free-solid-svg-icons';
 
-
 const Header = ({ username, balance, handleLogout }) => {
   const [showBalance, setShowBalance] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -155,11 +154,6 @@ const Header = ({ username, balance, handleLogout }) => {
           Выйти
         </button>
       )}
-      <nav style={navStyle}>
-        <ul style={ulStyle}>
-          {/* Additional navigation links can be added here */}
-        </ul>
-      </nav>
       {isAuthenticated && (
         <div style={rightSectionStyle}>
           <div style={userInfoStyle}>
@@ -172,6 +166,29 @@ const Header = ({ username, balance, handleLogout }) => {
                 style={iconStyle}
                 onClick={toggleBalance}
               />
+            <nav style={navStyle}>
+            <ul style={ulStyle}>
+              <li style={liStyle}>
+                <Link to="/top-up-balance"
+                  style={{
+                    ...linkStyle,
+                    backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                    marginLeft: '20px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(41, 128, 185, 0.8)';
+                    e.currentTarget.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(52, 152, 219, 0.8)';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  Пополнить баланс
+                </Link>
+              </li>
+            </ul>
+            </nav>
             </div>
           </div>
         </div>

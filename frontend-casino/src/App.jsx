@@ -7,7 +7,9 @@ import SweetBonanza from "./components/rooms/SweetBonanzaCard"
 import Login from './components/auth_components/Login'
 import Register from './components/auth_components/Register'
 import Home from './components/Home'
-
+import SuccessPage from './pages/SucessPage';
+import CancelPage from './pages/CancelPage';
+import TopUpPage from './components/payments/TopUpComponent';
 
 function App() {
   return (
@@ -22,6 +24,9 @@ function App() {
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register/>} />
               <Route path="/" element={<Home/>} />
+              <Route path="/sucess-payment" element={<SuccessPage/>} />
+              <Route path="/cancel-payment" element={<CancelPage/>} />
+              <Route path="/top-up-balance" element={<TopUpPage/>} />
           </Routes>
       </Router>
   );
