@@ -9,8 +9,6 @@ const TopUpPage = () => {
       <div style={paymentMethodStyle}>
         <h2 style={methodHeaderStyle}>PayPal</h2>
         <PayPalComponent 
-          amount="10.00" 
-          currency="USD" 
           returnURL="http://localhost:5173/sucess-payment" 
           cancelURL="http://localhost:5173/cancel-payment" 
         />

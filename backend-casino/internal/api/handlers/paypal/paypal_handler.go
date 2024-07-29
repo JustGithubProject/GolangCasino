@@ -2,6 +2,7 @@ package paypal_handlers
 
 import (
 	"bytes"
+    "log"
 	"encoding/json"
     "encoding/base64"
     "io/ioutil"
@@ -60,16 +61,21 @@ func PaypalGetAccessToken() (string, error) {
 func CreatePaypalPaymentHandler(c *gin.Context) {
     // Getting accessToken to do API request to PAYPAL
 	accessToken, err := PaypalGetAccessToken()
+    log.Println("AcessToken: ", accessToken)
 	if err != nil {
+        log.Println("AccessToken is empty or invalid")
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
 		return
 	}
-
+    log.Println("AccessToken is okay")
 	paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
     // Getting amount of money and currency to execute payment using paypal method
     total := c.PostForm("Total")
     currency := c.PostForm("Currency")
+
+    log.Println("Total: ", total)
+    log.Println("Currency: ", currency)
 
 	paymentData := map[string]interface{}{
 		"intent": "sale",
