@@ -6,7 +6,7 @@ import RouletteCardV3 from './components/rooms/RouletteCard_v3'
 import SweetBonanza from "./components/rooms/SweetBonanzaCard"
 import Login from './components/auth_components/Login'
 import Register from './components/auth_components/Register'
-import Home from './components/Home'
+import Home from './components/home/Home'
 import SuccessPage from './pages/SucessPage';
 import CancelPage from './pages/CancelPage';
 import TopUpPage from './components/payments/TopUpComponent';

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, message } from 'antd';
-import NumberGrid from '../NumberGrid';
+import NumberGrid from '../number_grid/NumberGrid';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import './styles.css';
 import Header from '../header/Header';  // Import the Header component
 import backgroundImage from '../../images/casinoImage_2.png';
 
-import BalanceDisplay from '../BalanceDisplay';  
-import ResultOverlay from '../ResultOverlay'; 
+import BalanceDisplay from '../displays/BalanceDisplay';  
+import ResultOverlay from '../result_overlay/ResultOverlay'; 
 import BetButton from '../betforms/BetButton';  
 
 const { Text } = Typography;

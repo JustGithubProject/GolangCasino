@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { fetchWithAuth } from './auth_components/fetchWrapper';
-import Login from './auth_components/Login';
-import Register from './auth_components/Register';
+import { fetchWithAuth } from '../auth_components/fetchWrapper';
+import Login from '../auth_components/Login';
+import Register from '../auth_components/Register';
 import * as jwtDecodeModule from 'jwt-decode';
 import { Link } from 'react-router-dom';
-import Header from './header/Header';
-import Footer from './footer/Footer';
+import Header from '../header/Header';
+import Footer from '../footer/Footer';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
-import backgroundImage from '../images/casinoImage_2.png';
-import cardBackgroundImage from '../images/card.png'; 
+import backgroundImage from '../../images/casinoImage_2.png';
+import cardBackgroundImage from '../../images/card.png'; 
 
-import image1 from '../images/cas_image_99.png';
-import image2 from '../images/cas_image_9.png';
-import image3 from '../images/cas_image_11.png';
+import image1 from '../../images/cas_image_99.png';
+import image2 from '../../images/cas_image_9.png';
+import image3 from '../../images/cas_image_11.png';
 
 const Home = () => {
   const [isLogin, setIsLogin] = useState(true);
