@@ -13,6 +13,5 @@ cd frontend-casino
 npm run dev
 ```
 
-![image](https://github.com/user-attachments/assets/dba65ac8-8e09-4772-b7fa-dcba4f1a55e0)
 
 
