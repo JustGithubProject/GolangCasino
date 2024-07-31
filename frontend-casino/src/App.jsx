@@ -15,8 +15,8 @@ function App() {
   return (
       <Router>
           <Routes>
-              <Route path="/room/roulette/1" element={<RouletteCard />} />
-              <Route path="/room/roulette/2" element={<RouletteCardV2/>} />
+              <Route path="/room/roulette/1" element={<RouletteCardV3/>} />
+              <Route path="/room/roulette/2" element={<RouletteCardV3/>} />
               <Route path="/room/roulette/3" element={<RouletteCardV3/>} />
               <Route path="/room/roulette/4" element={<RouletteCardV3/>} />
               <Route path="/room/slot/sweetbonanza" element={<SweetBonanza/>} />

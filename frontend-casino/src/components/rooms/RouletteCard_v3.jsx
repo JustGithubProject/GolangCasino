@@ -5,7 +5,7 @@ import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import './styles.css';
 import Header from '../header/Header';  // Import the Header component
-import backgroundImage from '../../images/casinoImage_2.png';
+import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 
 import BalanceDisplay from '../displays/BalanceDisplay';  
 import ResultOverlay from '../result_overlay/ResultOverlay'; 

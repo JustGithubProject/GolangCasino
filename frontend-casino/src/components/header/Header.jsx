@@ -130,7 +130,7 @@ const Header = ({ username, balance, handleLogout }) => {
   };
 
   const formatBalance = (balance) => {
-    return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(balance);
+    return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'UAH' }).format(balance);
   };
 
   return (

@@ -10,13 +10,10 @@ import (
 	"net/url"
 	"strings"
     "os"
+
     "github.com/joho/godotenv"
 	"github.com/gin-gonic/gin"
 )
-
-
-
-
 
 
 func PaypalGetAccessToken() (string, error) {
@@ -29,8 +26,7 @@ func PaypalGetAccessToken() (string, error) {
     // Getting vars from .env file
     var clientID string = os.Getenv("PAYPAL_CLIENT_ID")
     var paypalSecret string = os.Getenv("PAYPAL_SECRET")
-    log.Println(clientID)
-    log.Println(paypalSecret)
+    
 	paypalURL := "https://api.sandbox.paypal.com/v1/oauth2/token"
 	data := url.Values{}
 	auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + paypalSecret))

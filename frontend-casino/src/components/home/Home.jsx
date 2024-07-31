@@ -8,8 +8,9 @@ import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
-import backgroundImage from '../../images/casinoImage_2.png';
+import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import cardBackgroundImage from '../../images/card.png'; 
+import sweetbonanzaImage from '../../images/sweet-bonanza.png'; 
 
 import image1 from '../../images/cas_image_99.png';
 import image2 from '../../images/cas_image_9.png';
@@ -32,6 +33,15 @@ const Home = () => {
       fetchUserBalance(username);
       setIsAuthenticated(true);
     }
+
+    const interval = setInterval(() => {
+      localStorage.removeItem('token');
+      setIsAuthenticated(false);
+      setUsername('');
+      setBalance(0);
+    }, 30 * 60 * 1000); // в миллисекундах
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchUserBalance = async (username) => {
@@ -119,12 +129,12 @@ const Home = () => {
     color: '#28a745',
   };
 
-  const cardStyle = {
+  const cardStyle = (index) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    background: `url(${cardBackgroundImage}) no-repeat center center`,
+    background: index === 4 ? `url(${sweetbonanzaImage}) no-repeat center center` : `url(${cardBackgroundImage}) no-repeat center center`,
     backgroundSize: 'cover',
     color: '#fff',
     padding: '30px',
@@ -136,7 +146,7 @@ const Home = () => {
     animation: 'fadeIn 1s',
     border: '2px solid rgba(255, 255, 255, 0.8)',
     marginBottom: '5px',
-  };
+  });
 
   const cardButtonStyle = {
     backgroundColor: '#4CAF50',
@@ -218,23 +228,23 @@ const Home = () => {
       </div>
       <div style={mainStyle}>
         {isAuthenticated ? (
-   <div style={cardGridStyle}>
-      {[...Array(6)].map((_, index) => (
-        <div key={index} style={{ textAlign: 'center' }}>
-          <div style={cardStyle}>
-            <Link
-              to={index === 4 ? '/room/slot/sweetbonanza' : `/room/roulette/${index + 1}`}
-              style={cardButtonStyle}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              Играть
-            </Link>
+          <div style={cardGridStyle}>
+            {[...Array(6)].map((_, index) => (
+              <div key={index} style={{ textAlign: 'center' }}>
+                <div style={cardStyle(index)}>
+                  <Link
+                    to={index === 4 ? '/room/slot/sweetbonanza' : `/room/roulette/${index + 1}`}
+                    style={cardButtonStyle}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    Играть
+                  </Link>
+                </div>
+                <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
+              </div>
+            ))}
           </div>
-          <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
-        </div>
-      ))}
-    </div>
         ) : (
           <div style={formContainerStyle}>
             <div style={tabStyle}>
