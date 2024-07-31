@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to bottom, #ff416c, #ff4b2b);
+  background: linear-gradient(to bottom, rgba(255, 64, 108, 0.8), rgba(255, 75, 43, 0.8));
   background-image: url(${backgroundImage});
   background-size: cover;
   background-position: center;
@@ -17,29 +17,29 @@ const Wrapper = styled.div`
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
-  padding: 80px 20px 20px 20px;
-  border: 2px solid #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  overflow: hidden; /* Prevents scrollbars from appearing if content overflows */
+  padding: 60px 20px;
+  border: 2px solid #333;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
 `;
 
 const spinAnimation = keyframes`
   0% { transform: rotate(0); }
-  50% { transform: rotate(10deg); }
+  50% { transform: rotate(5deg); }
   100% { transform: rotate(0); }
 `;
 
 const GameBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-gap: 10px;
-  background: rgba(255, 255, 255, 0.9);
+  grid-gap: 15px;
+  background: rgba(255, 255, 255, 0.15);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 15px;
   margin-top: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  border: 2px solid #ffdf00;
-  animation: ${props => props.isSpinning ? spinAnimation : 'none'} 0.5s ease-in-out;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 2px solid #444;
+  animation: ${props => props.isSpinning ? spinAnimation : 'none'} 0.6s ease-in-out;
 `;
 
 const bounce = keyframes`
@@ -47,85 +47,88 @@ const bounce = keyframes`
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 `;
 
 const Symbol = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${props => props.color || '#ccc'};
-  border-radius: 10px;
-  font-size: 24px;
+  background: ${props => props.color || '#666'};
+  border-radius: 12px;
+  font-size: 28px;
   color: #fff;
   animation: ${bounce} 1s infinite;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
   }
 `;
 
 const Button = styled.button`
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 12px 24px;
   background: #28a745;
   color: #fff;
-  border: 2px solid #fff;
-  border-radius: 5px;
+  border: 2px solid #444;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 18px;
-  transition: background 0.3s ease, transform 0.3s ease;
+  font-size: 20px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     background: #218838;
     transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
   }
 `;
 
 const BalanceText = styled.p`
-  margin-top: 10px;
-  font-size: 20px;
+  margin-top: 15px;
+  font-size: 22px;
   color: #ffdf00;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: 2px solid #FFD700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 2px solid #555;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
 `;
 
 const Title = styled.h1`
   color: #fff;
   margin-top: 20px;
-  font-size: 36px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px #FFD700;
-  border: 2px solid #FFD700;
-  padding: 10px;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.6);
+  font-size: 40px;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8), 0 0 15px #ff4500;
+  border: 2px solid #444;
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.7);
 `;
 
 const InnerWrapper = styled.div`
-  border: 2px solid #FFD700;
-  border-radius: 10px;
+  border: 2px solid #444;
+  border-radius: 15px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 `;
 
 const BetInput = styled.input`
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 18px;
-  border: 2px solid #FFD700;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.7);
+  margin-top: 15px;
+  padding: 12px;
+  font-size: 20px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.8);
   color: #fff;
-  width: 80px;
+  width: 90px;
   text-align: center;
 `;
 
