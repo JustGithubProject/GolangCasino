@@ -77,12 +77,31 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
     log.Println("AccessToken is okay")
 	paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
+    var requestData struct {
+        Total    string `json:"Total"`
+        Currency string `json:"Currency"`
+    }
+
+    if err := c.BindJSON(&requestData); err != nil {
+        log.Println("Failed to bind JSON:", err)
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid input"})
+        return
+    }
+
+    log.Println("Received data: ", requestData)
+
     // Getting amount of money and currency to execute payment using paypal method
-    total := c.PostForm("Total")
-    currency := c.PostForm("Currency")
+    total := requestData.Total
+    currency := requestData.Currency
 
     log.Println("Total: ", total)
     log.Println("Currency: ", currency)
+
+    if total == "" || currency == ""{
+        log.Println("Total and Currency are required")
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Total and Currency are required"})
+        return
+    }
 
 	paymentData := map[string]interface{}{
 		"intent": "sale",
