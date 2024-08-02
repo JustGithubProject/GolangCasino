@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
 const clientId = "AR472O-P4C1udEvKpzyCKdo7yxC4PuZqGYuVn43PR37ZbhlSPlToUN40nSlutsL4z4Sypnfkf6Pjazfz";
 
@@ -12,24 +13,43 @@ const PayPalComponent = ({ returnURL, cancelURL }) => {
   const [error, setError] = useState('');
 
 
-  console.log("Total", amount)
-  console.log("Currency", currency)
+
   
   const createPayPalOrder = async (data, actions) => {
     setLoading(true);
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8081/paypal/paypal-payment/', {
-        Total: amount,
-        Currency: currency,
-        return_url: returnURL,
-        cancel_url: cancelURL,
+      // const response = await axios.post('http://localhost:8081/paypal/paypal-payment/', {
+      //   Total: amount,
+      //   Currency: currency,
+      //   return_url: returnURL,
+      //   cancel_url: cancelURL,
+      // });
+
+      // const response = await axios.post(
+      //   'http://127.0.0.1:8081/paypal/paypal-payment/',
+      //   {amount, currency},
+      //   {
+      //     withCredentials: true,
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //   }
+      // );
+
+      const url = "http://localhost:8081/paypal/paypal-payment/"
+      const response = await fetchWithAuth(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          Total: amount,
+          Currency: currency
+        }),
       });
 
-      if (response.status !== 200) {
-        throw new Error(response.data.message || 'Error creating PayPal order');
-      }
+      // if (response.status !== 200) {
+      //   throw new Error('Network response was not ok');
+      // }
 
       return response.data.id;  
     } catch (error) {

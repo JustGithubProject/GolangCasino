@@ -10,9 +10,12 @@ import (
 	"net/url"
 	"strings"
     "os"
+    "strconv"
 
     "github.com/joho/godotenv"
 	"github.com/gin-gonic/gin"
+
+    "github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 )
 
 
@@ -64,6 +67,10 @@ func PaypalGetAccessToken() (string, error) {
 	return result["access_token"].(string), nil
 }
 
+type PaypalPaymentInput struct {
+    Total    string `json:"Total"`
+    Currency string `json:"Currency"`
+}
 
 func CreatePaypalPaymentHandler(c *gin.Context) {
     // Getting accessToken to do API request to PAYPAL
@@ -77,22 +84,19 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
     log.Println("AccessToken is okay")
 	paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
-    var requestData struct {
-        Total    string `json:"Total"`
-        Currency string `json:"Currency"`
-    }
-
-    if err := c.BindJSON(&requestData); err != nil {
+    // Trying to get data from json
+    var paypalInput PaypalPaymentInput
+    if err := c.BindJSON(&paypalInput); err != nil {
         log.Println("Failed to bind JSON:", err)
-        c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid input"})
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid paypal input"})
         return
     }
 
-    log.Println("Received data: ", requestData)
+    log.Println("Received data: ", paypalInput)
 
     // Getting amount of money and currency to execute payment using paypal method
-    total := requestData.Total
-    currency := requestData.Currency
+    total := paypalInput.Total
+    currency := paypalInput.Currency
 
     log.Println("Total: ", total)
     log.Println("Currency: ", currency)
@@ -139,7 +143,7 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 
     // Set needed headers
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+accessToken)
+	req.Header.Set("Authorization", "Bearer "+ accessToken)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -169,6 +173,43 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to unmarshal JSON"})
 		return
 	}
+
+    // Getting username by token
+    username, err := services.ValidateToken(c)
+    if err != nil{
+        log.Println("Issues with token")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    // Init user repository to manage user
+    user_repository, err := services.InitializeUserRepository()
+    if err != nil{
+        log.Println("Failed to init repository")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    // Get user by username
+    user, err := user_repository.GetUserByUsername(username)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+
+    // Converting string to float64
+    convertedToFloatTotal, err := strconv.ParseFloat(total, 64)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert string to float"})
+        return
+    }
+
+    user.Balance += convertedToFloatTotal 
+    err = user_repository.UpdateBalanceUser(user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
+        return
+    }
 
 	c.JSON(http.StatusOK, result)
 }
