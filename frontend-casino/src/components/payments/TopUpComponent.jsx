@@ -8,10 +8,7 @@ const TopUpPage = () => {
       <p style={paragraphStyle}>Выберите способ пополнения вашего баланса:</p>
       <div style={paymentMethodStyle}>
         <h2 style={methodHeaderStyle}>PayPal</h2>
-        <PayPalComponent 
-          returnURL="http://localhost:5173/sucess-payment" 
-          cancelURL="http://localhost:5173/cancel-payment" 
-        />
+        <PayPalComponent />
       </div>
     </div>
   );

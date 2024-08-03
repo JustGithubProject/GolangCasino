@@ -319,5 +319,42 @@ func CreateCreditCardPaymentHandler(c *gin.Context) {
         return
     }
 
+    // Getting username by token
+    username, err := services.ValidateToken(c)
+    if err != nil{
+        log.Println("Issues with token")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    // Init user repository to manage user
+    user_repository, err := services.InitializeUserRepository()
+    if err != nil{
+        log.Println("Failed to init repository")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    // Get user by username
+    user, err := user_repository.GetUserByUsername(username)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+
+    // Converting string to float64
+    convertedToFloatTotal, err := strconv.ParseFloat(total, 64)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert string to float"})
+        return
+    }
+
+    user.Balance += convertedToFloatTotal 
+    err = user_repository.UpdateBalanceUser(user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
+        return
+    }
+
     c.JSON(http.StatusOK, result)
 }
