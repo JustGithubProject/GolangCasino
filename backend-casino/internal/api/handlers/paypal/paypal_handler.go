@@ -214,6 +214,17 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+type PaypalPaymentCardInput struct {
+    NumberCard string `json:"NumberCard"`
+    TypeCard string `json:"TypeCard"`
+    ExpireMonthCard string `json:"ExpireMonthCard"`
+    ExpireYearCard string `json:"ExpireYearCard"`
+    CVV2 string `json:"CVV2"`
+    FirstName string `json:"FirstName"`
+    LastName string `json:"LastName"`
+    Total string `json:"Total"`
+    Currency string `json:"Currency"`
+}
 
 
 func CreateCreditCardPaymentHandler(c *gin.Context) {
