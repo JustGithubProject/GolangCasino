@@ -78,35 +78,7 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 	}
     
      // POST Request to endpoint of PayPal API to create payment using paypal method
-	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
-		return
-	}
-
-    // Set needed headers
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+ accessToken)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusCreated {
-		body, _ := ioutil.ReadAll(resp.Body)
-		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
-		return
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
-		return
-	}
+	body, err := services.PostRequestUsingPaypalMethod(c, paymentURL, accessToken, paymentJSON)
 
 
     // Convert JSON to golang map
@@ -183,7 +155,7 @@ func CreateCreditCardPaymentHandler(c *gin.Context) {
     cvv2, firstName,
     lastName := services.ExtractCreditCardPaymentData(&paypalCardInput)
 
-    paymentData := services.GetMapPaymentData(
+    paymentData := services.GetCreditCardPaymentData(
         total, currency,
         numberCard, typeCard,
         expireMonthCard, expireYearCard,

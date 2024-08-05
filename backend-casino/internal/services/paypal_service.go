@@ -1,17 +1,18 @@
 package services
 
 import (
-	"os"
-	"log"
 	"encoding/base64"
 	"encoding/json"
-	"net/http"
-	"strings"
+	"errors"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
-
 
 ///////////////////////////////////////
 //	BLOCK WITH PAYPAL STRUCTS	     //
@@ -99,7 +100,7 @@ func ExtractCreditCardPaymentData(data *PaypalPaymentCardInput) (string, string,
 }
 
 
-func GetMapPaymentData(
+func GetCreditCardPaymentData(
     total, currency, numberCard, typeCard, expireMonthCard, expireYearCard, cvv2, firstName, lastName string,
 ) map[string]interface{} {
     paymentData := map[string]interface{}{
@@ -138,4 +139,38 @@ func GetMapPaymentData(
         },
     }
     return paymentData
+}
+
+
+func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken string, paymentJSON []byte) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
+		return nil, err
+	}
+
+    // Set needed headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+		body, _ := ioutil.ReadAll(resp.Body)
+		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
+		return nil, errors.New("failed to create payment")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
+		return nil, err
+	}
+	return body, nil
 }
