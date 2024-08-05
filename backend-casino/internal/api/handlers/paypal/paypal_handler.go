@@ -4,77 +4,21 @@ import (
 	"bytes"
     "log"
 	"encoding/json"
-    "encoding/base64"
     "io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
-    "os"
     "strconv"
 
-    "github.com/joho/godotenv"
 	"github.com/gin-gonic/gin"
 
     "github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 )
 
 
-func PaypalGetAccessToken() (string, error) {
-
-    err := godotenv.Load()
-    if err != nil{
-        log.Fatal("Error loading .env file")
-    }
-
-    // Getting vars from .env file
-    var clientID string = os.Getenv("PAYPAL_CLIENT_ID")
-    var paypalSecret string = os.Getenv("PAYPAL_SECRET")
-    
-	paypalURL := "https://api.sandbox.paypal.com/v1/oauth2/token"
-	data := url.Values{}
-	auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + paypalSecret))
-	data.Set("grant_type", "client_credentials")
-
-	req, err := http.NewRequest(http.MethodPost, paypalURL, strings.NewReader(data.Encode()))
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Authorization", "Basic "+auth)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return "", err
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	var result map[string]interface{}
-	err = json.Unmarshal(body, &result)
-	if err != nil {
-		return "", err
-	}
-
-	return result["access_token"].(string), nil
-}
-
-type PaypalPaymentInput struct {
-    Total    string `json:"Total"`
-    Currency string `json:"Currency"`
-}
 
 func CreatePaypalPaymentHandler(c *gin.Context) {
     // Getting accessToken to do API request to PAYPAL
-	accessToken, err := PaypalGetAccessToken()
+	accessToken, err := services.PaypalGetAccessToken()
     log.Println("AcessToken: ", accessToken)
 	if err != nil {
         log.Println("AccessToken is empty or invalid")
@@ -85,7 +29,7 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 	paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
     // Trying to get data from json
-    var paypalInput PaypalPaymentInput
+    var paypalInput services.PaypalPaymentInput
     if err := c.BindJSON(&paypalInput); err != nil {
         log.Println("Failed to bind JSON:", err)
         c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid paypal input"})
@@ -95,8 +39,7 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
     log.Println("Received data: ", paypalInput)
 
     // Getting amount of money and currency to execute payment using paypal method
-    total := paypalInput.Total
-    currency := paypalInput.Currency
+    total, currency := services.ExtractPaypalPaymentData(&paypalInput)
 
     log.Println("Total: ", total)
     log.Println("Currency: ", currency)
@@ -214,76 +157,38 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-type PaypalPaymentCardInput struct {
-    NumberCard string `json:"NumberCard"`
-    TypeCard string `json:"TypeCard"`
-    ExpireMonthCard string `json:"ExpireMonthCard"`
-    ExpireYearCard string `json:"ExpireYearCard"`
-    CVV2 string `json:"CVV2"`
-    FirstName string `json:"FirstName"`
-    LastName string `json:"LastName"`
-    Total string `json:"Total"`
-    Currency string `json:"Currency"`
-}
-
 
 func CreateCreditCardPaymentHandler(c *gin.Context) {
 
     // Getting accessToken to do API request to PAYPAL
-    accessToken, err := PaypalGetAccessToken()
+    accessToken, err := services.PaypalGetAccessToken()
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
         return
     }
 
     paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
+    var paypalCardInput services.PaypalPaymentCardInput
+    if err := c.BindJSON(&paypalCardInput); err != nil{
+        log.Println("Failed to bind JSON for PaypalPaymentCardInput:", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to bind JSON for PaypalPaymentCardInput"})
+    }
+
+    log.Println("Received data: ", paypalCardInput)
 
     // Getting needed data to do payment
-    numberCard := c.PostForm("numberCard")
-    typeCard := c.PostForm("typeCard")
-    expireMonthCard := c.PostForm("expireMonthCard")
-    expireYearCard := c.PostForm("expireYearCard")
-    cvv2 := c.PostForm("cvv2")
-    firstName := c.PostForm("firstName")
-    lastName := c.PostForm("lastName")
-    total := c.PostForm("total")
-    currency := c.PostForm("currency")
+    total, currency,
+    numberCard, typeCard,
+    expireMonthCard, expireYearCard,
+    cvv2, firstName,
+    lastName := services.ExtractCreditCardPaymentData(&paypalCardInput)
 
-    paymentData := map[string]interface{}{
-        "intent": "sale",
-        "payer": map[string]interface{}{
-            "payment_method": "credit_card",
-            "funding_instruments": []map[string]interface{}{
-                {
-                    "credit_card": map[string]interface{}{
-                        "number":       numberCard,
-                        "type":        typeCard,
-                        "expire_month": expireMonthCard,
-                        "expire_year":  expireYearCard,
-                        "cvv2":         cvv2,
-                        "first_name":   firstName,
-                        "last_name":    lastName,
-                        "billing_address": map[string]string{
-                            "line1":       "52 N Main ST",
-                            "city":        "Johnstown",
-                            "state":       "OH",
-                            "postal_code": "43210",
-                            "country_code": "US",
-                        },
-                    },
-                },
-            },
-        },
-        "transactions": []map[string]interface{}{
-            {
-                "amount": map[string]string{
-                    "total":    total,
-                    "currency": currency,
-                },
-                "description": "This is the payment transaction description.",
-            },
-        },
-    }
+    paymentData := services.GetMapPaymentData(
+        total, currency,
+        numberCard, typeCard,
+        expireMonthCard, expireYearCard,
+        cvv2, firstName, lastName,
+    )
 
     // Convert to JSON
     paymentJSON, err := json.Marshal(paymentData)
