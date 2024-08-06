@@ -7,7 +7,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -142,6 +144,30 @@ func GetCreditCardPaymentData(
 }
 
 
+func GetPaypalPaymentData(total, currency string) map[string]interface{}{
+	paymentData := map[string]interface{}{
+		"intent": "sale",
+		"redirect_urls": map[string]string{
+			"return_url": "http://127.0.0.1:5173/",
+			"cancel_url": "http://127.0.0.1:5173/",
+		},
+		"payer": map[string]string{
+			"payment_method": "paypal",
+		},
+		"transactions": []map[string]interface{}{
+			{
+				"amount": map[string]string{
+					"total":    total,
+					"currency": currency,
+				},
+				"description": "This is the payment transaction description.",
+			},
+		},
+	}
+	return paymentData
+}
+
+
 func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken string, paymentJSON []byte) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
 	if err != nil {
@@ -173,4 +199,83 @@ func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken
 		return nil, err
 	}
 	return body, nil
+}
+
+
+
+func UpdateUserBalance(c *gin.Context, total string){
+	// Getting username by token
+    username, err := ValidateToken(c)
+    if err != nil{
+        log.Println("Issues with token")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    // Init user repository to manage user
+    user_repository, err := InitializeUserRepository()
+    if err != nil{
+        log.Println("Failed to init repository")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    // Get user by username
+    user, err := user_repository.GetUserByUsername(username)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+
+    // Converting string to float64
+    convertedToFloatTotal, err := strconv.ParseFloat(total, 64)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert string to float"})
+        return
+    }
+
+    user.Balance += convertedToFloatTotal 
+    err = user_repository.UpdateBalanceUser(user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
+        return
+    }
+}
+
+
+func PGetAccessToken(c *gin.Context) (string, error) {
+    accessToken, err := PaypalGetAccessToken()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
+        return "", err
+    }
+    return accessToken, nil
+}
+
+func PBindJSONData(c *gin.Context, input interface{}) error {
+    if err := c.BindJSON(input); err != nil {
+        log.Println("Failed to bind JSON:", err)
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid input"})
+        return err
+    }
+    return nil
+}
+
+func PPostPaypalRequest(c *gin.Context, paymentURL, accessToken string, paymentJSON []byte) ([]byte, error) {
+    body, err := PostRequestUsingPaypalMethod(c, paymentURL, accessToken, paymentJSON)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to do POST request"})
+        return nil, err
+    }
+    return body, nil
+}
+
+func PHandlePaypalResponse(c *gin.Context, body []byte) (map[string]interface{}, error) {
+    var result map[string]interface{}
+    err := json.Unmarshal(body, &result)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to unmarshal JSON"})
+        return nil, err
+    }
+    return result, nil
 }
