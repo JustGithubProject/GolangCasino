@@ -11,7 +11,6 @@ import (
 )
 
 
-
 func CreatePaypalPaymentHandler(c *gin.Context) {
     accessToken, err := services.PGetAccessToken(c)
     if err != nil {

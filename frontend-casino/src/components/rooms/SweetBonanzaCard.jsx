@@ -2,6 +2,17 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import Header from '../header/Header';
+import bananaImage from '../../images/sweetbonanza-items/banana.png';
+import grapesImage from '../../images/sweetbonanza-items/grapes.png'
+import watermelonImage from '../../images/sweetbonanza-items/watermelon.png'
+import plumImage from '../../images/sweetbonanza-items/plum.avif'
+import appleImage from '../../images/sweetbonanza-items/apple.jpg'
+import bluecandyImage from '../../images/sweetbonanza-items/bluecandy.png'
+import greencandyImage from '../../images/sweetbonanza-items/greencandy.png'
+import purpleImage from '../../images/sweetbonanza-items/purplecandy.png'
+import scatter from '../../images/sweetbonanza-items/scatter.webp'
+import redCandy from '../../images/sweetbonanza-items/redcandy.png'
+import bomb100xImage from '../../images/sweetbonanza-items/bomb100x.png'
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
 
@@ -133,25 +144,26 @@ const BetInput = styled.input`
 `;
 
 const symbols = [
-  { id: 1, name: 'Banana', emoji: '🍌', color: '#FFE135' },
-  { id: 2, name: 'Grapes', emoji: '🍇', color: '#6F2DA8' },
-  { id: 3, name: 'Watermelon', emoji: '🍉', color: '#FC6C85' },
-  { id: 4, name: 'Plum', emoji: '🍑', color: '#DDA0DD' },
-  { id: 5, name: 'Apple', emoji: '🍎', color: '#FF0800' },
-  { id: 6, name: 'BlueCandy', emoji: '🍬', color: '#4169E1' },
-  { id: 7, name: 'GreenCandy', emoji: '🍬', color: '#32CD32' },
-  { id: 8, name: 'PurpleCandy', emoji: '🍬', color: '#9370DB' },
-  { id: 9, name: 'RedCandy', emoji: '🍬', color: '#FF4500' },
-  { id: 10, name: 'Scatter', emoji: '⭐', color: '#FFD700' },
-  { id: 11, name: 'Bomb2X', emoji: '💣', color: '#FFA500' },
-  { id: 12, name: 'Bomb3X', emoji: '💣', color: '#FF4500' },
-  { id: 13, name: 'Bomb5X', emoji: '💣', color: '#FF6347' },
-  { id: 14, name: 'Bomb10X', emoji: '💣', color: '#FF0000' },
-  { id: 15, name: 'Bomb25X', emoji: '💣', color: '#8B0000' },
-  { id: 16, name: 'Bomb50X', emoji: '💣', color: '#800000' },
-  { id: 17, name: 'Bomb100X', emoji: '💣', color: '#4B0082' }
+  { id: 1, name: 'Banana', image: bananaImage },
+  { id: 2, name: 'Grapes', image: grapesImage },
+  { id: 3, name: 'Watermelon', image: watermelonImage },
+  { id: 4, name: 'Plum', image: plumImage },
+  { id: 5, name: 'Apple', image: appleImage },
+  { id: 6, name: 'BlueCandy', image: bluecandyImage },
+  { id: 7, name: 'GreenCandy', image: greencandyImage },
+  { id: 8, name: 'PurpleCandy', image: purpleImage },
+  { id: 9, name: 'RedCandy', image: redCandy },
+  { id: 10, name: 'Scatter', image: scatter },
+  { id: 11, name: 'Bomb2X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 12, name: 'Bomb3X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 13, name: 'Bomb5X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 14, name: 'Bomb10X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 15, name: 'Bomb25X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 16, name: 'Bomb50X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 17, name: 'Bomb100X', image: bomb100xImage }
 ];
 
+// Функция генерации случайного игрового поля
 const generateRandomGameBoard = () => {
   const gameBoard = [];
   for (let i = 0; i < 5; i++) {
@@ -231,35 +243,34 @@ const SweetBonanzaCard = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       <Header username={username} balance={balance} handleLogout={() => {
-        localStorage.removeItem('token');
-        window.location.reload();
-      }} />
-      <Wrapper>
+          localStorage.removeItem('token');
+          window.location.reload();
+        }} />
+      <InnerWrapper>
         <Title>Sweet Bonanza</Title>
-        <InnerWrapper>
-          <GameBoard isSpinning={isSpinning}>
-            {gameBoard.flat().map((symbolId, index) => {
-              const symbol = symbols.find(s => s.id === symbolId);
-              return (
-                <Symbol key={index} color={symbol.color}>
-                  {symbol.emoji}
-                </Symbol>
-              );
-            })}
-          </GameBoard>
-          <BetInput
-            type="number"
-            value={bet}
-            onChange={e => setBet(Number(e.target.value))}
-            min="1"
-          />
-          <Button onClick={handleSpin}>Spin</Button>
-          <BalanceText>Balance: ${balance}</BalanceText>
-        </InnerWrapper>
-      </Wrapper>
-    </>
+        <BalanceText>Ваш баланс: {balance} UAH</BalanceText>
+        <BetInput
+          type="number"
+          value={bet}
+          onChange={e => setBet(Number(e.target.value))}
+        />
+        <Button onClick={handleSpin} disabled={isSpinning}>
+          {isSpinning ? 'Спините...' : 'Спин'}
+        </Button>
+        <GameBoard isSpinning={isSpinning}>
+          {gameBoard.flat().map((symbolId, index) => {
+            const symbol = symbols.find(s => s.id === symbolId);
+            return (
+              <Symbol key={index} color={symbol.color}>
+                <img src={symbol.image} alt={symbol.name} style={{ width: '100%', height: '100%' }} />
+              </Symbol>
+            );
+          })}
+        </GameBoard>
+      </InnerWrapper>
+    </Wrapper>
   );
 };
 
