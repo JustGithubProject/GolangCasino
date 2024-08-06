@@ -5,14 +5,22 @@ import Header from '../header/Header';
 import bananaImage from '../../images/sweetbonanza-items/banana.png';
 import grapesImage from '../../images/sweetbonanza-items/grapes.png'
 import watermelonImage from '../../images/sweetbonanza-items/watermelon.png'
-import plumImage from '../../images/sweetbonanza-items/plum.avif'
-import appleImage from '../../images/sweetbonanza-items/apple.jpg'
+import plumImage from '../../images/sweetbonanza-items/plum.png'
+import appleImage from '../../images/sweetbonanza-items/apple.png'
 import bluecandyImage from '../../images/sweetbonanza-items/bluecandy.png'
 import greencandyImage from '../../images/sweetbonanza-items/greencandy.png'
 import purpleImage from '../../images/sweetbonanza-items/purplecandy.png'
 import scatter from '../../images/sweetbonanza-items/scatter.webp'
 import redCandy from '../../images/sweetbonanza-items/redcandy.png'
 import bomb100xImage from '../../images/sweetbonanza-items/bomb100x.png'
+import bomb25xImage from '../../images/sweetbonanza-items/bomb25x.png'
+import bomb50xImage from '../../images/sweetbonanza-items/bomb50x.png'
+import bomb2xImage from '../../images/sweetbonanza-items/bomb2x.png'
+import bomb3xImage from '../../images/sweetbonanza-items/bomb3x.png'
+import bomb5xImage from '../../images/sweetbonanza-items/bomb5x.png'
+import bomb10xImage from '../../images/sweetbonanza-items/bomb10x.png'
+import sweetbonanzabackground from '../../images/sweetbonanza-items/sweetbonanza-background.png'
+
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
 
@@ -68,7 +76,7 @@ const Symbol = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${props => props.color || '#666'};
+  background: transparent;  
   border-radius: 12px;
   font-size: 28px;
   color: #fff;
@@ -126,7 +134,9 @@ const InnerWrapper = styled.div`
   border: 2px solid #444;
   border-radius: 15px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.3);
+  background-image: url(${sweetbonanzabackground});
+  background-size: cover;
+  background-position: center;
   backdrop-filter: blur(6px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 `;
@@ -154,12 +164,12 @@ const symbols = [
   { id: 8, name: 'PurpleCandy', image: purpleImage },
   { id: 9, name: 'RedCandy', image: redCandy },
   { id: 10, name: 'Scatter', image: scatter },
-  { id: 11, name: 'Bomb2X', image: '../../images/sweetbonanza-items/banana.png' },
-  { id: 12, name: 'Bomb3X', image: '../../images/sweetbonanza-items/banana.png' },
-  { id: 13, name: 'Bomb5X', image: '../../images/sweetbonanza-items/banana.png' },
-  { id: 14, name: 'Bomb10X', image: '../../images/sweetbonanza-items/banana.png' },
-  { id: 15, name: 'Bomb25X', image: '../../images/sweetbonanza-items/banana.png' },
-  { id: 16, name: 'Bomb50X', image: '../../images/sweetbonanza-items/banana.png' },
+  { id: 11, name: 'Bomb2X', image: bomb2xImage },
+  { id: 12, name: 'Bomb3X', image: bomb3xImage },
+  { id: 13, name: 'Bomb5X', image: bomb5xImage },
+  { id: 14, name: 'Bomb10X', image: bomb10xImage },
+  { id: 15, name: 'Bomb25X', image: bomb25xImage },
+  { id: 16, name: 'Bomb50X', image: bomb50xImage },
   { id: 17, name: 'Bomb100X', image: bomb100xImage }
 ];
 
@@ -257,7 +267,7 @@ const SweetBonanzaCard = () => {
           onChange={e => setBet(Number(e.target.value))}
         />
         <Button onClick={handleSpin} disabled={isSpinning}>
-          {isSpinning ? 'Спините...' : 'Спин'}
+          {isSpinning ? 'Spinning...' : 'Крутить'}
         </Button>
         <GameBoard isSpinning={isSpinning}>
           {gameBoard.flat().map((symbolId, index) => {
