@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
+import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import Header from '../header/Header';
 import bananaImage from '../../images/sweetbonanza-items/banana.png';
@@ -20,10 +20,13 @@ import bomb3xImage from '../../images/sweetbonanza-items/bomb3x.png'
 import bomb5xImage from '../../images/sweetbonanza-items/bomb5x.png'
 import bomb10xImage from '../../images/sweetbonanza-items/bomb10x.png'
 import sweetbonanzabackground from '../../images/sweetbonanza-items/sweetbonanza-background.png'
-
+import backgroundMusic from '../../images/sweetbonanza-items/sweet-music.mp3';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
 
+
+
+// Стили для Wrapper
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,58 +40,86 @@ const Wrapper = styled.div`
   width: 100vw;
   box-sizing: border-box;
   padding: 60px 20px;
-  border: 2px solid #333;
+  border: 2px solid #444;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 `;
 
-const spinAnimation = keyframes`
-  0% { transform: rotate(0); }
-  50% { transform: rotate(5deg); }
-  100% { transform: rotate(0); }
+// Анимация для падения символов
+const fallAnimation = keyframes`
+  0% {
+    transform: translateY(-300%) rotate(0deg) scale(0.4);
+    opacity: 0;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+  40% {
+    transform: translateY(60%) rotate(180deg) scale(1.2);
+    opacity: 0.6;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+  }
+  60% {
+    transform: translateY(20%) rotate(270deg) scale(1.1);
+    opacity: 0.8;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  }
+  80% {
+    transform: translateY(5%) rotate(360deg) scale(1.05);
+    opacity: 0.9;
+    box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.5);
+  }
+  90% {
+    transform: translateY(0) rotate(360deg) scale(1.02);
+    opacity: 1;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg) scale(1);
+    opacity: 1;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+  }
 `;
 
+// Анимация для перемещения GameBoard вниз
+const boardAnimation = keyframes`
+  0% { transform: translateY(-200%); }
+  50% { transform: translateY(15%); }
+  70% { transform: translateY(-5%); }
+  90% { transform: translateY(5%); }
+  100% { transform: translateY(0); }
+`;
+
+// Стили для GameBoard
 const GameBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 15px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   padding: 20px;
   border-radius: 15px;
   margin-top: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  border: 2px solid #444;
-  animation: ${props => props.isSpinning ? spinAnimation : 'none'} 0.6s ease-in-out;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 2px solid #555;
+  position: relative;
+  overflow: hidden;
+  animation: ${props => props.isSpinning ? css`${boardAnimation} 1.2s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
 `;
 
-const bounce = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-`;
-
+// Стили для символов
 const Symbol = styled.div`
   width: 70px;
   height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;  
+  background: transparent;
   border-radius: 12px;
   font-size: 28px;
   color: #fff;
-  animation: ${bounce} 1s infinite;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-  }
+  animation: ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
+  animation-delay: ${props => props.delay || '0s'};
 `;
 
+// Стили для кнопок
 const Button = styled.button`
   margin-top: 20px;
   padding: 12px 24px;
@@ -108,6 +139,7 @@ const Button = styled.button`
   }
 `;
 
+// Стили для текста баланса
 const BalanceText = styled.p`
   margin-top: 15px;
   font-size: 22px;
@@ -119,6 +151,7 @@ const BalanceText = styled.p`
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
 `;
 
+// Стили для заголовка
 const Title = styled.h1`
   color: #fff;
   margin-top: 20px;
@@ -130,6 +163,7 @@ const Title = styled.h1`
   background: rgba(0, 0, 0, 0.7);
 `;
 
+// Стили для внутреннего контейнера
 const InnerWrapper = styled.div`
   border: 2px solid #444;
   border-radius: 15px;
@@ -141,6 +175,7 @@ const InnerWrapper = styled.div`
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 `;
 
+// Стили для инпута ставки
 const BetInput = styled.input`
   margin-top: 15px;
   padding: 12px;
@@ -151,6 +186,25 @@ const BetInput = styled.input`
   color: #fff;
   width: 90px;
   text-align: center;
+`;
+
+const MusicButton = styled.button`
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #007bff;
+  color: #fff;
+  border: 2px solid #444;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
 `;
 
 const symbols = [
@@ -193,6 +247,8 @@ const SweetBonanzaCard = () => {
   const [balance, setBalance] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [bet, setBet] = useState(10);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true); // Состояние для управления музыкой
+  const audioRef = useRef(null); // Ссылка на аудио элемент
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -202,7 +258,18 @@ const SweetBonanzaCard = () => {
       setUsername(username);
       fetchUserBalance(username);
     }
-  }, []);
+
+    // Воспроизведение музыки при монтировании компонента
+    if (audioRef.current) {
+      audioRef.current.loop = true; // Зацикливаем музыку
+      audioRef.current.volume = 0.5; // Устанавливаем громкость
+      if (isMusicPlaying) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isMusicPlaying]);
 
   const fetchUserBalance = async (username) => {
     try {
@@ -252,6 +319,10 @@ const SweetBonanzaCard = () => {
     }, 500);
   };
 
+  const toggleMusic = () => {
+    setIsMusicPlaying(!isMusicPlaying);
+  };
+
   return (
     <Wrapper>
       <Header username={username} balance={balance} handleLogout={() => {
@@ -269,6 +340,9 @@ const SweetBonanzaCard = () => {
         <Button onClick={handleSpin} disabled={isSpinning}>
           {isSpinning ? 'Spinning...' : 'Крутить'}
         </Button>
+        <MusicButton onClick={toggleMusic}>
+          {isMusicPlaying ? 'Отключить музыку' : 'Включить музыку'}
+        </MusicButton>
         <GameBoard isSpinning={isSpinning}>
           {gameBoard.flat().map((symbolId, index) => {
             const symbol = symbols.find(s => s.id === symbolId);
@@ -280,8 +354,11 @@ const SweetBonanzaCard = () => {
           })}
         </GameBoard>
       </InnerWrapper>
+      <audio ref={audioRef} src={backgroundMusic} />
     </Wrapper>
   );
 };
+
+
 
 export default SweetBonanzaCard;
