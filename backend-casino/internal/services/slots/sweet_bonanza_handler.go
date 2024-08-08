@@ -45,6 +45,21 @@ func SweetBonanzaHandle(c *gin.Context) {
     }
 
     currentPlayingField, currentBalance := SweetBonanzaSpin(false, convertedSpinBet, user.Balance)
+
+    // Getting a specific array from a matrix
+    row1 := currentPlayingField[0]
+    row2 := currentPlayingField[1]
+    row3 := currentPlayingField[2]
+    row4 := currentPlayingField[3]
+    row5 := currentPlayingField[4]
+
+    // Getting a specific string from an array
+    sRow1 := ConversionArrayToString(row1)
+    sRow2 := ConversionArrayToString(row2)
+    sRow3 := ConversionArrayToString(row3)
+    sRow4 := ConversionArrayToString(row4)
+    sRow5 := ConversionArrayToString(row5)
+
     log.Println("Current playing field: ", currentPlayingField)
 
     // Update balance of user after spin
@@ -54,6 +69,15 @@ func SweetBonanzaHandle(c *gin.Context) {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
         return
     }
-    c.JSON(http.StatusOK, gin.H{"message": "Game request handled successfully", "user": user, "playingField": currentPlayingField, "balance": currentBalance})
+    c.JSON(http.StatusOK, gin.H{
+        "message": "Game request handled successfully",
+        "user": user,
+        "balance": currentBalance,
+        "sRow1": sRow1,
+        "sRow2": sRow2,
+        "sRow3": sRow3,
+        "sRow4": sRow4,
+        "sRow5": sRow5,
+    })
 }
 

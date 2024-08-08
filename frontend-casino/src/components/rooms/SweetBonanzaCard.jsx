@@ -242,7 +242,8 @@ const generateRandomGameBoard = () => {
 };
 
 const SweetBonanzaCard = () => {
-  const [gameBoard, setGameBoard] = useState(generateRandomGameBoard());
+  let defaultMatrix = [[10, 7,6, 4, 1, 6], [4, 6, 5, 4, 6, 4], [3, 1, 3, 3, 4, 6], [6, 3, 4, 5, 5, 6], [7, 4, 6, 6, 4, 6]]
+  const [gameBoard, setGameBoard] = useState(defaultMatrix);
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -308,9 +309,39 @@ const SweetBonanzaCard = () => {
           throw new Error('Network response was not ok');
         }
 
-        const { playingField, balance } = await response.json();
-        setGameBoard(playingField);
-        setBalance(balance);
+        let data = await response.json();
+        
+        // Getting a string from json representing a string of numbers
+        let sRow1 = data.sRow1;
+        let sRow2 = data.sRow2;
+        let sRow3 = data.sRow3;
+        let sRow4 = data.sRow4;
+        let sRow5 = data.sRow5;
+
+        // ["2", "3", "4", ... "5"]
+        let strRow1Array = sRow1.split(", ");
+        let strRow2Array = sRow2.split(", ");
+        let strRow3Array = sRow3.split(", ");
+        let strRow4Array = sRow4.split(", ");
+        let strRow5Array = sRow5.split(", ");
+
+        let numRow1Array = strRow1Array.map(Number);
+        let numRow2Array = strRow2Array.map(Number);
+        let numRow3Array = strRow3Array.map(Number);
+        let numRow4Array = strRow4Array.map(Number);
+        let numRow5Array = strRow5Array.map(Number);
+
+        let matrixArray = [
+            numRow1Array,
+            numRow2Array,
+            numRow3Array,
+            numRow4Array,
+            numRow5Array
+        ];
+
+
+        setGameBoard(matrixArray);
+        setBalance(data.balance);
       } catch (error) {
         console.error('Error fetching spin data:', error);
       } finally {

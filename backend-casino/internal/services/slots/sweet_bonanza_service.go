@@ -2,6 +2,7 @@ package slots
 
 import (
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -562,6 +563,19 @@ func GeneratePlayingFieldBonusMode() [][]int {
 	}
 	return playingField
 }
+
+func ConversionArrayToString(rowArr []int) string {
+	var result string
+	
+	for index, number := range rowArr{
+		if (index > 0){
+			result += ", "
+		}
+		result += strconv.Itoa(number)
+	}
+	return result
+}
+
 
 
 func SweetBonanzaSpin(isBonusMode bool, bet float64, balance float64) ([][]int, float64) {
