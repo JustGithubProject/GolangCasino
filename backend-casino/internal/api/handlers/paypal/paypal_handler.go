@@ -12,11 +12,13 @@ import (
 
 
 func CreatePaypalPaymentHandler(c *gin.Context) {
+
+    // Getting paypal AccessToken
     accessToken, err := services.PGetAccessToken(c)
     if err != nil {
         return
     }
-
+    log.Println("AccessToken: ", accessToken)
     paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
     var paypalInput services.PaypalPaymentInput

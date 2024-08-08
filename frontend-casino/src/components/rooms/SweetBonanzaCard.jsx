@@ -48,34 +48,29 @@ const Wrapper = styled.div`
 // Анимация для падения символов
 const fallAnimation = keyframes`
   0% {
-    transform: translateY(-300%) rotate(0deg) scale(0.4);
+    transform: translateY(-300%) rotate(0deg) scale(0.6);
     opacity: 0;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
   }
   40% {
-    transform: translateY(60%) rotate(180deg) scale(1.2);
-    opacity: 0.6;
+    transform: translateY(50%) rotate(90deg) scale(1.1);
+    opacity: 0.5;
     box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
   }
-  60% {
-    transform: translateY(20%) rotate(270deg) scale(1.1);
-    opacity: 0.8;
+  70% {
+    transform: translateY(10%) rotate(180deg) scale(1.05);
+    opacity: 0.7;
     box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
   }
-  80% {
-    transform: translateY(5%) rotate(360deg) scale(1.05);
+  85% {
+    transform: translateY(0) rotate(270deg) scale(1);
     opacity: 0.9;
     box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.5);
-  }
-  90% {
-    transform: translateY(0) rotate(360deg) scale(1.02);
-    opacity: 1;
-    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
   }
   100% {
     transform: translateY(0) rotate(360deg) scale(1);
     opacity: 1;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 25px 30px rgba(0, 0, 0, 0.6);
   }
 `;
 
@@ -94,7 +89,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 15px;
   background: rgba(255, 255, 255, 0.2);
-  padding: 20px;
+  padding: 10px;
   border-radius: 15px;
   margin-top: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -102,6 +97,12 @@ const GameBoard = styled.div`
   position: relative;
   overflow: hidden;
   animation: ${props => props.isSpinning ? css`${boardAnimation} 1.2s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
+`;
+
+const bounceAnimation = keyframes`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 `;
 
 // Стили для символов
@@ -115,6 +116,7 @@ const Symbol = styled.div`
   border-radius: 12px;
   font-size: 28px;
   color: #fff;
+  animation: ${bounceAnimation} 1s infinite;
   animation: ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
   animation-delay: ${props => props.delay || '0s'};
 `;
@@ -227,22 +229,10 @@ const symbols = [
   { id: 17, name: 'Bomb100X', image: bomb100xImage }
 ];
 
-// Функция генерации случайного игрового поля
-const generateRandomGameBoard = () => {
-  const gameBoard = [];
-  for (let i = 0; i < 5; i++) {
-    const row = [];
-    for (let j = 0; j < 6; j++) {
-      const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)].id;
-      row.push(randomSymbol);
-    }
-    gameBoard.push(row);
-  }
-  return gameBoard;
-};
+
 
 const SweetBonanzaCard = () => {
-  let defaultMatrix = [[10, 7,6, 4, 1, 6], [4, 6, 5, 4, 6, 4], [3, 1, 3, 3, 4, 6], [6, 3, 4, 5, 5, 6], [7, 4, 6, 6, 4, 6]]
+  let defaultMatrix = [[10, 7, 6, 4, 1, 6], [4, 6, 5, 4, 6, 4], [3, 1, 3, 3, 4, 6], [6, 3, 4, 5, 5, 6], [7, 4, 6, 6, 4, 6]]
   const [gameBoard, setGameBoard] = useState(defaultMatrix);
   const [username, setUsername] = useState(null);
   const [balance, setBalance] = useState(null);
@@ -292,7 +282,7 @@ const SweetBonanzaCard = () => {
     }
 
     setIsSpinning(true);
-    setGameBoard(generateRandomGameBoard());
+    setGameBoard(defaultMatrix);
 
     setTimeout(async () => {
       try {

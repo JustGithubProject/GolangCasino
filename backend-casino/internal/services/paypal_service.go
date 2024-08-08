@@ -171,6 +171,7 @@ func GetPaypalPaymentData(total, currency string) map[string]interface{}{
 func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken string, paymentJSON []byte) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
 	if err != nil {
+        log.Println("Failed to create request")
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
 		return nil, err
 	}
@@ -182,6 +183,7 @@ func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+        log.Println("Failed to send request")
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
 		return nil, err
 	}
@@ -195,6 +197,7 @@ func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+        log.Println("Failed to read response body")
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
 		return nil, err
 	}
@@ -264,6 +267,7 @@ func PBindJSONData(c *gin.Context, input interface{}) error {
 func PPostPaypalRequest(c *gin.Context, paymentURL, accessToken string, paymentJSON []byte) ([]byte, error) {
     body, err := PostRequestUsingPaypalMethod(c, paymentURL, accessToken, paymentJSON)
     if err != nil {
+        log.Println("Post request using paypal method failed!!!")
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to do POST request"})
         return nil, err
     }
@@ -274,6 +278,7 @@ func PHandlePaypalResponse(c *gin.Context, body []byte) (map[string]interface{},
     var result map[string]interface{}
     err := json.Unmarshal(body, &result)
     if err != nil {
+        log.Println("Failed to unmarshal JSON")
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to unmarshal JSON"})
         return nil, err
     }
