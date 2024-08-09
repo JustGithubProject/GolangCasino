@@ -44,6 +44,10 @@ type PaypalPaymentCardInput struct {
 
 
 func PaypalGetAccessToken() (string, error) {
+    /*
+    An access token is typically used to perform operations on behalf of the application,
+    such as creating payments, checking the status of transactions, etc.
+    */
 
     err := godotenv.Load()
     if err != nil{
@@ -54,9 +58,17 @@ func PaypalGetAccessToken() (string, error) {
     var clientID string = os.Getenv("PAYPAL_CLIENT_ID")
     var paypalSecret string = os.Getenv("PAYPAL_SECRET")
     
-	paypalURL := "https://api.sandbox.paypal.com/v1/oauth2/token"
+	paypalURL := "https://api-m.sandbox.paypal.com/v1/oauth2/token"
 	data := url.Values{}
 	auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + paypalSecret))
+
+
+    /*
+    grant_type=???
+    For example, when access to the API is required on behalf of a specific user,
+    other authorization methods such as auth_code or password are used,
+    where the user directly interacts with the authorization system.
+    */
 	data.Set("grant_type", "client_credentials")
 
 	req, err := http.NewRequest(http.MethodPost, paypalURL, strings.NewReader(data.Encode()))
