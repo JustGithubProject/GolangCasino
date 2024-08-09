@@ -10,6 +10,13 @@ import (
     "github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 )
 
+/*
+To do payment:
+    After creating an order using the /v2/checkout/orders endpoint,
+    you will receive an order ID and a confirmation link.
+    This link is the URL that the customer must go to to complete the payment process.
+*/
+
 
 func CreatePaypalPaymentHandler(c *gin.Context) {
 
@@ -19,6 +26,11 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
         return
     }
     log.Println("AccessToken: ", accessToken)
+
+    /*
+        Sandbox. https://api-m.sandbox.paypal.com
+        Live. https://api-m.paypal.com
+    */
     paymentURL := "https://api.sandbox.paypal.com/v1/payments/payment"
 
     var paypalInput services.PaypalPaymentInput
@@ -104,4 +116,9 @@ func CreateCreditCardPaymentHandler(c *gin.Context) {
 
     services.UpdateUserBalance(c, total)
     c.JSON(http.StatusOK, result)
+}
+
+
+func CreatePaymentOrder(){
+    // ...
 }
