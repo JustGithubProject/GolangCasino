@@ -71,6 +71,7 @@ func CreatePaypalPaymentHandler(c *gin.Context) {
 }
 
 func CreateCreditCardPaymentHandler(c *gin.Context) {
+    // Getting paypal AccessToken
     accessToken, err := services.PGetAccessToken(c)
     if err != nil {
         return
@@ -119,6 +120,42 @@ func CreateCreditCardPaymentHandler(c *gin.Context) {
 }
 
 
-func CreatePaymentOrder(){
-    // ...
+func CreatePaymentOrder(c *gin.Context){
+    // Getting paypal AccessToken
+    accessToken, err := services.PGetAccessToken(c)
+    if err != nil{
+        return
+    }
+
+    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders"
+    var paypalCreateOrderInput services.PaypalCreateOrderInput
+    if err := services.PBindJSONData(c, &paypalCreateOrderInput); err != nil {
+        return
+    }
+
+    currencyCode := paypalCreateOrderInput.CurrencyCode
+    moneyValue := paypalCreateOrderInput.MoneyValue
+
+    orderData := services.GetOrderPaymentData(currencyCode, moneyValue)
+
+    orderJSON, err := json.Marshal(orderData)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to marshal order JSON data"})
+        return
+    }
+
+    body, err := services.PPostPaypalCreateOrderRequest(c, paypalOrderURL, accessToken, orderJSON)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to create paypal order"})
+        return
+    }
+
+    result, err := services.PHandlePaypalResponse(c, body)
+    if err != nil {
+        return
+    }
+
+    services.UpdateUserBalance(c, moneyValue)
+    c.JSON(http.StatusOK, result)
+
 }
