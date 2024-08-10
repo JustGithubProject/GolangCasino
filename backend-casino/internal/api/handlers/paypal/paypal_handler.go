@@ -126,16 +126,20 @@ func CreatePaymentOrder(c *gin.Context){
     if err != nil{
         return
     }
-
+    log.Println("accessToken=", accessToken)
     paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders"
     var paypalCreateOrderInput services.PaypalCreateOrderInput
     if err := services.PBindJSONData(c, &paypalCreateOrderInput); err != nil {
         return
     }
 
+    // Getting currency and amount of money from JSON
     currencyCode := paypalCreateOrderInput.CurrencyCode
     moneyValue := paypalCreateOrderInput.MoneyValue
+    log.Println("CurrencyCode=", currencyCode)
+    log.Println("MonetValue=", moneyValue)
 
+    // Needed data to do request
     orderData := services.GetOrderPaymentData(currencyCode, moneyValue)
 
     orderJSON, err := json.Marshal(orderData)
@@ -155,7 +159,40 @@ func CreatePaymentOrder(c *gin.Context){
         return
     }
 
+    log.Println("order_id", result["id"])
+
     services.UpdateUserBalance(c, moneyValue)
     c.JSON(http.StatusOK, result)
+}
 
+
+func GetOrderDetailByID(c *gin.Context) {
+    // Getting order id
+    orderID := c.Query("id")
+    if orderID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Order ID is required"})
+        return
+    }
+
+    // Getting access token
+    accessToken, err := services.PGetAccessToken(c)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
+        return
+    }
+
+    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders/" + orderID
+
+    // Do get request to PayPal API and get response
+    response, err := services.PGetPaypalOrderDetails(c, paypalOrderURL, accessToken)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get PayPal order details"})
+        return
+    }
+
+    result, err := services.PHandlePaypalResponse(c, response)
+    if err != nil {
+        return
+    }
+    c.JSON(http.StatusOK, result)
 }

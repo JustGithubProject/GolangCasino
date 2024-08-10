@@ -347,9 +347,10 @@ func PPostPaypalCreateOrderRequest(c *gin.Context, paymentURL, accessToken strin
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
 		return nil, err
 	}
+
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusCreated {
+	if resp.StatusCode != 200 {
 		body, _ := ioutil.ReadAll(resp.Body)
 		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
 		return nil, errors.New("failed to create payment")
@@ -362,6 +363,34 @@ func PPostPaypalCreateOrderRequest(c *gin.Context, paymentURL, accessToken strin
 		return nil, err
 	}
 	return body, nil
+}
+
+
+func PGetPaypalOrderDetails(c *gin.Context, url string, accessToken string) ([]byte, error) {
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        return nil, err
+    }
+
+    // Установка заголовков запроса
+    req.Header.Set("Authorization", "Bearer " + accessToken)
+    req.Header.Set("Content-Type", "application/json")
+
+    // Отправка запроса
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+
+    // Чтение ответа
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+
+    return body, nil
 }
 
 func PHandlePaypalResponse(c *gin.Context, body []byte) (map[string]interface{}, error) {
