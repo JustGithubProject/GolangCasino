@@ -67,6 +67,7 @@ func PaypalGetAccessToken() (string, error) {
     // Getting vars from .env file
     var clientID string = os.Getenv("PAYPAL_CLIENT_ID")
     var paypalSecret string = os.Getenv("PAYPAL_SECRET")
+
     
 	paypalURL := "https://api-m.sandbox.paypal.com/v1/oauth2/token"
 	data := url.Values{}
@@ -189,35 +190,46 @@ func GetPaypalPaymentData(total, currency string) map[string]interface{}{
 	return paymentData
 }
 
-func GetOrderPaymentData(currencyCode string, moneyValue string) map[string]interface{}{
+func GetOrderPaymentData(currencyCode string, moneyValue string) map[string]interface{} {
     paymentData := map[string]interface{}{
-		"intent": "CAPTURE",
-		"purchase_units": []map[string]interface{}{
-			{
-				"reference_id": GenerateUUIDForPaypal(),
-				"amount": map[string]interface{}{
-					"currency_code": currencyCode,
-					"value":         moneyValue,
-				},
-			},
-		},
-		"payment_source": map[string]interface{}{
-			"paypal": map[string]interface{}{
-				"experience_context": map[string]interface{}{
-					"payment_method_preference": "IMMEDIATE_PAYMENT_REQUIRED",
-					"brand_name":                "EXAMPLE INC",
-					"locale":                    "en-US",
-					"landing_page":              "LOGIN",
-					"shipping_preference":       "SET_PROVIDED_ADDRESS",
-					"user_action":               "PAY_NOW",
-					"return_url":                "https://example.com/returnUrl",
-					"cancel_url":                "https://example.com/cancelUrl",
-				},
-			},
-		},
-	}
+        "intent": "CAPTURE",
+        "purchase_units": []map[string]interface{}{
+            {
+                "reference_id": GenerateUUIDForPaypal(),
+                "amount": map[string]interface{}{
+                    "currency_code": currencyCode,
+                    "value":         moneyValue,
+                },
+                "shipping": map[string]interface{}{
+                    "address": map[string]interface{}{
+                        "address_line_1": "123 Main St",
+                        "address_line_2": "Apt 4B",
+                        "admin_area_2":   "City",
+                        "admin_area_1":   "State",
+                        "postal_code":    "12345",
+                        "country_code":   "US",
+                    },
+                },
+            },
+        },
+        "payment_source": map[string]interface{}{
+            "paypal": map[string]interface{}{
+                "experience_context": map[string]interface{}{
+                    "payment_method_preference": "IMMEDIATE_PAYMENT_REQUIRED",
+                    "brand_name":                "EXAMPLE INC",
+                    "locale":                    "en-US",
+                    "landing_page":              "LOGIN",
+                    "shipping_preference":       "SET_PROVIDED_ADDRESS",
+                    "user_action":               "PAY_NOW",
+                    "return_url":                "https://example.com/returnUrl",
+                    "cancel_url":                "https://example.com/cancelUrl",
+                },
+            },
+        },
+    }
     return paymentData
 }
+
 
 
 func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken string, paymentJSON []byte) ([]byte, error) {
@@ -328,7 +340,6 @@ func PPostPaypalRequest(c *gin.Context, paymentURL, accessToken string, paymentJ
 
 func PPostPaypalCreateOrderRequest(c *gin.Context, paymentURL, accessToken string, orderJSON []byte) ([]byte, error){
     req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(orderJSON)))
-	
     if err != nil {
         log.Println("Failed to create request")
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
@@ -336,8 +347,9 @@ func PPostPaypalCreateOrderRequest(c *gin.Context, paymentURL, accessToken strin
 	}
 
     // Set needed headers
-	req.Header.Set("Content-Type", "application/json")
+    log.Println("AccessToken", len(accessToken))
 	req.Header.Set("Authorization", "Bearer "+ accessToken)
+    req.Header.Set("Content-Type", "application/json")
     req.Header.Set("PayPal-Request-Id", GenerateUUIDForPaypal())
 
 	client := &http.Client{}
@@ -349,9 +361,11 @@ func PPostPaypalCreateOrderRequest(c *gin.Context, paymentURL, accessToken strin
 	}
 
 	defer resp.Body.Close()
-
+    log.Println("StatusCode=", resp.StatusCode)
 	if resp.StatusCode != 200 {
+        log.Println("StatusCode was bad?")
 		body, _ := ioutil.ReadAll(resp.Body)
+        log.Println("Body", string(body))
 		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
 		return nil, errors.New("failed to create payment")
 	}
@@ -362,6 +376,7 @@ func PPostPaypalCreateOrderRequest(c *gin.Context, paymentURL, accessToken strin
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
 		return nil, err
 	}
+    log.Println("Are we at the end of the PPostPaypalCreateOrderRequest?")
 	return body, nil
 }
 

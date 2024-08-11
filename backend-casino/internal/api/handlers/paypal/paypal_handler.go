@@ -127,7 +127,7 @@ func CreatePaymentOrder(c *gin.Context){
         return
     }
     log.Println("accessToken=", accessToken)
-    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders"
+    paypalOrderURL := "https://api-m.sandbox.paypal.com/v2/checkout/orders"
     var paypalCreateOrderInput services.PaypalCreateOrderInput
     if err := services.PBindJSONData(c, &paypalCreateOrderInput); err != nil {
         return
@@ -136,26 +136,33 @@ func CreatePaymentOrder(c *gin.Context){
     // Getting currency and amount of money from JSON
     currencyCode := paypalCreateOrderInput.CurrencyCode
     moneyValue := paypalCreateOrderInput.MoneyValue
+
     log.Println("CurrencyCode=", currencyCode)
     log.Println("MonetValue=", moneyValue)
 
     // Needed data to do request
     orderData := services.GetOrderPaymentData(currencyCode, moneyValue)
 
+    log.Println("OrderData", orderData["intent"])
     orderJSON, err := json.Marshal(orderData)
     if err != nil{
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to marshal order JSON data"})
         return
     }
-
+    
+    log.Println("JSON: ", orderJSON)
+    
     body, err := services.PPostPaypalCreateOrderRequest(c, paypalOrderURL, accessToken, orderJSON)
     if err != nil{
+        // Dropped here
+        log.Println("Error occurred after PPostPaypalCreateOrderRequest")
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to create paypal order"})
         return
     }
 
     result, err := services.PHandlePaypalResponse(c, body)
     if err != nil {
+        log.Println("Error occurred after PHandlePaypalResponse")
         return
     }
 
@@ -181,7 +188,7 @@ func GetOrderDetailByID(c *gin.Context) {
         return
     }
 
-    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders/" + orderID
+    paypalOrderURL := "https://api-m.sandbox.paypal.com/v2/checkout/orders/" + orderID
 
     // Do get request to PayPal API and get response
     response, err := services.PGetPaypalOrderDetails(c, paypalOrderURL, accessToken)
