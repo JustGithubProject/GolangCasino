@@ -19,16 +19,18 @@ func MigrateDB(db *gorm.DB){
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-    // Загрузка переменных окружения из файла .env
+    
+    // Loading .env file
     err := godotenv.Load()
     if err != nil{
         log.Fatal("Error loading .env file")
     }
 
+    // Getting variable of .env 
     dsn := os.Getenv("DB_DSN")
 
 
-    // Настройка соединения с базой данных PostgreSQL
+    // Setting of connection
     db, err := gorm.Open(postgres.New(postgres.Config{
         DSN: dsn,
     }), &gorm.Config{})
@@ -36,7 +38,8 @@ func InitDB() *gorm.DB {
     if err != nil {
         log.Fatal("failed to connect database")
     }
-    
+
+
     DB = db
     return db
 }

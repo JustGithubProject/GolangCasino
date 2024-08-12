@@ -37,6 +37,16 @@ func LogResponseHeaders() gin.HandlerFunc {
 
 func main() {
 	db := database.InitDB()
+	sqlDB, err := db.DB()
+    if err != nil{
+        log.Fatal("Failed to get database connection", err)
+    }
+
+	sqlDB.SetMaxOpenConns(50)
+	sqlDB.SetMaxIdleConns(50)
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
+    defer sqlDB.Close()
 	// database.MigrateDB(db)
 
 	r := gin.Default()

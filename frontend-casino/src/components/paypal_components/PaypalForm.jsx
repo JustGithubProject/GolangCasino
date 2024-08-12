@@ -1,111 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
 import axios from 'axios';
 
-const createPayPalOrder = async (amountP, currencyP, setLoading, setError) => {
-  console.log("Come in createPayPalOrder");
-  setLoading(true);
-  setError('');
-  
-  try {
-    console.log("Amount=", amountP);
-
-    // Извлекаем токен из localStorage
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('No authentication token found');
-    }
-
-    const url = "http://127.0.0.1:8081/paypal/paypal-payment/";
-    
-    const response = await axios.post(url, {
-      Total: amountP,
-      Currency: currencyP,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    console.log("Status=", response.status);
-    console.log("Data=", response.data);
-    return response.data.id; 
-    
-  } catch (error) {
-    setError(error.message);
-    console.error('Error creating PayPal order:', error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-const createCreditCardPayment = async (amount, currency, setLoading, setError) => {
-  setLoading(true);
-  setError('');
-
-  try {
-    console.log("Amount=", amount);
-    const response = await fetch('http://localhost:8081/paypal/creditCard-payment/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        Total: amount,
-        Currency: currency,
-      }),
-    });
-
-    const payment = await response.json();
-
-    if (!response.ok) {
-      throw new Error(payment.message || 'Error initiating credit card payment');
-    }
-
-    console.log('Credit card payment initiated:', payment);
-  } catch (error) {
-    setError(error.message);
-    console.error('Error initiating credit card payment:', error);
-  } finally {
-    setLoading(false);
-  }
-};
-
 const PayPalComponent = () => {
+  const paypalRef = useRef();
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  console.log(amount); // тут правильно выдает amount
+  useEffect(() => {
+    const loadPayPalScript = () => {
+      const script = document.createElement('script');
+      script.src = "https://www.paypal.com/sdk/js?client-id=AX4y6W2OQIABZYyC4OoPfLY1pxRTlQsg80XghZG2Jxs0Fd-OJkNR6gQXTesLUUeGuoxfFO7MOw9Ql-2G&components=buttons&enable-funding=venmo,paylater";
+      script.addEventListener('load', () => {
+        window.paypal.Buttons({
+          style: {
+            shape: 'rect',
+            layout: 'vertical',
+          },
+          createOrder: async () => {
+            try {
+              const orderId = await createPayPalOrder(amount, currency, setLoading, setError);
+              return orderId;
+            } catch (error) {
+              console.error('Error creating PayPal order:', error);
+            }
+          },
+          onApprove: async (data, actions) => {
+            try {
+              await actions.order.capture();
+              console.log('Transaction completed by', data.payer.name.given_name);
+            } catch (error) {
+              console.error('Error capturing PayPal order:', error);
+            }
+          },
+        }).render(paypalRef.current);
+      });
+      document.body.appendChild(script);
+    };
 
-  const handlePayPalPayment = async () => {
+    loadPayPalScript();
+  }, [amount, currency]);
+
+  const createPayPalOrder = async (amountP, currencyP, setLoading, setError) => {
     setLoading(true);
     setError('');
-
     try {
-      const orderId = await createPayPalOrder(amount, currency, setLoading, setError);
-      if (orderId) {
-        window.location.href = `https://www.paypal.com/checkoutnow?token=${orderId}`;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
       }
+
+      const url = "http://127.0.0.1:8081/paypal/create/order/";
+      const response = await axios.post(url, {
+        currency_code: currencyP,
+        value: amountP,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      window.location.href = response.data.links[1].href
+      return response.data.id; 
     } catch (error) {
-      setError('Error initiating PayPal payment');
-      console.error('Error initiating PayPal payment:', error);
+      setError(error.message);
+      console.error('Error creating PayPal order:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const onPayPalApprove = async (data, actions) => {
-    try {
-      await actions.order.capture();
-      console.log('Transaction completed by', data.payer.name.given_name);
-    } catch (error) {
-      console.error('Error capturing PayPal order:', error);
-    }
-  };
+  
 
   return (
     <Container>
@@ -134,12 +101,8 @@ const PayPalComponent = () => {
           </Select>
         </Label>
       </Form>
-      <PayPalButton onClick={() => handlePayPalPayment()} disabled={loading}>
-        {loading ? 'Обработка...' : 'Оплатить через PayPal'}
-      </PayPalButton>
-      <CreditCardButton onClick={() => createCreditCardPayment(amount, currency, setLoading, setError)} disabled={loading}>
-        {loading ? 'Обработка...' : 'Оплатить кредитной картой'}
-      </CreditCardButton>
+      <div ref={paypalRef}></div>
+
     </Container>
   );
 };
@@ -209,7 +172,7 @@ const Select = styled.select`
   }
 `;
 
-const PayPalButton = styled.button`
+const CreditCardButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
@@ -229,8 +192,6 @@ const PayPalButton = styled.button`
     cursor: not-allowed;
   }
 `;
-
-const CreditCardButton = styled(PayPalButton)``;
 
 const ErrorMessage = styled.div`
   color: red;
