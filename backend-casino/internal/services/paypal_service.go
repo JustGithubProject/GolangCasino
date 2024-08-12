@@ -221,7 +221,7 @@ func GetOrderPaymentData(currencyCode string, moneyValue string) map[string]inte
                     "landing_page":              "LOGIN",
                     "shipping_preference":       "SET_PROVIDED_ADDRESS",
                     "user_action":               "PAY_NOW",
-                    "return_url":                "https://example.com/returnUrl",
+                    "return_url":                "http://127.0.0.1:5173/",
                     "cancel_url":                "https://example.com/cancelUrl",
                 },
             },
@@ -274,7 +274,7 @@ func UpdateUserBalance(c *gin.Context, total string){
 	// Getting username by token
     username, err := ValidateToken(c)
     if err != nil{
-        log.Println("Issues with token")
+        log.Println("Issues with casino auth token")
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
         return
     }
@@ -313,7 +313,7 @@ func UpdateUserBalance(c *gin.Context, total string){
 func PGetAccessToken(c *gin.Context) (string, error) {
     accessToken, err := PaypalGetAccessToken()
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get paypal access token"})
         return "", err
     }
     return accessToken, nil

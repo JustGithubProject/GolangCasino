@@ -84,8 +84,6 @@ func main() {
 
 
 	// paypal handlers
-	r.POST("/paypal/paypal-payment/", paypal_handlers.CreatePaypalPaymentHandler) // Incorrect (will be deleted soon)
-	r.POST("/paypal/creditCard-payment/", paypal_handlers.CreateCreditCardPaymentHandler) // Incorrect (will be deleted soon)
 	r.POST("/paypal/create/order/", paypal_handlers.CreatePaymentOrder) // Correct way to add balance for users
 	r.GET("/paypal/info/order/", paypal_handlers.GetOrderDetailByID) 
 	

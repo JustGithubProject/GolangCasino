@@ -1,0 +1,3 @@
+1. You need to fix problem  interrupting connection with postgres database
+2. You need to take from site paypal html/js for payment method of paypal
+3. To add your endpoint for creating order to frontend

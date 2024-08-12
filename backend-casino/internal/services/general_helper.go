@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+    "log"
 
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/repositories"
@@ -46,6 +47,7 @@ func InitNumbersArray() []int{
 
 func ValidateToken(c *gin.Context) (string, error) {
     authHeader := c.GetHeader("Authorization")
+
     if authHeader == "" {
         return "", errors.New("Authorization header is missing")
     }
@@ -56,6 +58,7 @@ func ValidateToken(c *gin.Context) (string, error) {
     }
     
     tokenString := tokenParts[1]
+    log.Println("Auth token: ", tokenString)
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         return []byte("secret-key"), nil
     })
