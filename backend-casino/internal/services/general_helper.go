@@ -549,6 +549,12 @@ func InitializeGameRepository() (repositories.GameRepository, error){
     return game_repository, nil
 }
 
+func InitializePaymentRepository() (repositories.PaymentRepository, error){
+    db := database.InitDB()
+    payment_repository := repositories.PaymentRepository{Db: db}
+    return payment_repository, nil
+}
+
 
 type GameParams struct {
     GuessEvenBet             float64

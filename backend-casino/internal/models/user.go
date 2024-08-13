@@ -1,6 +1,8 @@
 package models 
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -11,4 +13,13 @@ type User struct {
 	Email string `gorm."unique"`
 	Password string
 	Balance float64
+	Payments []Payment
+}
+
+
+type Payment struct {
+	gorm.Model
+	OrderID string
+	UserID uint
+	Status string
 }

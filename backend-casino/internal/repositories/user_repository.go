@@ -49,3 +49,15 @@ func (ur *UserRepository) DeleteUser(user *models.User) error {
 func (ur *UserRepository) UpdateBalanceUser(user *models.User) error {
     return ur.Db.Model(user).Update("balance", user.Balance).Error
 }
+
+func (ur *UserRepository) GetUserPayments(userID uint) (*models.User, error) {
+    var user models.User
+
+    // Find the user by ID and preload payments
+    result := ur.Db.Preload("Payments").First(&user, userID)
+    if result.Error != nil {
+        return nil, result.Error // Return the error if the user or payments cannot be fetched
+    }
+
+    return &user, nil // Return the user with preloaded payments
+}

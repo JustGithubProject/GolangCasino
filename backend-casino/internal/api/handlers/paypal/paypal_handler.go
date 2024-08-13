@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
     "github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
+    "github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
 )
 
 /*
@@ -66,8 +67,54 @@ func CreatePaymentOrder(c *gin.Context){
     log.Println("order_id", result["id"])
 
     // TODO: fix it. You need to somehow update the balance only after the order is approved
-    services.UpdateUserBalance(c, moneyValue)
+    // services.UpdateUserBalance(c, moneyValue)
+
+    /*
+        BLOCK WITH GETTING OBJECT OF USER (WILL BE MOVE SOON)
+    */
+    username, err := services.ValidateToken(c)
+    if err != nil{
+        log.Println("Issues with casino auth token")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    // Init user repository to manage user
+    user_repository, err := services.InitializeUserRepository()
+    if err != nil{
+        log.Println("Failed to init repository")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    // Get user by username
+    user, err := user_repository.GetUserByUsername(username)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+    /*
+        END BLOCK
+    */
+    paymentRepository, err := services.InitializePaymentRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+    payment := models.Payment{
+        OrderID: result["id"].(string),
+        UserID: user.ID,
+        Status: "NOT READY",
+    }
+
+    err = paymentRepository.CreatePayment(&payment)
+
+
     c.JSON(http.StatusOK, result)
+}
+
+func InitializePaymentRepository() {
+	panic("unimplemented")
 }
 
 
