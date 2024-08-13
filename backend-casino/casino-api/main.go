@@ -45,9 +45,9 @@ func main() {
 	sqlDB.SetMaxOpenConns(50)
 	sqlDB.SetMaxIdleConns(50)
 	sqlDB.SetConnMaxLifetime(time.Hour)
-
-    defer sqlDB.Close()
 	// database.MigrateDB(db)
+    defer sqlDB.Close()
+	
 
 	r := gin.Default()
 
@@ -96,6 +96,7 @@ func main() {
 	// paypal handlers
 	r.POST("/paypal/create/order/", paypal_handlers.CreatePaymentOrder) // Correct way to add balance for users
 	r.GET("/paypal/info/order/", paypal_handlers.GetOrderDetailByID) 
+	r.GET("/paypal/payments/history", paypal_handlers.GetListPaypalPayments)
 	
 	// Start the web server
 	r.Run(":8081")

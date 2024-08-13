@@ -104,10 +104,14 @@ func CreatePaymentOrder(c *gin.Context){
     payment := models.Payment{
         OrderID: result["id"].(string),
         UserID: user.ID,
-        Status: "NOT READY",
+        Status: "Pending",
     }
 
     err = paymentRepository.CreatePayment(&payment)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create payment"})
+        return 
+    }
 
 
     c.JSON(http.StatusOK, result)
@@ -147,4 +151,41 @@ func GetOrderDetailByID(c *gin.Context) {
         return
     }
     c.JSON(http.StatusOK, result)
+}
+
+func GetListPaypalPayments(c *gin.Context){
+    /*
+        BLOCK WITH GETTING OBJECT OF USER (WILL BE MOVE SOON)
+    */
+    username, err := services.ValidateToken(c)
+    if err != nil{
+        log.Println("Issues with casino auth token")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    // Init user repository to manage user
+    user_repository, err := services.InitializeUserRepository()
+    if err != nil{
+        log.Println("Failed to init repository")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    // Get user by username
+    user, err := user_repository.GetUserByUsername(username)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+    /*
+        END BLOCK
+    */
+
+    userWithPayments, err := user_repository.GetUserPayments(user.ID)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get payments of user"})
+    }
+    
+    c.JSON(http.StatusOK, userWithPayments.Payments)
 }

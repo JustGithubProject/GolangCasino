@@ -13,7 +13,7 @@ import (
 
 
 func MigrateDB(db *gorm.DB){
-    db.AutoMigrate(&models.User{}, &models.Game{})
+    db.AutoMigrate(&models.User{}, &models.Game{}, &models.Payment{})
 }
 
 var DB *gorm.DB
