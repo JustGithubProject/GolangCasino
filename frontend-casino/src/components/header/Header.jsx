@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faHome, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 const Header = ({ username, balance, handleLogout }) => {
   const [showBalance, setShowBalance] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -16,6 +17,10 @@ const Header = ({ username, balance, handleLogout }) => {
 
   const toggleBalance = () => {
     setShowBalance(!showBalance);
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
   };
 
   const headerStyle = {
@@ -73,18 +78,28 @@ const Header = ({ username, balance, handleLogout }) => {
 
   const navStyle = {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
+    marginLeft: '20px',
+    position: 'relative',
   };
 
   const ulStyle = {
     listStyleType: 'none',
     padding: '0',
     margin: '0',
-    display: 'flex',
+    display: showDropdown ? 'block' : 'none',
+    backgroundColor: 'rgba(52, 73, 94, 0.9)',
+    borderRadius: '10px',
+    position: 'absolute',
+    top: '50px',
+    left: '0',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    zIndex: '1001',
   };
 
   const liStyle = {
-    margin: '0 15px',
+    margin: '10px 0',
   };
 
   const linkStyle = {
@@ -115,6 +130,20 @@ const Header = ({ username, balance, handleLogout }) => {
     marginRight: '30px',
     transition: 'background-color 0.3s, transform 0.3s',
     marginLeft: 'auto',
+  };
+
+  const manageButtonStyle = {
+    backgroundColor: 'rgba(127, 140, 141, 0.8)', // Серый цвет
+    color: '#fff',
+    border: 'none',
+    padding: '8px 15px', // Сделаем кнопку чуть меньше
+    fontSize: '14px', // Уменьшим шрифт
+    fontWeight: 'bold',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+
   };
 
   const iconStyle = {
@@ -166,29 +195,38 @@ const Header = ({ username, balance, handleLogout }) => {
                 style={iconStyle}
                 onClick={toggleBalance}
               />
-            <nav style={navStyle}>
-            <ul style={ulStyle}>
-              <li style={liStyle}>
-                <Link to="/top-up-balance"
-                  style={{
-                    ...linkStyle,
-                    backgroundColor: 'rgba(52, 152, 219, 0.8)',
-                    marginLeft: '20px'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(41, 128, 185, 0.8)';
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(52, 152, 219, 0.8)';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
+              <div style={navStyle}>
+                <button
+                  style={manageButtonStyle}
+                  onClick={toggleDropdown}
                 >
-                  Пополнить баланс
-                </Link>
-              </li>
-            </ul>
-            </nav>
+                  Управление средствами
+                  <FontAwesomeIcon icon={faCaretDown} style={{ marginLeft: '8px' }} />
+                </button>
+                <ul style={ulStyle}>
+                  <li style={liStyle}>
+                    <Link to="/top-up-balance"
+                      style={linkStyle}
+                    >
+                      Пополнить баланс
+                    </Link>
+                  </li>
+                  <li style={liStyle}>
+                    <Link to="/withdraw-funds"
+                      style={linkStyle}
+                    >
+                      Вывод средств
+                    </Link>
+                  </li>
+                  <li style={liStyle}>
+                    <Link to="/payment-history"
+                      style={linkStyle}
+                    >
+                      Мои платежи
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
