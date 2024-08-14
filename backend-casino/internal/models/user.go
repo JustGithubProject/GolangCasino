@@ -19,5 +19,6 @@ type Payment struct {
 	gorm.Model
 	OrderID string
 	UserID uint
+	Amount float64
 	Status string
 }

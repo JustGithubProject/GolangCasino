@@ -3,12 +3,10 @@ import axios from 'axios';
 
 const PaymentHistoryPage = () => {
     const [payments, setPayments] = useState([]);
-    const [orderDetails, setOrderDetails] = useState();
     const [dictOrder, setDictOrder] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Function to fetch payments
     const getListOrdersOrPayments = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -27,19 +25,16 @@ const PaymentHistoryPage = () => {
             console.log("Response:", response.status);
             console.log("Response data", response.data);
 
-          
-        
-            //... TODO
-            const paymentOrderDetails = response.data.map((payment) => {
-                const data = await checkOrderIDPayment(payment.OrderID) 
-                setDictOrder(prevDict => ({
-                    ...prevDict,
-                    [payment.OrderID]: value
-                  }));
-            });
+            const orderDetailsDict = {};
+            for (const payment of response.data) {
+                const data = await checkOrderIDPayment(payment.OrderID);
+                console.log("DATA=", data);
+                orderDetailsDict[payment.OrderID] = data;
+            }
 
+            setDictOrder(orderDetailsDict);
             setPayments(response.data);
-            setLoading(false); // Set loading to false once data is fetched
+            setLoading(false);
 
         } catch (error) {
             console.error("Error fetching payments", error);
@@ -70,20 +65,20 @@ const PaymentHistoryPage = () => {
 
         } catch (error) {
             console.error("Error fetching payments", error);
+            return null;
         }
     };
 
-    // Fetch payments when component mounts
     useEffect(() => {
         getListOrdersOrPayments();
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>; // Show a loading message or spinner
+        return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>{error}</div>; // Show error message
+        return <div>{error}</div>;
     }
 
     return (
@@ -92,6 +87,7 @@ const PaymentHistoryPage = () => {
             <ul>
                 {payments.map((payment) => (
                     <li key={payment.ID}>
+                        <h1>--------------------</h1>
                         <div>
                             <strong>ID:</strong> {payment.ID}
                         </div>
@@ -99,7 +95,7 @@ const PaymentHistoryPage = () => {
                             <strong>OrderID:</strong> {payment.OrderID}
                         </div>
                         <div>
-                            <strong>Status:</strong> {payment.Status}
+                            <strong>Status:</strong> {dictOrder[payment.OrderID]?.status || "Неизвестен"}
                         </div>
                         <div>
                             <strong>Amount:</strong> {payment.amount}

@@ -4,6 +4,7 @@ import (
     "log"
 	"encoding/json"
 	"net/http"
+    "strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -37,6 +38,15 @@ func CreatePaymentOrder(c *gin.Context){
 
     log.Println("CurrencyCode=", currencyCode)
     log.Println("MonetValue=", moneyValue)
+
+    // Converting moneyValue to float64
+    convertedToFloatMoneyValue, err := strconv.ParseFloat(moneyValue, 64)
+    if err != nil{
+        log.Println("Failed to convert string to float64")
+        return
+    }
+    
+
 
     // Needed data to do request
     orderData := services.GetOrderPaymentData(currencyCode, moneyValue)
@@ -104,6 +114,7 @@ func CreatePaymentOrder(c *gin.Context){
     payment := models.Payment{
         OrderID: result["id"].(string),
         UserID: user.ID,
+        Amount: convertedToFloatMoneyValue,
         Status: "Pending",
     }
 
@@ -188,4 +199,43 @@ func GetListPaypalPayments(c *gin.Context){
     }
     
     c.JSON(http.StatusOK, userWithPayments.Payments)
+}
+
+func UpdateBalanceAndStatus(c *gin.Context){
+    orderID := c.Query("token")
+    if orderID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"message": "Order ID is required"})
+        return
+    }
+
+    // Getting access token
+    accessToken, err := services.PGetAccessToken(c)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
+        return
+    }
+
+    paypalOrderURL := "https://api-m.sandbox.paypal.com/v2/checkout/orders/" + orderID
+
+    // Do get request to PayPal API and get response
+    response, err := services.PGetPaypalOrderDetails(c, paypalOrderURL, accessToken)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get PayPal order details"})
+        return
+    }
+
+    result, err := services.PHandlePaypalResponse(c, response)
+    if err != nil {
+        return
+    }
+
+    log.Println("OrderStatus", result["status"])
+    if result["status"] == "APPROVED"{
+        services.UpdateUserBalance(c, result["purchase_units"][0]["amount"]["value"])
+        // TODO ..
+    }
+
+
+    
+
 }
