@@ -309,6 +309,22 @@ func UpdateUserBalance(c *gin.Context, total string){
     }
 }
 
+func UpdatePaymentStatus(c *gin.Context, orderID string, status string){
+    paymentRepository, err := InitializePaymentRepository()
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    payment, err := paymentRepository.GetPaymentByOrderID(orderID)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"eror": "Failed to get payment by orderID"})
+        return
+    }
+    payment.Status = status
+    paymentRepository.UpdateStatusPayment(payment)
+}
+
 
 
 func PGetAccessToken(c *gin.Context) (string, error) {

@@ -45,8 +45,6 @@ func CreatePaymentOrder(c *gin.Context){
         log.Println("Failed to convert string to float64")
         return
     }
-    
-
 
     // Needed data to do request
     orderData := services.GetOrderPaymentData(currencyCode, moneyValue)
@@ -229,13 +227,34 @@ func UpdateBalanceAndStatus(c *gin.Context){
         return
     }
 
-    log.Println("OrderStatus", result["status"])
-    if result["status"] == "APPROVED"{
-        services.UpdateUserBalance(c, result["purchase_units"][0]["amount"]["value"])
-        // TODO ..
+    // Getting Status
+    status := result["status"].(string)
+    log.Println("OrderStatus", status)
+
+    // If status was approved. We will update balance and status
+    if status == "APPROVED"{
+        purchaseUnits, ok := result["purchase_units"].([]interface{})
+        if !ok {
+            log.Fatal("Error converting purchase_units to []interface{}")
+        }
+
+        firstUnit, ok := purchaseUnits[0].(map[string]interface{})
+        if !ok {
+            log.Fatal("Error converting first element of purchase_units to map[string]interface{}")
+        }
+        amount := firstUnit["amount"].(map[string]interface{})
+        currency := amount["currency_code"].(string)
+        value := amount["value"].(string)
+
+        log.Println("Currency: ", currency)
+        log.Println("Value: ", value)
+
+        services.UpdateUserBalance(c, value)
+        services.UpdatePaymentStatus(c, orderID, status)
+        c.JSON(http.StatusOK, "Updated successfully")
+        return
     }
 
-
-    
+    c.JSON(http.StatusOK, "Failure to update balance and status")
 
 }
