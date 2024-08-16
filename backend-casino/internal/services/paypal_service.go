@@ -227,7 +227,7 @@ func GetOrderPaymentData(currencyCode string, moneyValue string) map[string]inte
                     "landing_page":              "LOGIN",
                     "shipping_preference":       "SET_PROVIDED_ADDRESS",
                     "user_action":               "PAY_NOW",
-                    "return_url":                "http://127.0.0.1:5173/sucess-payment",
+                    "return_url":                "http://127.0.0.1:5173/",
                     "cancel_url":                "http://127.0.0.1:5173/cancel-payment",
                 },
             },
