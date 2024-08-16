@@ -41,7 +41,13 @@ type PaypalPaymentCardInput struct {
 
 type PaypalCreateOrderInput struct {
     CurrencyCode string `json:"currency_code"`
-    MoneyValue string `json:"value"`
+    MoneyValue float64 `json:"value"`
+}
+
+type PaypalPickUpMoneyInput struct {
+    Total float64 `json:"total"`
+    Status string `json:"status"`
+    OrderID string `json:"order_id"`
 }
 
 //////////////////////////////////////

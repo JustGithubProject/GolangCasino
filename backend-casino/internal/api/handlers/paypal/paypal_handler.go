@@ -39,15 +39,10 @@ func CreatePaymentOrder(c *gin.Context){
     log.Println("CurrencyCode=", currencyCode)
     log.Println("MonetValue=", moneyValue)
 
-    // Converting moneyValue to float64
-    convertedToFloatMoneyValue, err := strconv.ParseFloat(moneyValue, 64)
-    if err != nil{
-        log.Println("Failed to convert string to float64")
-        return
-    }
 
     // Needed data to do request
-    orderData := services.GetOrderPaymentData(currencyCode, moneyValue)
+    moneyValueString := strconv.FormatFloat(moneyValue, 'f', -1, 64)
+    orderData := services.GetOrderPaymentData(currencyCode, moneyValueString)
 
     log.Println("OrderData", orderData["intent"])
     orderJSON, err := json.Marshal(orderData)
@@ -112,7 +107,7 @@ func CreatePaymentOrder(c *gin.Context){
     payment := models.Payment{
         OrderID: result["id"].(string),
         UserID: user.ID,
-        Amount: convertedToFloatMoneyValue,
+        Amount: moneyValue,
         Status: "Pending",
     }
 
@@ -262,13 +257,19 @@ func UpdatePaymentStatusToApproved(c *gin.Context){
 }
 
 func PickUpMoneyAndStatusToSuccess(c *gin.Context) {
-    amountOfMoney := c.Query("Amount")
-    currentStatus := c.Query("Status")
-    orderID := c.Query("OrderID")
+    var paypalPickUpMoneyInput services.PaypalPickUpMoneyInput
+    if err := services.PBindJSONData(c, &paypalPickUpMoneyInput); err != nil {
+        return
+    }
+    currentStatus := paypalPickUpMoneyInput.Status
+    amountOfMoney := paypalPickUpMoneyInput.Total
+    orderID := paypalPickUpMoneyInput.OrderID
+
+    amountOfMoneyString := strconv.FormatFloat(amountOfMoney, 'f', -1, 64)
 
     // If status is approved. We're updating balance and status to success 
     if currentStatus == "APPROVED"{
-        services.UpdateUserBalance(c, amountOfMoney)
+        services.UpdateUserBalance(c, amountOfMoneyString)
         services.UpdatePaymentStatus(c, orderID, "Success")
     }
 }
