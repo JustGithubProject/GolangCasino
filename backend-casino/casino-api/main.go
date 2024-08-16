@@ -94,10 +94,11 @@ func main() {
 
 
 	// paypal handlers
-	r.POST("/paypal/create/order/", paypal_handlers.CreatePaymentOrder) // Correct way to add balance for users
+	r.POST("/paypal/create/order/", paypal_handlers.CreatePaymentOrder) 
 	r.GET("/paypal/info/order/", paypal_handlers.GetOrderDetailByID) 
 	r.GET("/paypal/payments/history/", paypal_handlers.GetListPaypalPayments)
-	r.GET("/paypal/update/approved/order/", paypal_handlers.UpdateBalanceAndStatus)
+	r.POST("/paypal/update/approved/order/", paypal_handlers.UpdatePaymentStatusToApproved)
+	r.POST("/paypal/update/pickup/money", paypal_handlers.PickUpMoneyAndStatusToSuccess)
 	
 	// Start the web server
 	r.Run(":8081")

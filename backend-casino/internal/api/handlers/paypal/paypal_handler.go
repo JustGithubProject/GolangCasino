@@ -199,7 +199,9 @@ func GetListPaypalPayments(c *gin.Context){
     c.JSON(http.StatusOK, userWithPayments.Payments)
 }
 
-func UpdateBalanceAndStatus(c *gin.Context){
+
+
+func UpdatePaymentStatusToApproved(c *gin.Context){
     orderID := c.Query("token")
     if orderID == "" {
         c.JSON(http.StatusBadRequest, gin.H{"message": "Order ID is required"})
@@ -233,23 +235,23 @@ func UpdateBalanceAndStatus(c *gin.Context){
 
     // If status was approved. We will update balance and status
     if status == "APPROVED"{
-        purchaseUnits, ok := result["purchase_units"].([]interface{})
-        if !ok {
-            log.Fatal("Error converting purchase_units to []interface{}")
-        }
+        log.Println("Status was approved!!!")
+        // purchaseUnits, ok := result["purchase_units"].([]interface{})
+        // if !ok {
+        //     log.Fatal("Error converting purchase_units to []interface{}")
+        // }
 
-        firstUnit, ok := purchaseUnits[0].(map[string]interface{})
-        if !ok {
-            log.Fatal("Error converting first element of purchase_units to map[string]interface{}")
-        }
-        amount := firstUnit["amount"].(map[string]interface{})
-        currency := amount["currency_code"].(string)
-        value := amount["value"].(string)
+        // firstUnit, ok := purchaseUnits[0].(map[string]interface{})
+        // if !ok {
+        //     log.Fatal("Error converting first element of purchase_units to map[string]interface{}")
+        // }
+        // amount := firstUnit["amount"].(map[string]interface{})
+        // currency := amount["currency_code"].(string)
+        // value := amount["value"].(string)
 
-        log.Println("Currency: ", currency)
-        log.Println("Value: ", value)
+        // log.Println("Currency: ", currency)
+        // log.Println("Value: ", value)
 
-        services.UpdateUserBalance(c, value)
         services.UpdatePaymentStatus(c, orderID, status)
         c.JSON(http.StatusOK, "Updated successfully")
         return
@@ -257,4 +259,16 @@ func UpdateBalanceAndStatus(c *gin.Context){
 
     c.JSON(http.StatusOK, "Failure to update balance and status")
 
+}
+
+func PickUpMoneyAndStatusToSuccess(c *gin.Context) {
+    amountOfMoney := c.Query("Amount")
+    currentStatus := c.Query("Status")
+    orderID := c.Query("OrderID")
+
+    // If status is approved. We're updating balance and status to success 
+    if currentStatus == "APPROVED"{
+        services.UpdateUserBalance(c, amountOfMoney)
+        services.UpdatePaymentStatus(c, orderID, "Success")
+    }
 }

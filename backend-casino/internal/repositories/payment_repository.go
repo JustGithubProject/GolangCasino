@@ -22,17 +22,13 @@ func (pym *PaymentRepository) GetPaymentByOrderID(orderID string) (*models.Payme
 		Getting payment by ORDER_ID
 	*/
 	var payment models.Payment
-	err := pym.Db.First(&payment, "OrderID = ?", orderID).Error
+	err := pym.Db.First(&payment, "order_id = ?", orderID).Error
 	if err != nil{
 		return nil, err
 	}
 	return &payment, nil
 }
 
-
-func (ur *UserRepository) UpdateBalanceUser(user *models.User) error {
-    return ur.Db.Model(user).Update("balance", user.Balance).Error
-}
 
 func (pym *PaymentRepository) UpdateStatusPayment(payment *models.Payment) error {
 	return pym.Db.Model(payment).Update("Status", payment.Status).Error

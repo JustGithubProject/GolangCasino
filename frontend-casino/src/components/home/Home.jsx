@@ -44,6 +44,29 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const token = localStorage.getItem("token");
+    const orderID = queryParams.get('token'); 
+    if (token && orderID) { 
+      fetch(`http://127.0.0.1:8081/paypal/update/approved/order/?token=${orderID}`, { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, 
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        window.location.href = "/"
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  }, [location.search]);
+
   const fetchUserBalance = async (username) => {
     try {
       const response = await fetchWithAuth(`http://127.0.0.1:8081/user/name/${username}`);

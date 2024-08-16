@@ -1,5 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+`;
+
+const Header = styled.h1`
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+`;
+
+const PaymentList = styled.ul`
+    list-style: none;
+    padding: 0;
+`;
+
+const PaymentItem = styled.li`
+    background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const PaymentInfo = styled.div`
+    font-size: 16px;
+    color: #555;
+`;
+
+const Button = styled.button`
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
 
 const PaymentHistoryPage = () => {
     const [payments, setPayments] = useState([]);
@@ -22,13 +74,9 @@ const PaymentHistoryPage = () => {
                 },
             });
 
-            console.log("Response:", response.status);
-            console.log("Response data", response.data);
-
             const orderDetailsDict = {};
             for (const payment of response.data) {
                 const data = await checkOrderIDPayment(payment.OrderID);
-                console.log("DATA=", data);
                 orderDetailsDict[payment.OrderID] = data;
             }
 
@@ -58,9 +106,6 @@ const PaymentHistoryPage = () => {
                 },
             });
 
-            console.log("Response:", response.status);
-            console.log("Response data", response.data);
-
             return response.data;
 
         } catch (error) {
@@ -68,6 +113,10 @@ const PaymentHistoryPage = () => {
             return null;
         }
     };
+
+    const updateUserBalance = async () => {
+        
+    }
 
     useEffect(() => {
         getListOrdersOrPayments();
@@ -82,34 +131,28 @@ const PaymentHistoryPage = () => {
     }
 
     return (
-        <div>
-            <h1 align="center">История платежей</h1>
-            <ul>
+        <Container>
+            <Header>История платежей</Header>
+            <PaymentList>
                 {payments.map((payment) => (
-                    <li key={payment.ID}>
-                        <h1>--------------------</h1>
-                        <div>
-                            <strong>ID:</strong> {payment.ID}
-                        </div>
-                        <div>
+                    <PaymentItem key={payment.ID}>
+                        <PaymentInfo>
                             <strong>OrderID:</strong> {payment.OrderID}
-                        </div>
-                        <div>
-                            <strong>Status:</strong> {dictOrder[payment.OrderID]?.status || "Неизвестен"}
-                        </div>
-                        <div>
-                            <strong>Amount:</strong> {payment.amount}
-                        </div>
-                        <div>
-                            <strong>Date: </strong> {payment.CreatedAt}
-                        </div>
-                        <div>
-                            <button>Забрать деньги</button>
-                        </div>
-                    </li>
+                        </PaymentInfo>
+                        <PaymentInfo>
+                            <strong>Status:</strong> {payment.Status}
+                        </PaymentInfo>
+                        <PaymentInfo>
+                            <strong>Amount:</strong> {payment.Amount} USD
+                        </PaymentInfo>
+                        <PaymentInfo>
+                            <strong>Date:</strong> {payment.CreatedAt}
+                        </PaymentInfo>
+                        <Button>Забрать деньги</Button>
+                    </PaymentItem>
                 ))}
-            </ul>
-        </div>
+            </PaymentList>
+        </Container>
     );
 };
 
