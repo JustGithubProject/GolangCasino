@@ -43,6 +43,7 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, []);
+  
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -59,7 +60,7 @@ const Home = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        window.location.href = "/"
+        window.location.href = "/sucess-payment"
       })
       .catch(error => {
         console.error('Error:', error);

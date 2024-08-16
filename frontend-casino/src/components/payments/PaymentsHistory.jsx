@@ -2,88 +2,129 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 
-// Загрузка анимации
+// Анимация загрузки
 const spin = keyframes`
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 `;
 
+// Анимация появления элемента
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// Общий контейнер страницы
 const Container = styled.div`
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f4f7fa;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
 `;
 
+// Заголовок страницы
 const Header = styled.h1`
-    text-align: center;
-    color: #333;
-    font-size: 2rem;
-    margin-bottom: 30px;
+  text-align: center;
+  color: #333;
+  font-size: 2.8rem;
+  margin-bottom: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 `;
 
+// Список платежей
 const PaymentList = styled.ul`
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 `;
 
+// Элемент списка платежей
 const PaymentItem = styled.li`
-    background-color: #fefefe;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  background-color: #ffffff;
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: ${fadeIn} 0.6s ease-out;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
 `;
 
+// Информация о платеже
 const PaymentInfo = styled.div`
-    font-size: 16px;
-    color: #555;
+  font-size: 18px;
+  color: #555;
+  line-height: 1.6;
+  font-weight: 500;
+
+  & strong {
+    color: #333;
+    font-weight: 700;
+  }
 `;
 
+// Кнопка для получения денег
 const Button = styled.button`
-    padding: 12px 24px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    
-    &:hover {
-        background-color: #0056b3;
-    }
-    
-    &:active {
-        transform: scale(0.98);
-    }
+  padding: 16px 32px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+
+  &:hover {
+    background-color: #218838;
+    box-shadow: 0 6px 18px rgba(40, 167, 69, 0.6);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
+// Контейнер для загрузки
 const Loader = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;
 
+// Анимация спиннера
 const Spinner = styled.div`
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #007bff;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: ${spin} 1s linear infinite;
+  border: 10px solid #f3f3f3;
+  border-top: 10px solid #007bff;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: ${spin} 1s linear infinite;
 `;
 
 const PaymentHistoryPage = () => {
     const [payments, setPayments] = useState([]);
-    const [dictOrder, setDictOrder] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -102,13 +143,13 @@ const PaymentHistoryPage = () => {
                 },
             });
 
-            const orderDetailsDict = {};
             for (const payment of response.data) {
-                const data = await checkOrderIDPayment(payment.OrderID);
-                orderDetailsDict[payment.OrderID] = data;
+                if (payment.Status == "APPROVED") {
+                }
+                await checkOrderIDPayment(payment.OrderID);
+
             }
 
-            setDictOrder(orderDetailsDict);
             setPayments(response.data);
             setLoading(false);
 
@@ -197,7 +238,7 @@ const PaymentHistoryPage = () => {
                             <strong>Amount:</strong> {payment.Amount} USD
                         </PaymentInfo>
                         <PaymentInfo>
-                            <strong>Date:</strong> {payment.CreatedAt}
+                            <strong>Date:</strong> {new Date(payment.CreatedAt).toLocaleDateString()}
                         </PaymentInfo>
                         {payment.Status === 'APPROVED' && (
                             <Button onClick={() => updateUserBalance(payment.Amount, payment.OrderID, payment.Status)}>
