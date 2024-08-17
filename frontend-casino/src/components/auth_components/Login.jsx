@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import GoogleButton from './google_auth/GoogleButton';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -85,6 +86,7 @@ const Login = () => {
       cursor: 'pointer',
       fontSize: '16px',
       transition: 'background 0.3s ease, transform 0.3s ease',
+      marginBottom: '20px',
     },
     buttonHover: {
       background: 'linear-gradient(to right, #ff4b2b, #ff416c)',
@@ -112,7 +114,31 @@ const Login = () => {
     },
     icon: {
       verticalAlign: 'middle',
-    }
+    },
+    googleButtonContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: '20px',
+    },
+    googleButton: {
+      width: 'auto',
+      height: '45px',
+      borderRadius: '10px', // Reduced border-radius for a more square-like appearance
+      padding: '0 20px', // Adjust padding for a more compact look
+      backgroundColor: '#4285F4', // Google button color
+      color: '#fff',
+      fontSize: '14px',
+      fontWeight: 'bold',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+      cursor: 'pointer',
+    },
+    googleButtonHover: {
+      transform: 'scale(1.05)',
+      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+    },
   };
 
   return (
@@ -152,8 +178,23 @@ const Login = () => {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        Login
+        Войти
       </button>
+      <div style={styles.googleButtonContainer}>
+        <div
+          style={styles.googleButton}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = styles.googleButtonHover.transform;
+            e.currentTarget.style.boxShadow = styles.googleButtonHover.boxShadow;
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          <GoogleButton />
+        </div>
+      </div>
       {error && <div style={styles.error}>{error}</div>}
       {success && <div style={styles.success}>{success}</div>}
     </form>
