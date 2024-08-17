@@ -1,3 +1,2 @@
-1. You need to do page that will contain page
-with payments for specific user and user can press the button Take Money (if order was APPROVED)
-
+1. To add google auth
+2. To add one more slot

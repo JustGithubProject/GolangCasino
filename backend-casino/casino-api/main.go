@@ -9,6 +9,7 @@ import (
 
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/paypal"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/google-auth"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 )
 
@@ -99,6 +100,11 @@ func main() {
 	r.GET("/paypal/payments/history/", paypal_handlers.GetListPaypalPayments)
 	r.POST("/paypal/update/approved/order/", paypal_handlers.UpdatePaymentStatusToApproved)
 	r.POST("/paypal/update/pickup/money", paypal_handlers.PickUpMoneyAndStatusToSuccess)
+
+
+	// Google auth handlers
+    r.GET("/login", google_auth.HandleGoogleLogin)
+    r.GET("/auth/callback", google_auth.HandleGoogleCallback)
 	
 	// Start the web server
 	r.Run(":8081")
