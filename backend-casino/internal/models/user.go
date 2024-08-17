@@ -12,6 +12,12 @@ type User struct {
 	Password string
 	Balance float64
 	Payments []Payment
+
+	GoogleID string `gorm."unique"`
+	Picture string  
+	GivenName string   // Name
+	FamilyName string  // Surname
+	Locale string 
 }
 
 

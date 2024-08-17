@@ -441,3 +441,35 @@ func PHandlePaypalResponse(c *gin.Context, body []byte) (map[string]interface{},
     }
     return result, nil
 }
+
+///////////////////////////////////////////////
+/*                                           //
+    GOOGLE UTILITY                           //
+*/                                           //
+///////////////////////////////////////////////
+
+func init() {
+    rand.Seed(time.Now().UnixNano())
+}
+
+func GeneratePasswordForGoogleUser() string {
+    length := 10
+    letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    specialBytes := "!@#$%^&*()_+-=[]{}\\|;':\",.<>/?`~"
+    numBytes := "0123456789"
+
+    b := make([]byte, length)
+    for i := range b {
+        b[i] = letterBytes[rand.Intn(len(letterBytes))]
+        b[i] = specialBytes[rand.Intn(len(specialBytes))]
+        b[i] = numBytes[rand.Intn(len(numBytes))]
+    }
+    return string(b)
+}
+
+
+/////////////////////////////////////////////////
+/*                          
+    ENDBLOCK
+*/
+////////////////////////////////////////////////

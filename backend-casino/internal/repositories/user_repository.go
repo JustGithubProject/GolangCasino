@@ -14,6 +14,10 @@ func (ur *UserRepository) CreateUser(user *models.User) error{
 	return ur.Db.Create(user).Error
 }
 
+func (ur *UserRepository) CreateGoogleUser(user* models.User) error {
+	return ur.Db.Create(user).Error
+}
+
 
 // Method to get user by id
 func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
