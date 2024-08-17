@@ -1,9 +1,21 @@
 import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 const GoogleButton = () => {
-  const handleLoginSuccess = (response) => {
+  const handleLoginSuccess = async (response) => {
     console.log('Google login success:', response);
+    const token = response.credential;
+
+    // Отправляем токен на сервер для обмена на данные о пользователе
+    try {
+      const result = await axios.post('http://127.0.0.1:8081/google/auth/callback', {
+        token,
+      });
+      console.log(result.data);
+    } catch (error) {
+      console.error('Error during authentication:', error);
+    }
   };
 
   const handleLoginFailure = (error) => {
