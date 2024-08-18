@@ -470,14 +470,12 @@ func GeneratePasswordForGoogleUser() string {
 }
 
 type GoogleAuthInput struct {
-	ID            string `json:"id"`
+	ID            string `json:"googleId"`
 	Email         string `json:"email"`
-	VerifiedEmail bool   `json:"verified_email"`
 	Name          string `json:"name"`
-	GivenName     string `json:"given_name"`
-	FamilyName    string `json:"family_name"`
-	Picture       string `json:"picture"`
-	Locale        string `json:"locale"`
+	GivenName     string `json:"givenName"`
+	FamilyName    string `json:"familyName"`
+	Picture       string `json:"imageUrl"`
 }
 
 

@@ -54,7 +54,7 @@ func main() {
 
 	// Using cors middleware from the gin-contrib/cors library
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://127.0.0.1:5173"},
+		AllowOrigins:     []string{"http://127.0.0.1:5173", "http://localhost:5173"},
 		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Content-Type", "Content-Length", "Authorization"},
 		AllowCredentials: true,
@@ -104,7 +104,7 @@ func main() {
 
 	// Google auth handlers
 	r.GET("/google/oauth/", google_auth.HandleGoogleLogin)
-    r.GET("/google/auth/callback/", google_auth.HandleGoogleCallback)
+    r.POST("/google/auth/callback/", google_auth.HandleGoogleCallback)
 	
 	// Start the web server
 	r.Run(":8081")

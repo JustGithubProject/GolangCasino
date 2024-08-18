@@ -52,7 +52,8 @@ func HandleGoogleLogin(c *gin.Context) {
 
 func HandleGoogleCallback(c *gin.Context) {
 	code := c.Query("code")
-	if code == "" {
+	if code == "" { // Error is here. TODO: ...
+		log.Println("Code is empty")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Code not found"})
 		return
 	}
@@ -105,7 +106,7 @@ func HandleGoogleCallback(c *gin.Context) {
 		Picture:     jsonResponse.Picture,
 		GivenName:   jsonResponse.GivenName,
 		FamilyName:  jsonResponse.FamilyName,
-		Locale:      jsonResponse.Locale,
+		Locale:      "en-EN",
 	}
 
 	if err := userRepository.CreateGoogleUser(&user); err != nil {
@@ -114,5 +115,5 @@ func HandleGoogleCallback(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "User created successfully", "user": user})
+	c.JSON(http.StatusOK, gin.H{"message": "User created successfully", "user": user, "token": token})
 }
