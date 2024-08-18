@@ -8,19 +8,23 @@ function LoginGo() {
 
     const onSuccess = async (res) => {
         console.log("LOGIN SUCCESS! Current user: ", res.profileObj);
-        const response = await axios.post(
-            "http://127.0.0.1:8081/google/auth/callback/",
-            res.profileObj,
-            {
-                withCredentials: true,
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-            }
+        // const response = await axios.post(
+        //     "http://127.0.0.1:8081/google/auth/callback/",
+        //     res.profileObj,
+        //     {
+        //         withCredentials: true,
+        //         headers: {
+        //           'Content-Type': 'application/json',
+        //         },
+        //     }
+        // )
+        // const token = response.token;
+        const response = await axios.get(
+            "http://127.0.0.1:8081/google/oauth/"
         )
-        const token = response.token;
-        localStorage.setItem("google_token", token);
-        window.location.href = "/";
+        console.log(response.data);
+
+        // localStorage.setItem("google_token", token);
     }
 
     const onFailure = (res) => {

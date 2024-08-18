@@ -46,6 +46,7 @@ func init() {
 
 func HandleGoogleLogin(c *gin.Context) {
 	url := googleOauthConfig.AuthCodeURL(oauthStateString, oauth2.AccessTypeOffline)
+	log.Println("URL", url)
 	c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
