@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import GoogleButton from './google_auth/GoogleButton';
+import LoginGo from './google_auth/GoogleLoginComponent';
+import { gapi } from 'gapi-script';
+
+const clientID = "609582150163-ejcmmse6ut85n5iv2sm6s7k4nauirlk8.apps.googleusercontent.com"
+
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -11,6 +15,17 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: clientID,
+        scope: ""
+      })
+    };
+    gapi.load('client:auth2', start);
+  });
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -192,7 +207,7 @@ const Login = () => {
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
-          <GoogleButton />
+          <LoginGo />
         </div>
       </div>
       {error && <div style={styles.error}>{error}</div>}
