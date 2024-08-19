@@ -52,15 +52,15 @@ func HandleGoogleLogin(c *gin.Context) {
 
 
 func HandleGoogleCallback(c *gin.Context) {
-	code := c.Query("code")
-	if code == "" { // Error is here. TODO: ...
+	tokenID := c.PostForm("id_token")
+	if tokenID == "" { // Error is here. TODO: ...
 		log.Println("Code is empty")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Code not found"})
 		return
 	}
 
 	ctx := context.Background()
-	token, err := googleOauthConfig.Exchange(ctx, code)
+	token, err := googleOauthConfig.Exchange(ctx, tokenID)
 	if err != nil {
 		log.Printf("Failed to exchange token: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get google token"})
@@ -68,7 +68,7 @@ func HandleGoogleCallback(c *gin.Context) {
 	}
 
 	client := googleOauthConfig.Client(ctx, token)
-	resp, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
+	resp, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
 		log.Printf("Failed to get user info: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not get user info"})

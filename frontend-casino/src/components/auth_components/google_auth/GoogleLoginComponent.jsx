@@ -7,25 +7,30 @@ const clientID = "609582150163-ejcmmse6ut85n5iv2sm6s7k4nauirlk8.apps.googleuserc
 function LoginGo() {
 
     const onSuccess = async (res) => {
-        console.log("LOGIN SUCCESS! Current user: ", res.profileObj);
-        // const response = await axios.post(
-        //     "http://127.0.0.1:8081/google/auth/callback/",
-        //     res.profileObj,
-        //     {
-        //         withCredentials: true,
-        //         headers: {
-        //           'Content-Type': 'application/json',
-        //         },
-        //     }
-        // )
-        // const token = response.token;
-        const response = await axios.get(
-            "http://127.0.0.1:8081/google/oauth/"
-        )
-        console.log(response.data);
-
-        // localStorage.setItem("google_token", token);
+        console.log("Current user: ", res.profileObj);
+        try {
+            const { tokenId } = res;
+            console.log("TokenID: ", tokenId);
+            const response = await axios.post(
+                "http://localhost:8081/google/auth/callback/",
+                { id_token: tokenId },
+                {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+    
+            const { token } = response.data;
+            localStorage.setItem("google_token", token);
+    
+            console.log("LOGIN SUCCESS! Token: ", token);
+        } catch (error) {
+            console.log("Error during Google login", error);
+        }
     }
+    
 
     const onFailure = (res) => {
         console.log("LOGIN FAILED res: ", res);
