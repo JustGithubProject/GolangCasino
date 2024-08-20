@@ -313,6 +313,7 @@ func WithdrawFundsPaypal(c *gin.Context) {
     }
 
     // Take the balance from the site
+    
     services.UpdateNegativeUserBalance(c, totalString)
 
     c.JSON(http.StatusOK, result)

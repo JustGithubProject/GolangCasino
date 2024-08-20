@@ -422,7 +422,10 @@ func UpdateNegativeUserBalance(c *gin.Context, total string){
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert string to float"})
         return
     }
-
+    if user.Balance < convertedToFloatTotal {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Insufficient funds"})
+        return
+    }
     user.Balance -= convertedToFloatTotal 
     err = user_repository.UpdateBalanceUser(user)
     if err != nil {

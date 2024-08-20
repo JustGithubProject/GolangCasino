@@ -5,14 +5,15 @@ const WithdrawFundsPage = () => {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const url = "http://127.0.0.1:8081/paypal/withdraw/funds/"
+        const url = "http://127.0.0.1:8081/paypal/withdraw/funds/";
         const token = localStorage.getItem("token");
 
-        const floatTotal = parseFloat(amount)
+        const floatTotal = parseFloat(amount);
 
         const response = await axios.post(url, {
                 total: floatTotal,
@@ -30,9 +31,9 @@ const WithdrawFundsPage = () => {
         window.location.href = "/";
 
     } catch (error) {
-        console.log("Failed to execute request: ", error);
+        // Устанавливаем сообщение об ошибке
+        setError('Недостаточно средств');
     }
-    
   };
 
   return (
@@ -80,6 +81,8 @@ const WithdrawFundsPage = () => {
             style={styles.input}
           />
         </div>
+
+        {error && <div style={styles.error}>{error}</div>}
 
         <button
           type="submit"
@@ -142,6 +145,11 @@ const styles = {
     },
     submitButtonHover: {
       backgroundColor: '#0056b3',
+    },
+    error: {
+      color: '#ff0000',
+      marginTop: '15px',
+      fontSize: '16px',
     },
   };
 
