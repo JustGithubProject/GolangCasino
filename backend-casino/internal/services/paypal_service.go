@@ -52,6 +52,12 @@ type PaypalPickUpMoneyInput struct {
     OrderID string `json:"order_id"`
 }
 
+type PaypalWithdrawFundsInput struct {
+    Total float64 `json:"total"`
+    Currency string `json:"currency"`
+    ReceiverEmail string `json:"receiver_email"`
+}
+
 //////////////////////////////////////
 /////////////////////////////////////
 ////////////////////////////////////
@@ -239,6 +245,37 @@ func GetOrderPaymentData(currencyCode string, moneyValue string) map[string]inte
 }
 
 
+func GetWithdrawFundsData(currencyCode string, moneyValue string, receiverEmail string) map[string]interface{} {
+    payoutRequest := map[string]interface{}{
+        "sender_batch_header": map[string]interface{}{
+            "sender_batch_id":  "Payouts_2018_100007",
+            "email_subject":    "You have a payout!",
+            "email_message":    "You have received a payout! Thanks for using our service!",
+        },
+        "items": []map[string]interface{}{
+            {
+                "recipient_type": "EMAIL",
+                "amount": map[string]interface{}{
+                    "value":    moneyValue,
+                    "currency": currencyCode,
+                },
+                "note":             "Thanks for your patronage!",
+                "sender_item_id":   GenerateUUIDForPaypal(),
+                "receiver":         receiverEmail,
+                "alternate_notification_method": map[string]interface{}{
+                    "phone": map[string]interface{}{
+                        "country_code":    "91",
+                        "national_number": "9999988888",
+                    },
+                },
+                "notification_language": "fr-FR",
+            },
+        },
+    }
+    return payoutRequest
+}
+
+
 
 func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken string, paymentJSON []byte) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
@@ -310,6 +347,46 @@ func UpdateUserBalance(c *gin.Context, total string){
     }
 
     user.Balance += convertedToFloatTotal 
+    err = user_repository.UpdateBalanceUser(user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})
+        return
+    }
+}
+
+
+func UpdateNegativeUserBalance(c *gin.Context, total string){
+	// Getting username by token
+    username, err := ValidateToken(c)
+    if err != nil{
+        log.Println("Issues with casino auth token")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate token"})
+        return
+    }
+    
+    // Init user repository to manage user
+    user_repository, err := InitializeUserRepository()
+    if err != nil{
+        log.Println("Failed to init repository")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to init db and repository"})
+        return
+    }
+
+    // Get user by username
+    user, err := user_repository.GetUserByUsername(username)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user"})
+        return
+    }
+
+    // Converting string to float64
+    convertedToFloatTotal, err := strconv.ParseFloat(total, 64)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert string to float"})
+        return
+    }
+
+    user.Balance -= convertedToFloatTotal 
     err = user_repository.UpdateBalanceUser(user)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user balance"})

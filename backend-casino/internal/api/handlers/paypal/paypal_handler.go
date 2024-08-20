@@ -206,7 +206,7 @@ func UpdatePaymentStatusToApproved(c *gin.Context){
     // Getting access token
     accessToken, err := services.PGetAccessToken(c)
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get access token"})
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get paypal access token"})
         return
     }
 
@@ -231,28 +231,12 @@ func UpdatePaymentStatusToApproved(c *gin.Context){
     // If status was approved. We will update balance and status
     if status == "APPROVED"{
         log.Println("Status was approved!!!")
-        // purchaseUnits, ok := result["purchase_units"].([]interface{})
-        // if !ok {
-        //     log.Fatal("Error converting purchase_units to []interface{}")
-        // }
-
-        // firstUnit, ok := purchaseUnits[0].(map[string]interface{})
-        // if !ok {
-        //     log.Fatal("Error converting first element of purchase_units to map[string]interface{}")
-        // }
-        // amount := firstUnit["amount"].(map[string]interface{})
-        // currency := amount["currency_code"].(string)
-        // value := amount["value"].(string)
-
-        // log.Println("Currency: ", currency)
-        // log.Println("Value: ", value)
-
         services.UpdatePaymentStatus(c, orderID, status)
-        c.JSON(http.StatusOK, "Updated successfully")
+        c.JSON(http.StatusOK, gin.H{"message": "Updated successfully"})
         return
     }
 
-    c.JSON(http.StatusOK, "Failure to update balance and status")
+    c.JSON(http.StatusOK, gin.H{"message": "Failure to update balance and status"})
 
 }
 
@@ -272,4 +256,64 @@ func PickUpMoneyAndStatusToSuccess(c *gin.Context) {
         services.UpdateUserBalance(c, amountOfMoneyString)
         services.UpdatePaymentStatus(c, orderID, "Success")
     }
+}
+
+
+func WithdrawFundsPaypal(c *gin.Context) {
+    // Getting paypal access token
+    accessToken, err := services.PGetAccessToken(c)
+    if err != nil{
+        log.Println("Failed to get paypal access token")
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get paypal access token"})
+        return
+    }
+    // paypal endpoint URL to withdraw funds 
+    paypalWithdrawFundsURL := "https://api-m.sandbox.paypal.com/v1/payments/payouts"
+
+    var paypalWithdrawInput services.PaypalWithdrawFundsInput
+    if err := services.PBindJSONData(c, &paypalWithdrawInput); err != nil{
+        return
+    }
+
+    // Getting the required data from JSON
+    total := paypalWithdrawInput.Total
+    currency := paypalWithdrawInput.Currency
+    receiverEmail := paypalWithdrawInput.ReceiverEmail
+
+    // Converting float64 to string
+    totalString := strconv.FormatFloat(total, 'f', -1, 64)
+
+    // Logging recieved data
+    log.Println("Total: ", total)
+    log.Println("Currency: ", currency)
+
+
+    // Getting needed data for POST request
+    withdrawFundsData := services.GetWithdrawFundsData(currency, totalString, receiverEmail)
+
+    // Converting data for POST request to JSON
+    withdrawFundsDataJSON, err := json.Marshal(withdrawFundsData)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to marshal withdraw funds JSON data "})
+        return
+    }
+
+    // POST request to withdraw funds
+    response, err := services.PPostPaypalRequest(c, paypalWithdrawFundsURL, accessToken, withdrawFundsDataJSON)
+    if err != nil{
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to complete the POST request for withdrawal of funds"})
+        return
+    }
+
+    // Handling response and getting golang object to work with it
+    result, err := services.PHandlePaypalResponse(c, response)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to handle paypal response"})
+        return
+    }
+
+    // Take the balance from the site
+    services.UpdateNegativeUserBalance(c, totalString)
+
+    c.JSON(http.StatusOK, result)
 }

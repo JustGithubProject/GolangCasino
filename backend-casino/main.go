@@ -100,6 +100,7 @@ func main() {
 	r.GET("/paypal/payments/history/", paypal_handlers.GetListPaypalPayments)
 	r.POST("/paypal/update/approved/order/", paypal_handlers.UpdatePaymentStatusToApproved)
 	r.POST("/paypal/update/pickup/money", paypal_handlers.PickUpMoneyAndStatusToSuccess)
+	r.POST("paypal/withdraw/funds/", paypal_handlers.WithdrawFundsPaypal)
 
 
 	// Google auth handlers
