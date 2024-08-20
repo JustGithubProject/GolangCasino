@@ -10,7 +10,8 @@ import Home from './components/home/Home'
 import SuccessPage from './pages/SucessPage';
 import CancelPage from './pages/CancelPage';
 import TopUpPage from './components/payments/TopUpComponent';
-import PaymentHistoryPage from './components/payments/PaymentsHistory'
+import PaymentHistoryPage from './components/payments/PaymentsHistory';
+import WithdrawFundsPage from './components/payments/WithdrawFundsPaypal';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="/cancel-payment" element={<CancelPage/>} />
               <Route path="/top-up-balance" element={<TopUpPage/>} />
               <Route path="/payment-history" element={<PaymentHistoryPage/>} />
+              <Route path="/withdraw-funds" element={<WithdrawFundsPage/>} />
           </Routes>
       </Router>
   );
