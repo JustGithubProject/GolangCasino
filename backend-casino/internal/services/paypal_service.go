@@ -248,7 +248,7 @@ func GetOrderPaymentData(currencyCode string, moneyValue string) map[string]inte
 func GetWithdrawFundsData(currencyCode string, moneyValue string, receiverEmail string) map[string]interface{} {
     payoutRequest := map[string]interface{}{
         "sender_batch_header": map[string]interface{}{
-            "sender_batch_id":  "Payouts_2018_100007",
+            "sender_batch_id":  GenerateUUIDForPaypal(),
             "email_subject":    "You have a payout!",
             "email_message":    "You have received a payout! Thanks for using our service!",
         },
@@ -299,6 +299,43 @@ func PostRequestUsingPaypalMethod(c *gin.Context, paymentURL string, accessToken
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusCreated {
+		body, _ := ioutil.ReadAll(resp.Body)
+		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
+		return nil, errors.New("failed to create payment")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+        log.Println("Failed to read response body")
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to read response body"})
+		return nil, err
+	}
+	return body, nil
+}
+
+func PostRequestWithdrawFunds(c *gin.Context, paymentURL string, accessToken string, paymentJSON []byte) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodPost, paymentURL, strings.NewReader(string(paymentJSON)))
+	if err != nil {
+        log.Println("Failed to create request")
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to create request"})
+		return nil, err
+	}
+
+    // Set needed headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+        log.Println("Failed to send request")
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Failed to send request"})
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+        log.Println("Failed to create payment", resp.StatusCode)
 		body, _ := ioutil.ReadAll(resp.Body)
 		c.JSON(resp.StatusCode, gin.H{"message": "Failed to create payment", "details": string(body)})
 		return nil, errors.New("failed to create payment")
@@ -433,7 +470,7 @@ func PBindJSONData(c *gin.Context, input interface{}) error {
 func PPostPaypalRequest(c *gin.Context, paymentURL, accessToken string, paymentJSON []byte) ([]byte, error) {
     body, err := PostRequestUsingPaypalMethod(c, paymentURL, accessToken, paymentJSON)
     if err != nil {
-        log.Println("Post request using paypal method failed!!!")
+        log.Println("Post request using paypal method failed: ", err)
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to do POST request"})
         return nil, err
     }

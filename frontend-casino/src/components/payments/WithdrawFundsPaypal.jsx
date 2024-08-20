@@ -11,8 +11,11 @@ const WithdrawFundsPage = () => {
     try {
         const url = "http://127.0.0.1:8081/paypal/withdraw/funds/"
         const token = localStorage.getItem("token");
+
+        const floatTotal = parseFloat(amount)
+
         const response = await axios.post(url, {
-                total: amount,
+                total: floatTotal,
                 currency: currency,
                 receiver_email: email
             },
@@ -22,6 +25,9 @@ const WithdrawFundsPage = () => {
                 'Authorization': `Bearer ${token}`,
             },
         });
+
+        console.log(response);
+        window.location.href = "/";
 
     } catch (error) {
         console.log("Failed to execute request: ", error);

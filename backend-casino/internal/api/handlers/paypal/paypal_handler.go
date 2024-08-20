@@ -299,7 +299,7 @@ func WithdrawFundsPaypal(c *gin.Context) {
     }
 
     // POST request to withdraw funds
-    response, err := services.PPostPaypalRequest(c, paypalWithdrawFundsURL, accessToken, withdrawFundsDataJSON)
+    response, err := services.PostRequestWithdrawFunds(c, paypalWithdrawFundsURL, accessToken, withdrawFundsDataJSON)
     if err != nil{
         c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to complete the POST request for withdrawal of funds"})
         return
