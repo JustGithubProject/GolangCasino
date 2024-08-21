@@ -1,1 +1,6 @@
 package slots
+
+func DogHouseHandler(){
+	
+}
+
