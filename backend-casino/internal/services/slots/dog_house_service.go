@@ -48,7 +48,8 @@ type DogHouseSymbols struct {
 /*
 	BLOCK: Checking multipliers
 */
-func CheckTenSymbolPlayed(playingField[][]int, symbol int) float64{
+
+func CountMatrixElement(playingField[][] int, symbol int) int {
 	countAppearance := 0
 
 	for i := 0; i < 3; i++{
@@ -58,6 +59,12 @@ func CheckTenSymbolPlayed(playingField[][]int, symbol int) float64{
 			}
 		}
 	}
+	return countAppearance
+}
+
+
+func CheckTenSymbolPlayed(playingField[][]int, symbol int) float64{
+	countAppearance := CountMatrixElement(playingField, symbol)
 
 	if countAppearance == 3 {
 		return 0.10
@@ -76,15 +83,7 @@ func CheckTenSymbolPlayed(playingField[][]int, symbol int) float64{
 
 
 func CheckJackSymbolPlayed(playingField[][]int, symbol int) float64 {
-	countAppearance := 0
-
-	for i := 0; i < 3; i++{
-		for j := 0; j < 5; j++ {
-			if playingField[i][j] == symbol {
-				countAppearance += 1
-			}
-		}
-	}
+	countAppearance := CountMatrixElement(playingField, symbol)
 
 	if countAppearance == 3{
 		return 0.10
@@ -103,15 +102,7 @@ func CheckJackSymbolPlayed(playingField[][]int, symbol int) float64 {
 
 
 func CheckQueenSymbolPlayed(playingField[][]int, symbol int) float64 {
-	countAppearance := 0
-
-	for i := 0; i < 3; i++{
-		for j := 0; j < 5; j++ {
-			if playingField[i][j] == symbol {
-				countAppearance += 1
-			}
-		}
-	}
+	countAppearance := CountMatrixElement(playingField, symbol)
 
 	if countAppearance == 3{
 		return 0.10
@@ -130,15 +121,7 @@ func CheckQueenSymbolPlayed(playingField[][]int, symbol int) float64 {
 
 
 func CheckKingSymbolPlayed(playingField[][]int, symbol int) float64 {
-	countAppearance := 0
-
-	for i := 0; i < 3; i++{
-		for j := 0; j < 5; j++ {
-			if playingField[i][j] == symbol {
-				countAppearance += 1
-			}
-		}
-	}
+	countAppearance := CountMatrixElement(playingField, symbol)
 
 	if countAppearance == 3{
 		return 0.25
@@ -149,8 +132,140 @@ func CheckKingSymbolPlayed(playingField[][]int, symbol int) float64 {
 	}
 
 	if countAppearance == 5 {
-		// TODO: ...
-		return 0.0
+		return 2.5
+	}
+
+	return 0.0
+}
+
+
+func CheckAceSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 0.25
+	}
+
+	if countAppearance == 4 {
+		return 0.50
+	}
+
+	if countAppearance == 5 {
+		return 2.5
+	}
+
+	return 0.0
+}
+
+
+func CheckBoneSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 0.40
+	}
+
+	if countAppearance == 4 {
+		return 1.00
+	}
+
+	if countAppearance == 5 {
+		return 5.00
+	}
+
+	return 0.0
+}
+
+
+func CheckCollarSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 0.60
+	}
+
+	if countAppearance == 4 {
+		return 1.25
+	}
+
+	if countAppearance == 5 {
+		return 7.5
+	}
+
+	return 0.0
+}
+
+
+func CheckDachshundSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 1.00
+	}
+
+	if countAppearance == 4 {
+		return 2.00
+	}
+
+	if countAppearance == 5 {
+		return 10.00
+	}
+
+	return 0.0
+}
+
+
+func CheckPugSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 1.25
+	}
+
+	if countAppearance == 4 {
+		return 3.00 
+	}
+
+	if countAppearance == 5 {
+		return 15.00
+	}
+
+	return 0.0
+}
+
+
+func CheckSpitzSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 1.75
+	}
+
+	if countAppearance == 4 {
+		return 5.00 
+	}
+
+	if countAppearance == 5 {
+		return 25.00
+	}
+
+	return 0.0
+}
+
+
+func CheckBoxerSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+
+	if countAppearance == 3{
+		return 2.50
+	}
+
+	if countAppearance == 4 {
+		return 7.50
+	}
+
+	if countAppearance == 5 {
+		return 37.50
 	}
 
 	return 0.0
