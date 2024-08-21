@@ -1,17 +1,5 @@
 package slots
 
-// func CreateDogHousePlayingField() [][]int{
-// 	rows, cols := 5, 6
-// 	playingField := make([][]int, rows)
-//     for i := range playingField {
-//         playingField[i] = make([]int, cols)
-//         for j := range playingField[i] {
-//             playingField[i][j] = 0
-//         }
-//     }
-// 	return playingField
-// }
-
 func CreateDogHousePlayingField() [][]int {
 	rows, cols := 3, 5
 	playingField := make([][]int, rows)
@@ -41,6 +29,9 @@ type DogHouseSymbols struct {
 	pug int // symbol=Pug order=9
 	spitz int // symbol=Spitz order=10
 	boxer int // symbol=Boxer order=11
+
+	// Bonus
+	paws int // symbol=Paws order=12
 }
 
 
@@ -269,4 +260,40 @@ func CheckBoxerSymbolPlayed(playingField[][]int, symbol int) float64 {
 	}
 
 	return 0.0
+}
+
+
+func CheckPawsSymbolPlayed(playingField[][]int, symbol int) float64 {
+	countAppearance := CountMatrixElement(playingField, symbol)
+	if countAppearance == 3 {
+		// TODO: ...
+	}
+
+	if countAppearance == 4 {
+		// TODO: ...
+	}
+
+	if countAppearance == 5 {
+		// TODO: ...
+	}
+
+	return 0.0
+}
+
+
+func CalculateDogHousePaymentsNormalMode(playingField[][]int, bet float64, balance float64) float64 {
+	payoutTenX := CheckTenSymbolPlayed(playingField, 1)
+	payoutJackX := CheckJackSymbolPlayed(playingField, 2)
+	payoutQueenX := CheckQueenSymbolPlayed(playingField, 3)
+	payoutKingX := CheckKingSymbolPlayed(playingField, 4)
+	payoutAceX := CheckAceSymbolPlayed(playingField, 5)
+	payoutBoneX := CheckBoneSymbolPlayed(playingField, 6)
+	payoutCollarX := CheckCollarSymbolPlayed(playingField, 7)
+	payoutDachshundX := CheckDachshundSymbolPlayed(playingField, 8)
+	payoutPugX := CheckPugSymbolPlayed(playingField, 9)
+	payoutSpitz := CheckSpitzSymbolPlayed(playingField, 10)
+	// TODO: ...
+
+
+
 }
