@@ -43,3 +43,7 @@ func DeleteGameHandler(c *gin.Context) {
 func SweetBonanzaSlotHandler(c *gin.Context){
     slots.SweetBonanzaHandle(c)
 }
+
+func DogHouseSlotHandler(c *gin.Context) {
+    slots.DogHouseHandle(c)
+}
