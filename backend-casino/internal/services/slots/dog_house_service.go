@@ -378,6 +378,16 @@ func GenerateDogHouseRandomNumberNormalMode() int {
 	return randomNumber
 }
 
+func GenerateDogHouseRandomNumberBonusMode() int {
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+	weights := []float64{
+		10.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 450.0, 500.0,
+		550.0, 600.0, 650.0, 700.0, 750.0, 10000.0, 100000.0,
+	}
+	randomNumber := WeightedDogHouseRandomChoice(values, weights)
+	return randomNumber
+}
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
@@ -394,10 +404,22 @@ func GenerateDogHousePlayingFieldNormalMode() [][]int {
 	return playingField
 }
 
+func GenerateDogHousePlayingFieldBonusMode() [][]int {
+	playingField := CreatePlayingField()
+	for i := 0; i < 5; i++ {
+		for j := 0; j < 6; j++ {
+			playingField[i][j] = GenerateDogHouseRandomNumberBonusMode()
+		}
+	}
+	return playingField
+}
+
 func DogHouseSpin(isBonusMode bool, bet float64, balance float64) ([][]int, float64) {
-	// if isBonusMode {
-		
-	// }
+	if isBonusMode {
+		currentPlayingField := GenerateDogHousePlayingFieldBonusMode()
+		currentBalance := CalculateDogHousePaymentsNormalMode(currentPlayingField, bet, balance) // Isn't correct.
+		return currentPlayingField, currentBalance
+	}
 	currentPlayingField := GenerateDogHousePlayingFieldNormalMode()
 	currentBalance := CalculateDogHousePaymentsNormalMode(currentPlayingField, bet, balance)
 	return currentPlayingField, currentBalance

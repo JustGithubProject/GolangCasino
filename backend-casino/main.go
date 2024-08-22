@@ -92,6 +92,7 @@ func main() {
 	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler) // like rooms(6 different handlers)
 	r.POST("/spin-roulette-v3/", handlers.VeryBadSpinRouletteHandler)
 	r.POST("/spin-slot-v1/", handlers.SweetBonanzaSlotHandler)
+	r.POST("/spin-slot-v2/", handlers.DogHouseSlotHandler)
 
 
 	// paypal handlers
