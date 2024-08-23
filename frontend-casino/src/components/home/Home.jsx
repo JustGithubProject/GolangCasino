@@ -11,7 +11,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import cardBackgroundImage from '../../images/card.png'; 
 import sweetbonanzaImage from '../../images/sweet-bonanza.png'; 
-
+import doghouseImage from '../../images/dog-house.png'; 
 import image1 from '../../images/cas_image_99.png';
 import image2 from '../../images/cas_image_9.png';
 import image3 from '../../images/cas_image_11.png';
@@ -153,24 +153,36 @@ const Home = () => {
     color: '#28a745',
   };
 
-  const cardStyle = (index) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: index === 4 ? `url(${sweetbonanzaImage}) no-repeat center center` : `url(${cardBackgroundImage}) no-repeat center center`,
-    backgroundSize: 'cover',
-    color: '#fff',
-    padding: '30px',
-    borderRadius: '10px',
-    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-    width: '200px',
-    height: '160px',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    animation: 'fadeIn 1s',
-    border: '2px solid rgba(255, 255, 255, 0.8)',
-    marginBottom: '5px',
-  });
+  const cardStyle = (index) => {
+    let backgroundImage;
+  
+    if (index === 4) {
+      backgroundImage = `url(${sweetbonanzaImage}) no-repeat center center`;
+    } else if (index === 5) {
+      backgroundImage = `url(${doghouseImage}) no-repeat center center`;
+    } else {
+      backgroundImage = `url(${cardBackgroundImage}) no-repeat center center`;
+    }
+  
+    return {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: backgroundImage,
+      backgroundSize: 'cover',
+      color: '#fff',
+      padding: '30px',
+      borderRadius: '10px',
+      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+      width: '200px',
+      height: '160px',
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+      animation: 'fadeIn 1s',
+      border: '2px solid rgba(255, 255, 255, 0.8)',
+      marginBottom: '5px',
+    };
+  };
 
   const cardButtonStyle = {
     backgroundColor: '#4CAF50',
@@ -253,21 +265,21 @@ const Home = () => {
       <div style={mainStyle}>
         {isAuthenticated ? (
           <div style={cardGridStyle}>
-            {[...Array(6)].map((_, index) => (
-              <div key={index} style={{ textAlign: 'center' }}>
-                <div style={cardStyle(index)}>
-                  <Link
-                    to={index === 4 ? '/room/slot/sweetbonanza' : `/room/roulette/${index + 1}`}
-                    style={cardButtonStyle}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    Играть
-                  </Link>
-                </div>
-                <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
-              </div>
-            ))}
+          {[...Array(6)].map((_, index) => (
+          <div key={index} style={{ textAlign: 'center' }}>
+            <div style={cardStyle(index)}>
+              <Link
+                to={index === 4 ? '/room/slot/sweetbonanza' : (index === 5 ? '/room/slot/doghouse' : `/room/roulette/${index + 1}`)}
+                style={cardButtonStyle}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                Играть
+              </Link>
+            </div>
+            <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
+          </div>
+          ))}
           </div>
         ) : (
           <div style={formContainerStyle}>

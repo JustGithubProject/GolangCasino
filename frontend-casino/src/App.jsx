@@ -1,12 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import RouletteCard from './components/rooms/RouletteCard';
-import RouletteCardV2 from './components/rooms/RouletteCard_v2'
-import RouletteCardV3 from './components/rooms/RouletteCard_v3'
-import SweetBonanza from "./components/rooms/SweetBonanzaCard"
-import Login from './components/auth_components/Login'
-import Register from './components/auth_components/Register'
-import Home from './components/home/Home'
+import RouletteCardV2 from './components/rooms/RouletteCard_v2';
+import RouletteCardV3 from './components/rooms/RouletteCard_v3';
+import SweetBonanza from "./components/rooms/SweetBonanzaCard";
+import DogHouseCard from './components/rooms/DogHouseCard';
+import Login from './components/auth_components/Login';
+import Register from './components/auth_components/Register';
+import Home from './components/home/Home';
 import SuccessPage from './pages/SucessPage';
 import CancelPage from './pages/CancelPage';
 import TopUpPage from './components/payments/TopUpComponent';
@@ -22,6 +23,7 @@ function App() {
               <Route path="/room/roulette/3" element={<RouletteCardV3/>} />
               <Route path="/room/roulette/4" element={<RouletteCardV3/>} />
               <Route path="/room/slot/sweetbonanza" element={<SweetBonanza/>} />
+              <Route path="/room/slot/doghouse" element={<DogHouseCard/>} />
               <Route path="/room/roulette/6" element={<RouletteCardV3/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register/>} />

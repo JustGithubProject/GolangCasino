@@ -10,12 +10,19 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isAgeConfirmed, setIsAgeConfirmed] = useState(false); // Новое состояние для чекбокса
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (!isAgeConfirmed) {
+      setError('Вы должны подтвердить, что вам есть 18 лет.');
+      return;
+    }
+
     try {
       const response = await axios.post(
         'http://127.0.0.1:8081/register/user/',
@@ -32,11 +39,11 @@ const Register = () => {
         throw new Error('Registration failed');
       }
 
-      setSuccess('Registration successful!');
+      setSuccess('Регистрация успешна!');
       navigate('/');
       window.location.reload(); 
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError('Ошибка регистрации. Пожалуйста, попробуйте еще раз.');
     }
   };
 
@@ -48,7 +55,7 @@ const Register = () => {
     form: {
       display: 'flex',
       flexDirection: 'column',
-      background: '#2c3e50', // Dark background color
+      background: '#2c3e50',
       padding: '30px',
       borderRadius: '15px',
       boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
@@ -64,14 +71,14 @@ const Register = () => {
       marginBottom: '8px',
       fontSize: '14px',
       fontWeight: 'bold',
-      color: '#ECF0F1', // Light text color
+      color: '#ECF0F1',
     },
     input: {
       padding: '12px 40px 12px 12px',
       borderRadius: '20px',
       border: '1px solid #34495e',
-      background: '#34495e', // Darker input background
-      color: '#ECF0F1', // Light text color
+      background: '#34495e',
+      color: '#ECF0F1',
       width: '100%',
       fontSize: '14px',
       outline: 'none',
@@ -114,6 +121,35 @@ const Register = () => {
     icon: {
       verticalAlign: 'middle',
     },
+    checkboxGroup: {
+      marginTop: '10px',
+      display: 'flex',
+      alignItems: 'center',
+    },
+    checkboxInput: {
+      marginRight: '10px',
+      cursor: 'pointer',
+    },
+    checkboxLabel: {
+      fontSize: '16px', // Увеличенный размер шрифта
+      fontWeight: '500', // Полужирное начертание
+      color: '#ECF0F1',
+      cursor: 'pointer',
+      padding: '5px 10px', // Отступы вокруг текста
+      borderRadius: '5px', // Скругленные углы
+      background: '#34495e', // Фон для выделения
+      transition: 'background 0.3s ease, color 0.3s ease',
+      display: 'flex',
+      alignItems: 'center',
+    },
+    checkboxLabelHover: {
+      background: '#2c3e50', // Более темный фон при наведении
+      color: '#ffffff', // Светлый цвет текста при наведении
+    },
+    checkboxLabelActive: {
+      background: '#185a9d', // Цвет фона при активации
+      color: '#ffffff', // Цвет текста при активации
+    },
   };
 
   return (
@@ -150,6 +186,18 @@ const Register = () => {
           required
           style={email ? { ...styles.input, borderColor: '#185a9d', boxShadow: '0 0 8px rgba(24, 90, 157, 0.2)' } : styles.input}
         />
+      </div>
+      <div style={styles.checkboxGroup}>
+        <input
+          type="checkbox"
+          id="age-confirm"
+          checked={isAgeConfirmed}
+          onChange={(e) => setIsAgeConfirmed(e.target.checked)}
+          style={styles.checkboxInput}
+        />
+        <label htmlFor="age-confirm" style={styles.checkboxLabel}>
+          Мне есть 18 лет
+        </label>
       </div>
       <button
         type="submit"
