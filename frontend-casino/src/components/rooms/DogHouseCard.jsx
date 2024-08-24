@@ -2,13 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import doghousebackground from '../../images/dog-house-background.png';
-import backgroundMusic from '../../images/sweetbonanza-items/sweet-music.mp3';
+import backgroundMusic from '../../images/doghouse-items/doghouse-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
 import boxerImage from '../../images/doghouse-items/boxer.png';
 import aceImage from '../../images/doghouse-items/ace.png';
+import kingImage from '../../images/doghouse-items/King.png';
+import boneImage from '../../images/doghouse-items/bone.png';
+import queenImage from '../../images/doghouse-items/queen.png';
+import collarImage from '../../images/doghouse-items/collar.png'
+import jackImage from '../../images/doghouse-items/jack.png';
+import tenImage from '../../images/doghouse-items/ten.png';
+import dachshundImage from '../../images/doghouse-items/dachshund.png';
+import pugImage from '../../images/doghouse-items/pug.png';
+import pawsImage from '../../images/doghouse-items/paws.png';
+import spitzImage from '../../images/doghouse-items/spitz.png';
 
 // Стили для Wrapper
 const Wrapper = styled.div`
@@ -28,7 +38,6 @@ const Wrapper = styled.div`
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 `;
-
 
 // Анимация для падения символов
 const fallAnimation = keyframes`
@@ -71,17 +80,18 @@ const boardAnimation = keyframes`
 // Стили для GameBoard
 const GameBoard = styled.div`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-gap: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  border-radius: 15px;
-  margin-top: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 2px solid #555;
+  grid-template-columns: repeat(5, 1fr); /* 5 столбцов */
+  grid-template-rows: repeat(3, 1fr); /* 3 строки */
+  grid-gap: 15px; 
+  background: rgba(139, 69, 19, 0.9); 
+  padding: 20px; 
+  border-radius: 20px; 
+  margin-top: 30px; 
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  border: 2px solid #666;
   position: relative;
   overflow: hidden;
-  animation: ${props => props.isSpinning ? css`${boardAnimation} 1.2s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
+  animation: ${props => props.isSpinning ? css`${boardAnimation} 1.5s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
 `;
 
 const bounceAnimation = keyframes`
@@ -92,17 +102,17 @@ const bounceAnimation = keyframes`
 
 // Стили для символов
 const Symbol = styled.div`
-  width: 70px;
-  height: 70px;
+  width: 80px; /* Увеличена ширина символов */
+  height: 80px; /* Увеличена высота символов */
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;
-  border-radius: 12px;
-  font-size: 28px;
+  background: rgba(139, 69, 19, 0.9); /* Коричневый фон символов */
+  border-radius: 15px; /* Более округлые углы */
+  font-size: 32px; /* Увеличен размер шрифта */
   color: #fff;
-  animation: ${bounceAnimation} 1s infinite;
-  animation: ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  animation: ${bounceAnimation} 1s infinite, ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
   animation-delay: ${props => props.delay || '0s'};
 `;
 
@@ -194,46 +204,26 @@ const MusicButton = styled.button`
   }
 `;
 
-// type DogHouseSymbols struct {
-// 	// Low value symbols
-// 	ten   int // symbol=10 order=1
-// 	jack  int // symbol=J order=2
-// 	queen int // symbol=Q order=3
-// 	king  int // symbol=K order=4
-// 	ace   int // symbol=A order=5
-
-// 	// Medium value symbols
-// 	bone   int // symbol=Bone order=6
-// 	collar int // symbol=Collar order=7
-
-// 	// High Value symbols (Dogs)
-// 	dachshund int // symbol=Dachshund order=8
-// 	pug       int // symbol=Pug order=9
-// 	spitz     int // symbol=Spitz order=10
-// 	boxer     int // symbol=Boxer order=11
-
-// 	// Bonus
-// 	paws int // symbol=Paws order=12
-// }
 
 const symbols = [
-    { id: 1, name: 'Ten', image: '' },
-    { id: 2, name: 'Jack', image: '' },
-    { id: 3, name: 'Queen', image: '' },
-    { id: 4, name: 'King', image: '' },
+    { id: 1, name: 'Ten', image: tenImage },
+    { id: 2, name: 'Jack', image: jackImage },
+    { id: 3, name: 'Queen', image: queenImage },
+    { id: 4, name: 'King', image:  kingImage},
     { id: 5, name: 'Ace', image: aceImage },
-    { id: 6, name: 'Bone', image: 'bluecandyImage' },
-    { id: 7, name: 'Collar', image: 'greencandyImage' },
-    { id: 8, name: 'Dachshund', image: 'purpleImage' },
-    { id: 9, name: 'Pug', image: 'redCandy' },
-    { id: 10, name: 'Spitz', image: 'scatter' },
+    { id: 6, name: 'Bone', image: boneImage },
+    { id: 7, name: 'Collar', image: collarImage },
+    { id: 8, name: 'Dachshund', image: dachshundImage },
+    { id: 9, name: 'Pug', image: pugImage },
+    { id: 10, name: 'Spitz', image: spitzImage },
     { id: 11, name: 'Boxer', image: boxerImage },
-    { id: 12, name: 'Paws', image: 'bomb3xImage' },
+    { id: 12, name: 'Paws', image: pawsImage },
   ];
   
 
 const DogHouseCard = () => {
     let defaultMatrix = [[11, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]]
+
     const [gameBoard, setGameBoard] = useState(defaultMatrix);
     const [username, setUsername] = useState(null);
     const [balance, setBalance] = useState(null);
