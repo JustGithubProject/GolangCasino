@@ -372,17 +372,16 @@ func WeightedDogHouseRandomChoice(values []int, weights []float64) int {
 func GenerateDogHouseRandomNumberNormalMode() int {
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
 	weights := []float64{
-		5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 15.0, 350.0, 400.0, 450.0, 500.0,
+		5.0, 5.0, 10.0, 15.0, 20.0, 25.0, 50.0, 55.0, 60.0, 65.0, 100.0,
 	}
 	randomNumber := WeightedDogHouseRandomChoice(values, weights)
 	return randomNumber
 }
 
 func GenerateDogHouseRandomNumberBonusMode() int {
-	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
 	weights := []float64{
-		10.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 450.0, 500.0,
-		550.0, 600.0, 650.0, 700.0, 750.0, 10000.0, 100000.0,
+		5.0, 5.0, 5.0, 5.0, 15.0, 15.0, 20.0, 350.0, 400.0, 450.0, 500.0,
 	}
 	randomNumber := WeightedDogHouseRandomChoice(values, weights)
 	return randomNumber

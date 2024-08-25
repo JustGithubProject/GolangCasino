@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to bottom, rgba(255, 64, 108, 0.8), rgba(255, 75, 43, 0.8));
+  background: linear-gradient(to bottom, rgba(255, 64, 108, 0.85), rgba(255, 75, 43, 0.85));
   background-image: url(${backgroundImage});
   background-size: cover;
   background-position: center;
@@ -34,61 +34,62 @@ const Wrapper = styled.div`
   width: 100vw;
   box-sizing: border-box;
   padding: 60px 20px;
-  border: 2px solid #444;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(68, 68, 68, 0.8);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   overflow: hidden;
+  backdrop-filter: blur(4px);
 `;
 
 // Анимация для падения символов
 const fallAnimation = keyframes`
   0% {
-    transform: translateY(-300%) rotate(0deg) scale(0.6);
+    transform: translateY(-300%) rotate(0deg) scale(0.7);
     opacity: 0;
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
   }
   40% {
     transform: translateY(50%) rotate(90deg) scale(1.1);
-    opacity: 0.5;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0.6;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.4);
   }
   70% {
     transform: translateY(10%) rotate(180deg) scale(1.05);
-    opacity: 0.7;
-    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+    opacity: 0.8;
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.5);
   }
   85% {
     transform: translateY(0) rotate(270deg) scale(1);
-    opacity: 0.9;
-    box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.5);
+    opacity: 0.95;
+    box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.6);
   }
   100% {
     transform: translateY(0) rotate(360deg) scale(1);
     opacity: 1;
-    box-shadow: 0px 25px 30px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 25px 35px rgba(0, 0, 0, 0.7);
   }
 `;
 
 // Анимация для перемещения GameBoard вниз
 const boardAnimation = keyframes`
-  0% { transform: translateY(-200%); }
-  50% { transform: translateY(15%); }
-  70% { transform: translateY(-5%); }
-  90% { transform: translateY(5%); }
+  0% { transform: translateY(-150%); }
+  50% { transform: translateY(10%); }
+  70% { transform: translateY(-3%); }
+  90% { transform: translateY(3%); }
   100% { transform: translateY(0); }
 `;
 
 // Стили для GameBoard
 const GameBoard = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 столбцов */
-  grid-template-rows: repeat(3, 1fr); /* 3 строки */
-  grid-gap: 15px; 
+  grid-template-columns: repeat(5, 1fr); 
+  grid-template-rows: repeat(3, 1fr); 
+  grid-gap: 20px; 
   background: rgba(139, 69, 19, 0.9); 
-  padding: 20px; 
+  padding: 25px; 
   border-radius: 20px; 
-  margin-top: 30px; 
+  margin-top: 40px; 
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-  border: 2px solid #666;
+  border: 2px solid rgba(102, 102, 102, 0.8);
   position: relative;
   overflow: hidden;
   animation: ${props => props.isSpinning ? css`${boardAnimation} 1.5s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
@@ -96,111 +97,111 @@ const GameBoard = styled.div`
 
 const bounceAnimation = keyframes`
   0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-12px); }
   100% { transform: translateY(0); }
 `;
 
 // Стили для символов
 const Symbol = styled.div`
-  width: 80px; /* Увеличена ширина символов */
-  height: 80px; /* Увеличена высота символов */
+  width: 90px; 
+  height: 90px; 
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(139, 69, 19, 0.9); /* Коричневый фон символов */
-  border-radius: 15px; /* Более округлые углы */
-  font-size: 32px; /* Увеличен размер шрифта */
+  background: rgba(139, 69, 19, 0.85); 
+  border-radius: 18px; 
+  font-size: 34px; 
   color: #fff;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   animation: ${bounceAnimation} 1s infinite, ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
   animation-delay: ${props => props.delay || '0s'};
 `;
 
 // Стили для кнопок
 const Button = styled.button`
-  margin-top: 20px;
-  padding: 12px 24px;
+  margin-top: 25px;
+  padding: 14px 28px;
   background: #28a745;
   color: #fff;
-  border: 2px solid #444;
-  border-radius: 8px;
+  border: 2px solid rgba(68, 68, 68, 0.8);
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     background: #218838;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
   }
 `;
 
 // Стили для текста баланса
 const BalanceText = styled.p`
-  margin-top: 15px;
-  font-size: 22px;
+  margin-top: 20px;
+  font-size: 24px;
   color: #ffdf00;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: 2px solid #555;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: 2px solid rgba(85, 85, 85, 0.8);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
 `;
 
 // Стили для заголовка
 const Title = styled.h1`
   color: #fff;
-  margin-top: 20px;
-  font-size: 40px;
-  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8), 0 0 15px #ff4500;
-  border: 2px solid #444;
-  padding: 15px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.7);
+  margin-top: 30px;
+  font-size: 42px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 0 0 18px #ff4500;
+  border: 2px solid rgba(68, 68, 68, 0.8);
+  padding: 18px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.75);
 `;
 
 // Стили для внутреннего контейнера
 const InnerWrapper = styled.div`
-  border: 2px solid #444;
-  border-radius: 15px;
-  padding: 20px;
+  border: 2px solid rgba(68, 68, 68, 0.8);
+  border-radius: 18px;
+  padding: 25px;
   background-image: url(${doghousebackground});
   background-size: cover;
   background-position: center;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
 `;
 
 // Стили для инпута ставки
 const BetInput = styled.input`
-  margin-top: 15px;
-  padding: 12px;
-  font-size: 20px;
-  border: 2px solid #555;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.8);
+  margin-top: 20px;
+  padding: 14px;
+  font-size: 22px;
+  border: 2px solid rgba(85, 85, 85, 0.8);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.85);
   color: #fff;
-  width: 90px;
+  width: 100px;
   text-align: center;
 `;
 
 const MusicButton = styled.button`
-  margin-top: 20px;
-  padding: 12px 24px;
+  margin-top: 25px;
+  padding: 14px 28px;
   background: #007bff;
   color: #fff;
-  border: 2px solid #444;
-  border-radius: 8px;
+  border: 2px solid rgba(68, 68, 68, 0.8);
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     background: #0056b3;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
   }
 `;
 

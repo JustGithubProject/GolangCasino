@@ -234,6 +234,49 @@ const Home = () => {
     borderRadius: '0 0 10px 10px',
   };
 
+  const sectionSeparatorStyle = {
+    backgroundColor: 'rgba(44, 62, 80, 0.7)', 
+    padding: '10px 0', // Немного увеличенные отступы для лучшего визуального разделения
+    textAlign: 'center',
+    position: 'relative',
+  };
+  
+  const sectionTitleStyle = {
+    color: '#ecf0f1',
+    fontSize: '18px', // Сохраняем размер шрифта
+    marginBottom: '8px', // Легкий отступ снизу
+    fontWeight: '500', // Полужирное начертание для акцента
+    textTransform: 'uppercase', // Верхний регистр для элегантности
+    letterSpacing: '1px', // Небольшое расстояние между буквами для улучшения читаемости
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Легкая тень для дополнительного акцента
+  };
+  
+  const sectionLineStyle = {
+    border: 'none',
+    borderTop: '1px solid rgba(255, 255, 255, 0.25)', // Тонкая и прозрачная линия
+    maxWidth: '100px', // Сохраняем ширину
+    margin: '10px auto', // Увеличенные отступы для лучшего визуального разделения
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)', // Легкая тень для мягкого эффекта
+    borderRadius: '2px', // Легкое закругление углов для более плавного вида
+    transition: 'box-shadow 0.3s ease-in-out', // Плавный переход для тени
+  };
+  
+  const sectionSeparatorHoverStyle = {
+    ...sectionSeparatorStyle,
+    '&:hover': {
+      backgroundColor: 'rgba(44, 62, 80, 0.7)', // Увеличение прозрачности при наведении
+    },
+  };
+  
+  const sectionLineHoverStyle = {
+    ...sectionLineStyle,
+    '&:hover': {
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.4)', // Более выраженная тень при наведении
+    },
+  };
+  
+  
+  
   return (
     <div style={containerStyle}>
       <Header
@@ -261,6 +304,10 @@ const Home = () => {
             <img src={image3} alt="Image 3" style={carouselImageStyle} />
           </div>
         </Carousel>
+      </div>
+      <div style={sectionSeparatorStyle}>
+        <p style={sectionTitleStyle}>Слоты</p>
+        <hr style={sectionLineStyle} />
       </div>
       <div style={mainStyle}>
         {isAuthenticated ? (
