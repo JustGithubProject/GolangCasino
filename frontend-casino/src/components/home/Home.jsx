@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { fetchWithAuth } from '../auth_components/fetchWrapper';
-import Login from '../auth_components/Login';
-import Register from '../auth_components/Register';
-import * as jwtDecodeModule from 'jwt-decode';
 import { Link } from 'react-router-dom';
+import { Carousel } from 'react-responsive-carousel';
+import * as jwtDecodeModule from 'jwt-decode';
+
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
-import { Carousel } from 'react-responsive-carousel';
+import Login from '../auth_components/Login';
+import Register from '../auth_components/Register';
+import { fetchWithAuth } from '../auth_components/fetchWrapper';
+
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
+
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import cardBackgroundImage from '../../images/card.png'; 
 import sweetbonanzaImage from '../../images/sweet-bonanza.png'; 
@@ -15,6 +18,7 @@ import doghouseImage from '../../images/dog-house.png';
 import image1 from '../../images/cas_image_99.png';
 import image2 from '../../images/cas_image_9.png';
 import image3 from '../../images/cas_image_11.png';
+
 
 const Home = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -42,6 +46,33 @@ const Home = () => {
     }, 30 * 60 * 1000); // в миллисекундах
 
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const token = localStorage.getItem('authToken');
+
+      if (token) {
+        try {
+          const decodedToken = jwtDecodeModule.jwtDecode(token);
+          const expirationTime = decodedToken.exp;
+          const currentTime = Math.floor(Date.now() / 1000);
+
+          if (expirationTime < currentTime) {
+            localStorage.removeItem('authToken');
+            console.log('Token has been deleted');
+          } else {
+            console.log('Correct Token');
+          }
+        } catch (error) {
+          console.error('Failed to decode token', error);
+        }
+      } else {
+        console.log('Token not found');
+      }
+    };
+
+    checkTokenExpiration();
   }, []);
   
 
@@ -234,48 +265,6 @@ const Home = () => {
     borderRadius: '0 0 10px 10px',
   };
 
-  const sectionSeparatorStyle = {
-    backgroundColor: 'rgba(44, 62, 80, 0.7)', 
-    padding: '10px 0', // Немного увеличенные отступы для лучшего визуального разделения
-    textAlign: 'center',
-    position: 'relative',
-  };
-  
-  const sectionTitleStyle = {
-    color: '#ecf0f1',
-    fontSize: '18px', // Сохраняем размер шрифта
-    marginBottom: '8px', // Легкий отступ снизу
-    fontWeight: '500', // Полужирное начертание для акцента
-    textTransform: 'uppercase', // Верхний регистр для элегантности
-    letterSpacing: '1px', // Небольшое расстояние между буквами для улучшения читаемости
-    textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Легкая тень для дополнительного акцента
-  };
-  
-  const sectionLineStyle = {
-    border: 'none',
-    borderTop: '1px solid rgba(255, 255, 255, 0.25)', // Тонкая и прозрачная линия
-    maxWidth: '100px', // Сохраняем ширину
-    margin: '10px auto', // Увеличенные отступы для лучшего визуального разделения
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)', // Легкая тень для мягкого эффекта
-    borderRadius: '2px', // Легкое закругление углов для более плавного вида
-    transition: 'box-shadow 0.3s ease-in-out', // Плавный переход для тени
-  };
-  
-  const sectionSeparatorHoverStyle = {
-    ...sectionSeparatorStyle,
-    '&:hover': {
-      backgroundColor: 'rgba(44, 62, 80, 0.7)', // Увеличение прозрачности при наведении
-    },
-  };
-  
-  const sectionLineHoverStyle = {
-    ...sectionLineStyle,
-    '&:hover': {
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.4)', // Более выраженная тень при наведении
-    },
-  };
-  
-  
   
   return (
     <div style={containerStyle}>
@@ -304,10 +293,6 @@ const Home = () => {
             <img src={image3} alt="Image 3" style={carouselImageStyle} />
           </div>
         </Carousel>
-      </div>
-      <div style={sectionSeparatorStyle}>
-        <p style={sectionTitleStyle}>Слоты</p>
-        <hr style={sectionLineStyle} />
       </div>
       <div style={mainStyle}>
         {isAuthenticated ? (

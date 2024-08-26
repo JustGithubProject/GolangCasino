@@ -94,6 +94,7 @@ func main() {
 	// slots handlers
 	r.POST("/spin-slot-v1/", handlers.SweetBonanzaSlotHandler)
 	r.POST("/spin-slot-v2/", handlers.DogHouseSlotHandler)
+	r.POST("/spin-slot-v3/", handlers.WolfGoldSlotHandler) // Not ready yet
 
 
 	// paypal handlers
