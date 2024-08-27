@@ -305,7 +305,7 @@ func GenerateWolfGoldRandomNumberNormalMode() int {
 	weights := []float64{
 		5.0, 5.0, 10.0, 15.0, 20.0, 25.0, 50.0, 55.0, 60.0, 65.0, 100.0,
 	}
-	randomNumber := WeightedDogHouseRandomChoice(values, weights)
+	randomNumber := WeightedWolfGoldRandomChoice(values, weights)
 	return randomNumber
 }
 
@@ -314,7 +314,7 @@ func GenerateWolfGoldRandomNumberBonusMode() int {
 	weights := []float64{
 		5.0, 5.0, 5.0, 5.0, 15.0, 15.0, 20.0, 350.0, 400.0, 450.0, 500.0,
 	}
-	randomNumber := WeightedDogHouseRandomChoice(values, weights)
+	randomNumber := WeightedWolfGoldRandomChoice(values, weights)
 	return randomNumber
 }
 
@@ -325,21 +325,33 @@ func init() {
 
 func GenerateWolfGoldPlayingFieldNormalMode() [][]int {
 	cols, rows := 3, 5
-	playingField := CreateDogHousePlayingField()
+	playingField := CreateWolfGoldPlayingField()
 	for i := 0; i < cols; i++ {
 		for j := 0; j < rows; j++ {
-			playingField[i][j] = GenerateDogHouseRandomNumberNormalMode()
+			playingField[i][j] = GenerateWolfGoldRandomNumberNormalMode()
 		}
 	}
 	return playingField
 }
 
 func GenerateWolfGoldPlayingFieldBonusMode() [][]int {
-	playingField := CreatePlayingField()
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 6; j++ {
-			playingField[i][j] = GenerateDogHouseRandomNumberBonusMode()
+	playingField := CreateWolfGoldPlayingField()
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 5; j++ {
+			playingField[i][j] = GenerateWolfGoldRandomNumberBonusMode()
 		}
 	}
 	return playingField
+}
+
+
+func WolfGoldSpin(isBonusMode bool, bet float64, balance float64) ([][]int, float64) {
+	if isBonusMode {
+		currentPlayingField := GenerateWolfGoldPlayingFieldBonusMode()
+		currentBalance := CalculateWolfGoldPaymentsNormalMode(currentPlayingField, bet, balance) // Isn't correct.
+		return currentPlayingField, currentBalance
+	}
+	currentPlayingField := GenerateWolfGoldPlayingFieldNormalMode()
+	currentBalance := CalculateWolfGoldPaymentsNormalMode(currentPlayingField, bet, balance)
+	return currentPlayingField, currentBalance
 }
