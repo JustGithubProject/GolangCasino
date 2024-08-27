@@ -15,6 +15,7 @@ import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import cardBackgroundImage from '../../images/card.png'; 
 import sweetbonanzaImage from '../../images/sweet-bonanza.png'; 
 import doghouseImage from '../../images/dog-house.png'; 
+import wolfGoldImage from '../../images/wolf-gold.png';
 import image1 from '../../images/cas_image_99.png';
 import image2 from '../../images/cas_image_9.png';
 import image3 from '../../images/cas_image_11.png';
@@ -191,6 +192,9 @@ const Home = () => {
       backgroundImage = `url(${sweetbonanzaImage}) no-repeat center center`;
     } else if (index === 5) {
       backgroundImage = `url(${doghouseImage}) no-repeat center center`;
+
+    }else if (index === 3) {
+        backgroundImage = `url(${wolfGoldImage}) no-repeat center center`;
     } else {
       backgroundImage = `url(${cardBackgroundImage}) no-repeat center center`;
     }
@@ -300,14 +304,19 @@ const Home = () => {
           {[...Array(6)].map((_, index) => (
           <div key={index} style={{ textAlign: 'center' }}>
             <div style={cardStyle(index)}>
-              <Link
-                to={index === 4 ? '/room/slot/sweetbonanza' : (index === 5 ? '/room/slot/doghouse' : `/room/roulette/${index + 1}`)}
-                style={cardButtonStyle}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                Играть
-              </Link>
+            <Link
+              to={
+                index === 3 ? '/room/slot/wolfgold' :
+                index === 4 ? '/room/slot/sweetbonanza' :
+                index === 5 ? '/room/slot/doghouse' :
+                `/room/roulette/${index + 1}`
+              }
+              style={cardButtonStyle}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              Играть
+            </Link>
             </div>
             <p style={cardLabelStyle}>{`Комната ${index + 1}`}</p>
           </div>
