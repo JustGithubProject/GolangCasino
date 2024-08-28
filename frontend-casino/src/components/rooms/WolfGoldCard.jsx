@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import wolfgoldbackground from '../../images/wolf-gold-background.jpeg';
-import backgroundMusic from '../../images/doghouse-items/doghouse-music.mp3';
+import backgroundMusic from '../../images/wolfgold-items/wolfgold-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
