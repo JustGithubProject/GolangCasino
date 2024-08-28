@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
-import doghousebackground from '../../images/dog-house-background.png';
+import wolfgoldbackground from '../../images/wolf-gold-background.jpeg';
 import backgroundMusic from '../../images/doghouse-items/doghouse-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
 import boxerImage from '../../images/doghouse-items/boxer.png';
-import aceImage from '../../images/doghouse-items/ace.png';
-import kingImage from '../../images/doghouse-items/King.png';
-import boneImage from '../../images/doghouse-items/bone.png';
-import queenImage from '../../images/doghouse-items/queen.png';
-import collarImage from '../../images/doghouse-items/collar.png'
-import jackImage from '../../images/doghouse-items/jack.png';
-import tenImage from '../../images/doghouse-items/ten.png';
-import dachshundImage from '../../images/doghouse-items/dachshund.png';
-import pugImage from '../../images/doghouse-items/pug.png';
-import pawsImage from '../../images/doghouse-items/paws.png';
+import aceImage from '../../images/wolfgold-items/ace.png';
+import kingImage from '../../images/wolfgold-items/king.png';
+import cougarImage from '../../images/wolfgold-items/cougar.png';
+import queenImage from '../../images/wolfgold-items/queen.png';
+import horseImage from '../../images/wolfgold-items/horse.png'
+import jackImage from '../../images/wolfgold-items/jack.png';
+import eagleImage from '../../images/wolfgold-items/eagle.png';
+import bisonImage from '../../images/wolfgold-items/bison.png';
+import wolfImage from '../../images/wolfgold-items/wolf.png';
+import scatterImage from '../../images/wolfgold-items/scatter.png';
 import spitzImage from '../../images/doghouse-items/spitz.png';
 
 // Стили для Wrapper
@@ -166,7 +166,7 @@ const InnerWrapper = styled.div`
   border: 2px solid rgba(68, 68, 68, 0.8);
   border-radius: 18px;
   padding: 25px;
-  background-image: url(${doghousebackground});
+  background-image: url(${wolfgoldbackground});
   background-size: cover;
   background-position: center;
   backdrop-filter: blur(8px);
@@ -216,7 +216,7 @@ const symbols = [
     { id: 7, name: 'Eagle', image: eagleImage },
     { id: 8, name: 'Bison', image: bisonImage },
     { id: 9, name: 'Wolf', image: wolfImage },
-    { id: 10, name: 'Scatter', image: scatterImage },
+    // { id: 10, name: 'Scatter', image: scatterImage },
   ];
   
 
@@ -276,7 +276,7 @@ const WolfGoldCard = () => {
 
         setTimeout(async () => {
         try {
-            const url = `http://localhost:8081/spin-slot-v2/?spinBet=${bet}`;
+            const url = `http://localhost:8081/spin-slot-v3/?spinBet=${bet}`;
             const response = await fetchWithAuth(url, {
             method: 'POST',
             headers: {

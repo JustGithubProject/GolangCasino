@@ -301,9 +301,9 @@ func WeightedWolfGoldRandomChoice(values []int, weights []float64) int {
 }
 
 func GenerateWolfGoldRandomNumberNormalMode() int {
-	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	weights := []float64{
-		5.0, 5.0, 10.0, 15.0, 20.0, 25.0, 50.0, 55.0, 60.0, 65.0, 100.0,
+		5.0, 5.0, 5.0, 15.0, 20.0, 35.0, 50.0, 60.0, 70.0,
 	}
 	randomNumber := WeightedWolfGoldRandomChoice(values, weights)
 	return randomNumber
@@ -312,7 +312,7 @@ func GenerateWolfGoldRandomNumberNormalMode() int {
 func GenerateWolfGoldRandomNumberBonusMode() int {
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
 	weights := []float64{
-		5.0, 5.0, 5.0, 5.0, 15.0, 15.0, 20.0, 350.0, 400.0, 450.0, 500.0,
+		5.0, 5.0, 5.0, 5.0, 10.0, 20.0, 30.0, 350.0, 400.0, 450.0, 500.0,
 	}
 	randomNumber := WeightedWolfGoldRandomChoice(values, weights)
 	return randomNumber
