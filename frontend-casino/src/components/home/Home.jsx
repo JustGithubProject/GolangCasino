@@ -16,6 +16,8 @@ import cardBackgroundImage from '../../images/card.png';
 import sweetbonanzaImage from '../../images/sweet-bonanza.png'; 
 import doghouseImage from '../../images/dog-house.png'; 
 import wolfGoldImage from '../../images/wolf-gold.png';
+import bigBassBonanzaImage from '../../images/big-bass-bonanza.png';
+import yetiQuestImage from '../../images/yeti-quest.png';
 import image1 from '../../images/cas_image_99.png';
 import image2 from '../../images/cas_image_9.png';
 import image3 from '../../images/cas_image_11.png';
@@ -195,6 +197,10 @@ const Home = () => {
 
     }else if (index === 3) {
         backgroundImage = `url(${wolfGoldImage}) no-repeat center center`;
+    } else if (index === 2) {
+      backgroundImage = `url(${bigBassBonanzaImage}) no-repeat center center`;
+    } else if (index === 1) {
+      backgroundImage = `url(${yetiQuestImage}) no-repeat center center`;
     } else {
       backgroundImage = `url(${cardBackgroundImage}) no-repeat center center`;
     }
