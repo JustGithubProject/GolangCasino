@@ -207,23 +207,21 @@ const MusicButton = styled.button`
 
 
 const symbols = [
-    { id: 1, name: 'Ten', image: tenImage },
-    { id: 2, name: 'Jack', image: jackImage },
-    { id: 3, name: 'Queen', image: queenImage },
-    { id: 4, name: 'King', image:  kingImage},
-    { id: 5, name: 'Ace', image: aceImage },
-    { id: 6, name: 'Bone', image: boneImage },
-    { id: 7, name: 'Collar', image: collarImage },
-    { id: 8, name: 'Dachshund', image: dachshundImage },
-    { id: 9, name: 'Pug', image: pugImage },
-    { id: 10, name: 'Spitz', image: spitzImage },
-    { id: 11, name: 'Boxer', image: boxerImage },
-    { id: 12, name: 'Paws', image: pawsImage },
+    { id: 1, name: 'Jack', image: jackImage },
+    { id: 2, name: 'Queen', image: queenImage },
+    { id: 3, name: 'King', image:  kingImage},
+    { id: 4, name: 'Ace', image: aceImage },
+    { id: 5, name: 'Cougar', image: cougarImage },
+    { id: 6, name: 'Horse', image: horseImage },
+    { id: 7, name: 'Eagle', image: eagleImage },
+    { id: 8, name: 'Bison', image: bisonImage },
+    { id: 9, name: 'Wolf', image: wolfImage },
+    { id: 10, name: 'Scatter', image: scatterImage },
   ];
   
 
-const DogHouseCard = () => {
-    let defaultMatrix = [[11, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]]
+const WolfGoldCard = () => {
+    let defaultMatrix = [[1, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]]
 
     const [gameBoard, setGameBoard] = useState(defaultMatrix);
     const [username, setUsername] = useState(null);
@@ -335,7 +333,7 @@ const DogHouseCard = () => {
             window.location.reload();
           }} />
         <InnerWrapper>
-          <Title>Dog House</Title>
+          <Title>Wolf Gold</Title>
           <BalanceText>Ваш баланс: {balance} UAH</BalanceText>
           <BetInput
             type="number"
@@ -364,4 +362,4 @@ const DogHouseCard = () => {
     );
 }
 
-export default DogHouseCard;
+export default WolfGoldCard;
