@@ -232,18 +232,20 @@ func CheckBigBassBonanzaTenthWinLine(playingField [][]int, symbol int) int {
 }
 
 
-func GreaterThanThreeTenSymbol(countLine int) float64 {
+func GreaterThanThreeSymbol(countLine int, factorFor3 float64, factorFor4 float64, factorFor5 float64) float64 {
 	if countLine == 3 {
-		return 0.50
+		return factorFor3
 	}
 
 	if countLine == 4 {
-		return 2.50
+		return factorFor4
 	}
 
 	if countLine == 5 {
-		return 10.00
+		return factorFor5
 	}
+
+	return 0.0
 }
 
 func CheckBigBassBonanzaTenSymbolPlayed(playingField [][]int, symbol int) float64 {
