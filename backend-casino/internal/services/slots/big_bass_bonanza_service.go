@@ -107,6 +107,131 @@ func CheckBigBassBonanzaFifthWinLine(playingField [][]int, symbol int) int {
 }
 
 
+func CheckBigBassBonanzaSixthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	if playingField[0][2] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][1] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][3] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][0] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][4] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+func CheckBigBassBonanzaSeventhWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	if playingField[0][0] == symbol {
+		counter += 1
+	}
+
+	if playingField[0][4] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][1] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][3] == symbol {
+		counter += 1
+	}
+	
+	if playingField[2][2] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+func CheckBigBassBonanzaEighthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	if playingField[0][3] == symbol {
+		counter += 1
+	}
+
+	if playingField[0][4] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][2] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][0] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][1] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+func CheckBigBassBonanzaNinthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	if playingField[0][0] == symbol {
+		counter += 1
+	}
+
+	if playingField[0][1] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][2] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][3] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][4] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+func CheckBigBassBonanzaTenthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+	
+	for i := 1; i < 4; i++ {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	if playingField[0][4] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][0] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+
 func CheckBigBassBonanzaTenSymbolPlayed(playingField [][]int, symbol int) float64 {
 	countAppearance := CountMatrixElement(playingField, symbol)
 
