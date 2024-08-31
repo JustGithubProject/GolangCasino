@@ -2,23 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import bigbassbackground from '../../images/big-bass-bonanza-background.png';
-import backgroundMusic from '../../images/doghouse-items/doghouse-music.mp3';
+import backgroundMusic from '../../images/bigbassbonanza-items/big-bass-bonanza-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
-import boxerImage from '../../images/doghouse-items/boxer.png';
-import aceImage from '../../images/doghouse-items/ace.png';
-import kingImage from '../../images/doghouse-items/King.png';
-import boneImage from '../../images/doghouse-items/bone.png';
-import queenImage from '../../images/doghouse-items/queen.png';
+// import fishImage from '../../images/bigbassbonanza-items/boxer.png';
+import aceImage from '../../images/bigbassbonanza-items/ace.png';
+import kingImage from '../../images/bigbassbonanza-items/king.png';
+import boxesImage from '../../images/bigbassbonanza-items/boxes.png';
+import queenImage from '../../images/bigbassbonanza-items/queen.png';
 import collarImage from '../../images/doghouse-items/collar.png'
-import jackImage from '../../images/doghouse-items/jack.png';
-import tenImage from '../../images/doghouse-items/ten.png';
-import dachshundImage from '../../images/doghouse-items/dachshund.png';
-import pugImage from '../../images/doghouse-items/pug.png';
+import jackImage from '../../images/bigbassbonanza-items/jack.png';
+import tenImage from '../../images/bigbassbonanza-items/ten.png';
+import dragonflyImage from '../../images/bigbassbonanza-items/dragonfly.png';
+import rodImage from '../../images/bigbassbonanza-items/rod.png';
 import pawsImage from '../../images/doghouse-items/paws.png';
-import spitzImage from '../../images/doghouse-items/spitz.png';
+import bobberImage from '../../images/bigbassbonanza-items/bobber.png';
 
 // Стили для Wrapper
 const Wrapper = styled.div`
@@ -206,18 +206,37 @@ const MusicButton = styled.button`
 `;
 
 
+	// // Low value symbols
+	// ten   int // symbol=10 order=1
+	// jack  int // symbol=J order=2
+	// queen int // symbol=Q order=3
+	// king  int // symbol=K order=4
+	// ace   int // symbol=A order=5
+
+	// // Medium value symbols
+	// fish   int // symbol=Fish order=6
+	// boxes int // symbol=Boxes order=7
+
+	// // High Value symbols
+	// dragonfly int // symbol=Dragonfly order=8
+	// rod       int // symbol=Rod order=9
+	// bobber     int // symbol=Spitz order=10
+
+	// // Bonus
+	// fishScatter int // symbol=Paws order=11
+
 const symbols = [
     { id: 1, name: 'Ten', image: tenImage },
     { id: 2, name: 'Jack', image: jackImage },
     { id: 3, name: 'Queen', image: queenImage },
     { id: 4, name: 'King', image:  kingImage},
     { id: 5, name: 'Ace', image: aceImage },
-    { id: 6, name: 'Bone', image: boneImage },
-    { id: 7, name: 'Collar', image: collarImage },
-    { id: 8, name: 'Dachshund', image: dachshundImage },
-    { id: 9, name: 'Pug', image: pugImage },
-    { id: 10, name: 'Spitz', image: spitzImage },
-    { id: 11, name: 'Boxer', image: boxerImage },
+    { id: 6, name: 'Fish', image: aceImage },
+    { id: 7, name: 'Boxes', image: boxesImage },
+    { id: 8, name: 'Dragonfly', image: dragonflyImage },
+    { id: 9, name: 'Rod', image: rodImage },
+    { id: 10, name: 'Bobber', image: bobberImage },
+    { id: 11, name: 'Boxer', image: kingImage },
     { id: 12, name: 'Paws', image: pawsImage },
   ];
   
