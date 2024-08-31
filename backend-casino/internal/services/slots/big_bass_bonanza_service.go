@@ -1,9 +1,9 @@
 package slots
 
-// import (
-// 	"math/rand"
-// 	"time"
-// )
+import (
+	"math/rand"
+	"time"
+)
 
 func CreateBigBassBonanzaPlayingField() [][]int {
 	rows, cols := 3, 5
@@ -942,4 +942,154 @@ func CheckBigBassBonanzaBobberSymbolPlayed(playingField [][]int, symbol int) flo
 		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 5.00, 20.00, 200.00)
 	}
 	return 0.0
+}
+
+
+func CalculateBigBassBonanzaPaymentsNormalMode(playingField [][]int, bet float64, balance float64) float64 {
+
+	// Checking the payout for each set of symbols
+	payoutTenX := CheckBigBassBonanzaTenSymbolPlayed(playingField, 1)
+	payoutJackX := CheckBigBassBonanzaJackSymbolPlayed(playingField, 2)
+	payoutQueenX := CheckBigBassBonanzaQueenSymbolPlayed(playingField, 3)
+	payoutKingX := CheckBigBassBonanzaKingSymbolPlayed(playingField, 4)
+	payoutAceX := CheckBigBassBonanzaAceSymbolPlayed(playingField, 5)
+	payoutFishX := CheckBigBassBonanzaFishSymbolPlayed(playingField, 6)
+	payoutBoxesX := CheckBigBassBonanzaBoxesSymbolPlayed(playingField, 7)
+	payoutDragonflyX := CheckBigBassBonanzaDragonflySymbolPlayed(playingField, 8)
+	payoutRodX := CheckBigBassBonanzaRodSymbolPlayed(playingField, 9)
+	payoutBobberX := CheckBigBassBonanzaBobberSymbolPlayed(playingField, 10)
+
+	// Calculating total payout
+	totalPayout := 0.0
+
+	if payoutTenX > 0.0 {
+		totalPayout += bet * payoutTenX
+	}
+
+	if payoutJackX > 0.0 {
+		totalPayout += bet * payoutJackX
+	}
+
+	if payoutQueenX > 0.0 {
+		totalPayout += bet * payoutQueenX
+	}
+
+	if payoutKingX > 0.0 {
+		totalPayout += bet * payoutKingX
+	}
+
+	if payoutAceX > 0.0 {
+		totalPayout += bet * payoutAceX
+	}
+
+	if payoutFishX > 0.0 {
+		totalPayout += bet * payoutFishX
+	}
+
+	if payoutBoxesX > 0.0 {
+		totalPayout += bet * payoutBoxesX
+	}
+
+	if payoutDragonflyX > 0.0 {
+		totalPayout += bet * payoutDragonflyX
+	}
+
+	if payoutRodX > 0.0 {
+		totalPayout += bet * payoutRodX
+	}
+
+	if payoutBobberX > 0.0 {
+		totalPayout += bet * payoutBobberX
+	}
+
+	// New balance = Initial balance − Bet + Win
+	balance = balance - bet + totalPayout
+	return balance
+}
+
+
+func WeightedBigBassBonanzaRandomChoice(values []int, weights []float64) int {
+	if len(values) != len(weights) {
+		panic("Values and weights must be the same length")
+	}
+
+	// Weight to invert
+	invWeights := make([]float64, len(weights))
+	for i, w := range weights {
+		invWeights[i] = 1.0 / w
+	}
+
+	// Make a list of cumulative sums
+	cumSum := make([]float64, len(invWeights))
+	cumSum[0] = invWeights[0]
+	for i := 1; i < len(invWeights); i++ {
+		cumSum[i] = cumSum[i-1] + invWeights[i]
+	}
+
+	// Generate a random number
+	r := rand.Float64() * cumSum[len(cumSum)-1]
+
+	// Находим элемент, соответствующий случайному числу
+	for i, cs := range cumSum {
+		if r < cs {
+			return values[i]
+		}
+	}
+
+	return values[len(values)-1]
+}
+
+func GenerateBigBassBonanzaRandomNumberNormalMode() int {
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+	weights := []float64{
+		5.0, 5.0, 10.0, 15.0, 20.0, 25.0, 50.0, 55.0, 60.0, 65.0, 100.0,
+	}
+	randomNumber := WeightedBigBassBonanzaRandomChoice(values, weights)
+	return randomNumber
+}
+
+func GenerateBigBassBonanzaRandomNumberBonusMode() int {
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+	weights := []float64{
+		5.0, 5.0, 5.0, 5.0, 15.0, 15.0, 20.0, 350.0, 400.0, 450.0, 500.0,
+	}
+	randomNumber := WeightedBigBassBonanzaRandomChoice(values, weights)
+	return randomNumber
+}
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+
+func GenerateBigBassBonanzaPlayingFieldNormalMode() [][]int {
+	cols, rows := 3, 5
+	playingField := CreateBigBassBonanzaPlayingField()
+	for i := 0; i < cols; i++ {
+		for j := 0; j < rows; j++ {
+			playingField[i][j] = GenerateBigBassBonanzaRandomNumberNormalMode()
+		}
+	}
+	return playingField
+}
+
+func GenerateBigBassBonanzaPlayingFieldBonusMode() [][]int {
+	playingField := CreateBigBassBonanzaPlayingField()
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 5; j++ {
+			playingField[i][j] = GenerateBigBassBonanzaRandomNumberBonusMode()
+		}
+	}
+	return playingField
+}
+
+func BigBassBonanzaSpin(isBonusMode bool, bet float64, balance float64) ([][]int, float64) {
+	if isBonusMode {
+		currentPlayingField := GenerateBigBassBonanzaPlayingFieldBonusMode()
+		currentBalance := CalculateBigBassBonanzaPaymentsNormalMode(currentPlayingField, bet, balance) // Isn't correct.
+		return currentPlayingField, currentBalance
+	}
+	currentPlayingField := GenerateBigBassBonanzaPlayingFieldNormalMode()
+	currentBalance := CalculateBigBassBonanzaPaymentsNormalMode(currentPlayingField, bet, balance)
+	return currentPlayingField, currentBalance
 }
