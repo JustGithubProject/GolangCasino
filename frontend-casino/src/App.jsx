@@ -4,6 +4,7 @@ import RouletteCardV3 from './components/rooms/RouletteCard_v3';
 import SweetBonanza from "./components/rooms/SweetBonanzaCard";
 import DogHouseCard from './components/rooms/DogHouseCard';
 import WolfGoldCard from './components/rooms/WolfGoldCard';
+import BigBassBonanzaCard from './components/rooms/BigBassBonanzaCard';
 import Login from './components/auth_components/Login';
 import Register from './components/auth_components/Register';
 import Home from './components/home/Home';
@@ -24,7 +25,9 @@ function App() {
               <Route path="/room/slot/sweetbonanza" element={<SweetBonanza/>} />
               <Route path="/room/slot/doghouse" element={<DogHouseCard/>} />
               <Route path="/room/slot/wolfgold" element={<WolfGoldCard/>} />
+              <Route path="/room/slot/bigbassbonanza" element={<BigBassBonanzaCard/>} />
               <Route path="/room/roulette/6" element={<RouletteCardV3/>} />
+
 
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register/>} />

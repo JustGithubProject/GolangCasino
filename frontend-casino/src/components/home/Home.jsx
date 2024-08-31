@@ -312,6 +312,7 @@ const Home = () => {
             <div style={cardStyle(index)}>
             <Link
               to={
+                index === 2 ? '/room/slot/bigbassbonanza' :
                 index === 3 ? '/room/slot/wolfgold' :
                 index === 4 ? '/room/slot/sweetbonanza' :
                 index === 5 ? '/room/slot/doghouse' :
