@@ -248,135 +248,698 @@ func GreaterThanThreeSymbol(countLine int, factorFor3 float64, factorFor4 float6
 	return 0.0
 }
 
+/*
+	CHECK TEN SYMBOL
+*/
 func CheckBigBassBonanzaTenSymbolPlayed(playingField [][]int, symbol int) float64 {
 	// Checking Middle Line
 	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
 	if countSymbolsOnMiddleLine > 2 {
-		if countSymbolsOnMiddleLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnMiddleLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnMiddleLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 0.50, 2.50, 10.00)
 	}
-
 
 	// Checking Upper Line
 	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
 	if countSymbolsOnUpperLine > 2 {
-		if countSymbolsOnUpperLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnUpperLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnUpperLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 0.50, 2.50, 10.00)
 	}
 
 	// Checking Lower Line
 	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
 	if countSymbolsOnLowerLine > 2 {
-		if countSymbolsOnLowerLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnLowerLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnLowerLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 0.50, 2.50, 10.00)
 	}
 
 	// Checking Fourth Line
 	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
 	if countSymbolsOnFourthLine > 2 {
-		if countSymbolsOnFourthLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnFourthLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnFourthLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 0.50, 2.50, 10.00)
 	}
 
 	// Checking Fifth Line
 	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
 	if countSymbolsOnFifthLine > 2 {
-		if countSymbolsOnFifthLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnFifthLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnFifthLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 0.50, 2.50, 10.00)
 	}
 
 	// Checking Sixth Line
 	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
 	if countSymbolsOnSixthLine > 2 {
-		if countSymbolsOnSixthLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnSixthLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnSixthLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 0.50, 2.50, 10.00)
 	}
 
 	// Checking Seventh Line
 	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
 	if countSymbolsOnSeventhLine > 2 {
-		if countSymbolsOnSeventhLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnSeventhLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnSeventhLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 0.50, 2.50, 10.00)
 	}
 
 	// Checking Eighth Line
 	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
 	if countSymbolsOnEighthLine > 2 {
-		if countSymbolsOnEighthLine == 3 {
-			return 0.50
-		}
-
-		if countSymbolsOnEighthLine == 4 {
-			return 2.50
-		}
-
-		if countSymbolsOnEighthLine == 5 {
-			return 10.00
-		}
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 0.50, 2.50, 10.00)
 	}
 
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.50, 2.50, 10.00)
+	}
+	return 0.0
+}
+
+/*
+	CHECK JACK SYMBOL
+*/
+func CheckBigBassBonanzaJackSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.50, 2.50, 10.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK QUEEN SYMBOL
+*/
+func CheckBigBassBonanzaQueenSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.50, 2.50, 10.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK KING SYMBOL
+*/
+func CheckBigBassBonanzaKingSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.50, 2.50, 10.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK ACE SYMBOL
+*/
+func CheckBigBassBonanzaAceSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 0.50, 2.50, 10.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.50, 2.50, 10.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK FISH SYMBOL
+*/
+func CheckBigBassBonanzaFishSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 1.00, 5.00, 20.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 1.00, 5.00, 20.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK BOXES SYMBOL
+*/
+func CheckBigBassBonanzaBoxesSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 2.00, 10.00, 50.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK DRAGONFLY SYMBOL
+*/
+func CheckBigBassBonanzaDragonflySymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 2.00, 10.00, 50.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 2.00, 10.00, 50.00)
+	}
+	return 0.0
+}
+
+
+/*
+	CHECK ROD SYMBOL
+*/
+func CheckBigBassBonanzaRodSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 3.00, 15.00, 100.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 3.00, 15.00, 100.00)
+	}
+	return 0.0
+}
+
+
+// CHECK BOBBER SYMBOL
+func CheckBigBassBonanzaBobberSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckBigBassBonanzaMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckBigBassBonanzaUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckBigBassBonanzaLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckBigBassBonanzaFourthWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckBigBassBonanzaFifthWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckBigBassBonanzaSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckBigBassBonanzaSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckBigBassBonanzaEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckBigBassBonanzaNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 5.00, 20.00, 200.00)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckBigBassBonanzaTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine == 2 {
+		return 0.50
+	}
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 5.00, 20.00, 200.00)
+	}
 	return 0.0
 }
