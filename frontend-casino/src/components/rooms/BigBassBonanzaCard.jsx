@@ -2,17 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import bigbassbackground from '../../images/big-bass-bonanza-background.png';
-import backgroundMusic from '../../images/bigbassbonanza-items/big-bass-bonanza-music.mp3';
+import backgroundMusic from '../../images/bigbassbonanza-items/music/big-bass-bonanza-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
-// import fishImage from '../../images/bigbassbonanza-items/boxer.png';
+import fishImage from '../../images/bigbassbonanza-items/fish.png';
 import aceImage from '../../images/bigbassbonanza-items/ace.png';
 import kingImage from '../../images/bigbassbonanza-items/king.png';
 import boxesImage from '../../images/bigbassbonanza-items/boxes.png';
 import queenImage from '../../images/bigbassbonanza-items/queen.png';
-import collarImage from '../../images/doghouse-items/collar.png'
 import jackImage from '../../images/bigbassbonanza-items/jack.png';
 import tenImage from '../../images/bigbassbonanza-items/ten.png';
 import dragonflyImage from '../../images/bigbassbonanza-items/dragonfly.png';
@@ -84,7 +83,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(5, 1fr); 
   grid-template-rows: repeat(3, 1fr); 
   grid-gap: 20px; 
-  background: rgba(139, 69, 19, 0.9); 
+  background: rgba(0, 191, 255, 0.8); 
   padding: 25px; 
   border-radius: 20px; 
   margin-top: 40px; 
@@ -231,18 +230,17 @@ const symbols = [
     { id: 3, name: 'Queen', image: queenImage },
     { id: 4, name: 'King', image:  kingImage},
     { id: 5, name: 'Ace', image: aceImage },
-    { id: 6, name: 'Fish', image: aceImage },
+    { id: 6, name: 'Fish', image: fishImage },
     { id: 7, name: 'Boxes', image: boxesImage },
     { id: 8, name: 'Dragonfly', image: dragonflyImage },
     { id: 9, name: 'Rod', image: rodImage },
     { id: 10, name: 'Bobber', image: bobberImage },
     { id: 11, name: 'Boxer', image: kingImage },
-    { id: 12, name: 'Paws', image: pawsImage },
   ];
   
 
 const BigBassBonanzaCard = () => {
-    let defaultMatrix = [[11, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]]
+    let defaultMatrix = [[1, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]]
 
     const [gameBoard, setGameBoard] = useState(defaultMatrix);
     const [username, setUsername] = useState(null);

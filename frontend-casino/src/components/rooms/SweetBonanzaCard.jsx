@@ -1,28 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { css, keyframes } from 'styled-components'; 
-import backgroundImage from '../../images/backgroundCasinoNew.jpg';
+import styled, { css, keyframes } from 'styled-components';
 import Header from '../header/Header';
-import bananaImage from '../../images/sweetbonanza-items/banana.png';
-import grapesImage from '../../images/sweetbonanza-items/grapes.png'
-import watermelonImage from '../../images/sweetbonanza-items/watermelon.png'
-import plumImage from '../../images/sweetbonanza-items/plum.png'
-import appleImage from '../../images/sweetbonanza-items/apple.png'
-import bluecandyImage from '../../images/sweetbonanza-items/bluecandy.png'
-import greencandyImage from '../../images/sweetbonanza-items/greencandy.png'
-import purpleImage from '../../images/sweetbonanza-items/purplecandy.png'
-import scatter from '../../images/sweetbonanza-items/scatter.webp'
-import redCandy from '../../images/sweetbonanza-items/redcandy.png'
-import bomb100xImage from '../../images/sweetbonanza-items/bomb100x.png'
-import bomb25xImage from '../../images/sweetbonanza-items/bomb25x.png'
-import bomb50xImage from '../../images/sweetbonanza-items/bomb50x.png'
-import bomb2xImage from '../../images/sweetbonanza-items/bomb2x.png'
-import bomb3xImage from '../../images/sweetbonanza-items/bomb3x.png'
-import bomb5xImage from '../../images/sweetbonanza-items/bomb5x.png'
-import bomb10xImage from '../../images/sweetbonanza-items/bomb10x.png'
-import sweetbonanzabackground from '../../images/sweetbonanza-items/sweetbonanza-background.png'
-import backgroundMusic from '../../images/sweetbonanza-items/sweet-music.mp3';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
+
+// Images
+import backgroundImage from '../../images/backgroundCasinoNew.jpg';
+import bananaImage from '../../images/sweetbonanza-items/banana.png';
+import grapesImage from '../../images/sweetbonanza-items/grapes.png';
+import watermelonImage from '../../images/sweetbonanza-items/watermelon.png';
+import plumImage from '../../images/sweetbonanza-items/plum.png';
+import appleImage from '../../images/sweetbonanza-items/apple.png';
+import bluecandyImage from '../../images/sweetbonanza-items/bluecandy.png';
+import greencandyImage from '../../images/sweetbonanza-items/greencandy.png';
+import purpleImage from '../../images/sweetbonanza-items/purplecandy.png';
+import scatter from '../../images/sweetbonanza-items/scatter.webp';
+import redCandy from '../../images/sweetbonanza-items/redcandy.png';
+import bomb100xImage from '../../images/sweetbonanza-items/bomb100x.png';
+import bomb25xImage from '../../images/sweetbonanza-items/bomb25x.png';
+import bomb50xImage from '../../images/sweetbonanza-items/bomb50x.png';
+import bomb2xImage from '../../images/sweetbonanza-items/bomb2x.png';
+import bomb3xImage from '../../images/sweetbonanza-items/bomb3x.png';
+import bomb5xImage from '../../images/sweetbonanza-items/bomb5x.png';
+import bomb10xImage from '../../images/sweetbonanza-items/bomb10x.png';
+import sweetbonanzabackground from '../../images/sweetbonanza-items/sweetbonanza-background.png';
+import backgroundMusic from '../../images/sweetbonanza-items/music/sweet-music.mp3';
+
 
 
 

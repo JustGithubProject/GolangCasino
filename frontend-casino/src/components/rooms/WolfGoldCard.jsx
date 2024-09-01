@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/backgroundCasinoNew.jpg';
 import wolfgoldbackground from '../../images/wolf-gold-background.jpeg';
-import backgroundMusic from '../../images/wolfgold-items/wolfgold-music.mp3';
+import backgroundMusic from '../../images/wolfgold-items/music/wolfgold-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
 import { fetchWithAuth } from '../auth_components/fetchWrapper';
 
-import boxerImage from '../../images/doghouse-items/boxer.png';
+
 import aceImage from '../../images/wolfgold-items/ace.png';
 import kingImage from '../../images/wolfgold-items/king.png';
 import cougarImage from '../../images/wolfgold-items/cougar.png';
@@ -17,8 +17,7 @@ import jackImage from '../../images/wolfgold-items/jack.png';
 import eagleImage from '../../images/wolfgold-items/eagle.png';
 import bisonImage from '../../images/wolfgold-items/bison.png';
 import wolfImage from '../../images/wolfgold-items/wolf.png';
-import scatterImage from '../../images/wolfgold-items/scatter.png';
-import spitzImage from '../../images/doghouse-items/spitz.png';
+
 
 // Стили для Wrapper
 const Wrapper = styled.div`
