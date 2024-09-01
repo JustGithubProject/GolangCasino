@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
-import backgroundImage from '../../images/backgroundCasinoNew.jpg';
-import bigbassbackground from '../../images/big-bass-bonanza-background.png';
+import backgroundImage from '../../images/MainBackground.jpg';
+import bigbassbackground from '../../images/slots-backgrounds/big-bass-bonanza-background.png';
 import backgroundMusic from '../../images/bigbassbonanza-items/music/big-bass-bonanza-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';

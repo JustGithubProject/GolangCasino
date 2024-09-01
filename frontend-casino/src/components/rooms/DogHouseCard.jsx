@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
-import backgroundImage from '../../images/backgroundCasinoNew.jpg';
-import doghousebackground from '../../images/dog-house-background.png';
+import backgroundImage from '../../images/MainBackground.jpg';
+import doghousebackground from '../../images/slots-backgrounds/dog-house-background.png';
 import backgroundMusic from '../../images/doghouse-items/music/doghouse-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';

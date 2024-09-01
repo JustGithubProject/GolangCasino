@@ -5,7 +5,7 @@ import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import * as jwtDecodeModule from 'jwt-decode';
 
 // Images
-import backgroundImage from '../../images/backgroundCasinoNew.jpg';
+import backgroundImage from '../../images/MainBackground.jpg';
 import bananaImage from '../../images/sweetbonanza-items/banana.png';
 import grapesImage from '../../images/sweetbonanza-items/grapes.png';
 import watermelonImage from '../../images/sweetbonanza-items/watermelon.png';
@@ -23,7 +23,7 @@ import bomb2xImage from '../../images/sweetbonanza-items/bomb2x.png';
 import bomb3xImage from '../../images/sweetbonanza-items/bomb3x.png';
 import bomb5xImage from '../../images/sweetbonanza-items/bomb5x.png';
 import bomb10xImage from '../../images/sweetbonanza-items/bomb10x.png';
-import sweetbonanzabackground from '../../images/sweetbonanza-items/sweetbonanza-background.png';
+import sweetbonanzabackground from '../../images/slots-backgrounds/sweetbonanza-background.png';
 import backgroundMusic from '../../images/sweetbonanza-items/music/sweet-music.mp3';
 
 
