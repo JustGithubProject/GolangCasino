@@ -12,7 +12,7 @@ import { fetchWithAuth } from '../auth_components/fetchWrapper';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
 
 import backgroundImage from '../../images/MainBackground.jpg';
-import cardBackgroundImage from '../../images/card.png'; 
+import cardBackgroundImage from '../../images/rooms-icons/card.png'; 
 import sweetbonanzaImage from '../../images/rooms-icons/sweet-bonanza.png'; 
 import doghouseImage from '../../images/rooms-icons/dog-house.png'; 
 import wolfGoldImage from '../../images/rooms-icons/wolf-gold.png';
