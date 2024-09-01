@@ -13,14 +13,14 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import backgroundImage from '../../images/MainBackground.jpg';
 import cardBackgroundImage from '../../images/card.png'; 
-import sweetbonanzaImage from '../../images/sweet-bonanza.png'; 
-import doghouseImage from '../../images/dog-house.png'; 
-import wolfGoldImage from '../../images/wolf-gold.png';
-import bigBassBonanzaImage from '../../images/big-bass-bonanza.png';
-import yetiQuestImage from '../../images/yeti-quest.png';
-import image1 from '../../images/cas_image_99.png';
-import image2 from '../../images/cas_image_9.png';
-import image3 from '../../images/cas_image_11.png';
+import sweetbonanzaImage from '../../images/rooms-icons/sweet-bonanza.png'; 
+import doghouseImage from '../../images/rooms-icons/dog-house.png'; 
+import wolfGoldImage from '../../images/rooms-icons/wolf-gold.png';
+import bigBassBonanzaImage from '../../images/rooms-icons/big-bass-bonanza.png';
+import yetiQuestImage from '../../images/rooms-icons/yeti-quest.png';
+import image1 from '../../images/carousel/cas_image_99.png';
+import image2 from '../../images/carousel/cas_image_9.png';
+import image3 from '../../images/carousel/cas_image_11.png';
 
 
 const Home = () => {
