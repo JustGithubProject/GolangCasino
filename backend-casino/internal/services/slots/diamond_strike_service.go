@@ -59,3 +59,53 @@ func CheckDiamondStrikeLowerWinLine(playingField [][]int, symbol int) int {
 	}
 	return counter
 }
+
+
+func CheckDiamondStrikeVWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking first diagonal
+	for i := 0; i < 3; i++ { // 0, 1, 2
+		if playingField[i][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking second diagonal
+	if playingField[0][4] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][3] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+
+func CheckDiamondStrikeReverseVWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+
+	// Checking first diagonal
+	j := 2
+	for i := 0; i < 3; i++ {
+		if playingField[i][j] == symbol {
+			counter += 1
+		}
+		j -= 1
+	}
+
+	// Checking second diagonal
+	if playingField[1][3] == symbol {
+		counter += 1
+	}
+
+	if playingField[2][4] == symbol {
+		counter += 1
+	}
+
+	return counter
+
+}
