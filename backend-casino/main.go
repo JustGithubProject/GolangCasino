@@ -96,7 +96,7 @@ func main() {
 	r.POST("/spin-slot-v2/", handlers.DogHouseSlotHandler)
 	r.POST("/spin-slot-v3/", handlers.WolfGoldSlotHandler)
 	r.POST("/spin-slot-v4/", handlers.BigBassBonanzaSlotHandler)
-
+	r.POST("/spin-slot-v5/", handlers.DiamondStrikeSlotHandler)
 
 	// paypal handlers
 	r.POST("/paypal/create/order/", paypal_handlers.CreatePaymentOrder) 

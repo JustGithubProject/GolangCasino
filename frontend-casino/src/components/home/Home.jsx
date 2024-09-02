@@ -17,7 +17,7 @@ import sweetbonanzaImage from '../../images/rooms-icons/sweet-bonanza.png';
 import doghouseImage from '../../images/rooms-icons/dog-house.png'; 
 import wolfGoldImage from '../../images/rooms-icons/wolf-gold.png';
 import bigBassBonanzaImage from '../../images/rooms-icons/big-bass-bonanza.png';
-import yetiQuestImage from '../../images/rooms-icons/yeti-quest.png';
+import dimondImage from '../../images/rooms-icons/dimond-strike.png';
 import image1 from '../../images/carousel/cas_image_99.png';
 import image2 from '../../images/carousel/cas_image_9.png';
 import image3 from '../../images/carousel/cas_image_11.png';
@@ -200,7 +200,7 @@ const Home = () => {
     } else if (index === 2) {
       backgroundImage = `url(${bigBassBonanzaImage}) no-repeat center center`;
     } else if (index === 1) {
-      backgroundImage = `url(${yetiQuestImage}) no-repeat center center`;
+      backgroundImage = `url(${dimondImage}) no-repeat center center`;
     } else {
       backgroundImage = `url(${cardBackgroundImage}) no-repeat center center`;
     }

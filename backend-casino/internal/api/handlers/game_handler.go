@@ -55,3 +55,7 @@ func WolfGoldSlotHandler(c *gin.Context){
 func BigBassBonanzaSlotHandler(c *gin.Context) {
     slots.BigBassBonanzaHandle(c)
 }
+
+func DiamondStrikeSlotHandler(c *gin.Context) {
+    slots.DiamondStrikeHandle(c)
+}
