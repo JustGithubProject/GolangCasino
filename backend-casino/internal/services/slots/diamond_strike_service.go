@@ -87,7 +87,6 @@ func CheckDiamondStrikeVWinLine(playingField [][]int, symbol int) int {
 func CheckDiamondStrikeReverseVWinLine(playingField [][]int, symbol int) int {
 	counter := 0
 
-
 	// Checking first diagonal
 	j := 2
 	for i := 0; i < 3; i++ {
@@ -107,5 +106,74 @@ func CheckDiamondStrikeReverseVWinLine(playingField [][]int, symbol int) int {
 	}
 
 	return counter
+}
 
+func CheckDiamondStrikeSixthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking upper line except first and last cells
+	for i := 1; i < 4; i++ {
+		if playingField[0][i] == symbol {
+			counter += 1
+		}
+	}
+
+	if playingField[1][0] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][4] == symbol {
+		counter += 1
+	}
+	
+	return counter
+}
+
+func CheckDiamondStrikeSeventhWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking lower line except first and last cells
+	for i := 1; i < 4; i++{
+		if playingField[2][i] == symbol {
+			counter += 1
+		}
+	}
+
+	if playingField[1][0] == symbol {
+		counter += 1
+	}
+
+	if playingField[1][4] == symbol {
+		counter += 1
+	}
+
+	return counter
+}
+
+
+func CheckDiamondStrikeEighthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking first two cells of upper line
+	for i := 0; i < 2; i++ {
+		if playingField[0][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking middle cell
+	if playingField[1][2] == symbol {
+		counter += 1
+	}
+
+	// Checking last two cells of lower line
+	for i := 3; i < 5; i++ {
+		if playingField[2][i] == symbol {
+			counter += 1
+		}
+	}
+
+	return counter
+
+	return counter
 }
