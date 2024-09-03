@@ -174,6 +174,154 @@ func CheckDiamondStrikeEighthWinLine(playingField [][]int, symbol int) int {
 	}
 
 	return counter
+}
+
+func CheckDiamondStrikeNinthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking first two cells of lower line
+	for i := 0; i < 2; i++ {
+		if playingField[2][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking middle cell
+	if playingField[1][2] == symbol {
+		counter += 1
+	}
+
+	// Checking last two cells of upper line
+	for i := 3; i < 5; i++ {
+		if playingField[0][i] == symbol {
+			counter += 1
+		}
+	}
+
+	return counter
+}
+
+func CheckDiamondStrikeTenthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	if playingField[0][3] == symbol {
+		counter += 1
+	}
+
+	// Checking the middle cell with a paired index
+	for i := 0; i < 5; i += 2 {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	if playingField[2][1] == symbol {
+		counter += 1
+	}
+	return counter
+}
+
+func CheckDiamondStrikeEleventhWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	if playingField[0][1] == symbol {
+		counter += 1
+	}
+
+	// Checking the middle cell with a paired index
+	for i := 0; i < 5; i += 2 {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	if playingField[2][3] == symbol {
+		counter += 1
+	}
+
+	return counter
+} 
+
+
+func CheckDiamondStriketTwelfthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking first and last cells of upper line
+	for i := 0; i < 5; i += 4 {
+		if playingField[0][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking middle line except first and last cells
+	for i := 1; i < 4; i++ {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	return counter
+}
+
+
+func CheckDiamondStriketThirteenthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking first and last cells of lower line
+	for i := 0; i < 5; i += 4 {
+		if playingField[2][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking middle line except first and last cells
+	for i := 1; i < 4; i++ {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	return counter
+}
+
+
+func CheckDiamondStriketFourteenthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking paired cells of upper line
+	for i := 0; i < 5; i += 2 {
+		if playingField[0][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking two cells of middle line 1-index and 3-index 
+	for i := 1; i < 4; i += 2 {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	return counter
+}
+
+
+func CheckDiamondStriketFifteenthWinLine(playingField [][]int, symbol int) int {
+	counter := 0
+
+	// Checking two cells of middle line 1-index and 3-index 
+	for i := 1; i < 4; i += 2 {
+		if playingField[1][i] == symbol {
+			counter += 1
+		}
+	}
+
+	// Checking paired cells of lower line
+	for i := 0; i < 5; i += 2 {
+		if playingField[2][i] == symbol {
+			counter += 1
+		}
+	}
 
 	return counter
 }
