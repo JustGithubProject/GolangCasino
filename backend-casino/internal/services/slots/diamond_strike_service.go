@@ -325,3 +325,77 @@ func CheckDiamondStriketFifteenthWinLine(playingField [][]int, symbol int) int {
 
 	return counter
 }
+
+
+
+/*
+	CHECK LEMON SYMBOL
+*/
+func CheckDiamondStrikeLemonSymbolPlayed(playingField [][]int, symbol int) float64 {
+	// Checking Middle Line
+	countSymbolsOnMiddleLine := CheckDiamondStrikeMiddleWinLine(playingField, symbol)
+	if countSymbolsOnMiddleLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnMiddleLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Upper Line
+	countSymbolsOnUpperLine := CheckDiamondStrikeUpperWinLine(playingField, symbol)
+	if countSymbolsOnUpperLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnUpperLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Lower Line
+	countSymbolsOnLowerLine := CheckDiamondStrikeLowerWinLine(playingField, symbol)
+	if countSymbolsOnLowerLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnLowerLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Fourth Line
+	countSymbolsOnFourthLine := CheckDiamondStrikeVWinLine(playingField, symbol)
+	if countSymbolsOnFourthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Fifth Line
+	countSymbolsOnFifthLine := CheckDiamondStrikeReverseVWinLine(playingField, symbol)
+	if countSymbolsOnFifthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Sixth Line
+	countSymbolsOnSixthLine := CheckDiamondStrikeSixthWinLine(playingField, symbol)
+	if countSymbolsOnSixthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSixthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Seventh Line
+	countSymbolsOnSeventhLine := CheckDiamondStrikeSeventhWinLine(playingField, symbol)
+	if countSymbolsOnSeventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnSeventhLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Eighth Line
+	countSymbolsOnEighthLine := CheckDiamondStrikeEighthWinLine(playingField, symbol)
+	if countSymbolsOnEighthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEighthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Ninth Line
+	countSymbolsOnNinthLine := CheckDiamondStrikeNinthWinLine(playingField, symbol)
+	if countSymbolsOnNinthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnNinthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking Tenth Line
+	countSymbolsOnTenthLine := CheckDiamondStrikeTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking 11-th Line
+	countSymbolsOnEleventhLine := CheckDiamondStrikeTenthWinLine(playingField, symbol)
+	if countSymbolsOnTenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.33, 0.66, 2.67)
+	}
+	return 0.0
+}
