@@ -394,8 +394,33 @@ func CheckDiamondStrikeLemonSymbolPlayed(playingField [][]int, symbol int) float
 
 	// Checking 11-th Line
 	countSymbolsOnEleventhLine := CheckDiamondStrikeTenthWinLine(playingField, symbol)
-	if countSymbolsOnTenthLine > 2 {
-		return GreaterThanThreeSymbol(countSymbolsOnTenthLine, 0.33, 0.66, 2.67)
+	if countSymbolsOnEleventhLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnEleventhLine, 0.33, 0.66, 2.67)
 	}
+
+	// Checking 12-th Line
+	countSymbolsOnTwelfthLine := CheckDiamondStriketTwelfthWinLine(playingField, symbol)
+	if countSymbolsOnTwelfthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnTwelfthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking 13-th Line
+	countSymbolsOnThirteenthLine := CheckDiamondStriketThirteenthWinLine(playingField, symbol)
+	if countSymbolsOnThirteenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnThirteenthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking 14-th Line
+	countSymbolsOnFourteenthLine := CheckDiamondStriketFourteenthWinLine(playingField, symbol)
+	if countSymbolsOnFourteenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFourteenthLine, 0.33, 0.66, 2.67)
+	}
+
+	// Checking 15-th Line
+	countSymbolsOnFifteenthLine := CheckDiamondStriketFifteenthWinLine(playingField, symbol)
+	if countSymbolsOnFifteenthLine > 2 {
+		return GreaterThanThreeSymbol(countSymbolsOnFifteenthLine, 0.33, 0.66, 2.67)
+	}
+
 	return 0.0
 }
