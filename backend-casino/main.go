@@ -106,7 +106,6 @@ func main() {
 	r.POST("/paypal/update/pickup/money", paypal_handlers.PickUpMoneyAndStatusToSuccess)
 	r.POST("/paypal/withdraw/funds/", paypal_handlers.WithdrawFundsPaypal)
 
-
 	// Google auth handlers
 	r.GET("/google/oauth/", google_auth.HandleGoogleLogin)
     r.POST("/google/auth/callback/", google_auth.HandleGoogleCallback)

@@ -26,7 +26,7 @@ func CreatePaymentOrder(c *gin.Context){
         return
     }
     log.Println("accessToken=", accessToken)
-    paypalOrderURL := "https://api-m.sandbox.paypal.com/v2/checkout/orders"
+    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders"
     var paypalCreateOrderInput services.PaypalCreateOrderInput
     if err := services.PBindJSONData(c, &paypalCreateOrderInput); err != nil {
         return
@@ -141,7 +141,7 @@ func GetOrderDetailByID(c *gin.Context) {
         return
     }
 
-    paypalOrderURL := "https://api-m.sandbox.paypal.com/v2/checkout/orders/" + orderID
+    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders/" + orderID
 
     // Do get request to PayPal API and get response
     response, err := services.PGetPaypalOrderDetails(c, paypalOrderURL, accessToken)
@@ -210,7 +210,7 @@ func UpdatePaymentStatusToApproved(c *gin.Context){
         return
     }
 
-    paypalOrderURL := "https://api-m.sandbox.paypal.com/v2/checkout/orders/" + orderID
+    paypalOrderURL := "https://api-m.paypal.com/v2/checkout/orders/" + orderID
 
     // Do get request to PayPal API and get response
     response, err := services.PGetPaypalOrderDetails(c, paypalOrderURL, accessToken)
@@ -268,7 +268,7 @@ func WithdrawFundsPaypal(c *gin.Context) {
         return
     }
     // paypal endpoint URL to withdraw funds 
-    paypalWithdrawFundsURL := "https://api-m.sandbox.paypal.com/v1/payments/payouts"
+    paypalWithdrawFundsURL := "https://api-m.paypal.com/v1/payments/payouts"
 
     var paypalWithdrawInput services.PaypalWithdrawFundsInput
     if err := services.PBindJSONData(c, &paypalWithdrawInput); err != nil{
