@@ -13,6 +13,7 @@ import CancelPage from './pages/CancelPage';
 import TopUpPage from './components/payments/TopUpComponent';
 import PaymentHistoryPage from './components/payments/PaymentsHistory';
 import WithdrawFundsPage from './components/payments/WithdrawFundsPaypal';
+import DiamondStrikeCard from './components/rooms/DiamondStrikeCard';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/room/slot/doghouse" element={<DogHouseCard/>} />
               <Route path="/room/slot/wolfgold" element={<WolfGoldCard/>} />
               <Route path="/room/slot/bigbassbonanza" element={<BigBassBonanzaCard/>} />
+              <Route path="/room/slot/diamondstrike" element={<DiamondStrikeCard/>} />
               <Route path="/room/roulette/6" element={<RouletteCardV3/>} />
 
 
