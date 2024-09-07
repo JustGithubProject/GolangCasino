@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/MainBackground.jpg';
 import wolfgoldbackground from '../../images/slots-backgrounds/wolf-gold-background.jpeg';
+import wolfgoldGameBoardBackground from '../../images/slots-backgrounds/wolfgold-gameboard-background.png';
 import backgroundMusic from '../../images/wolfgold-items/music/wolfgold-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
@@ -83,7 +84,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(5, 1fr); 
   grid-template-rows: repeat(3, 1fr); 
   grid-gap: 20px; 
-  background: rgba(139, 69, 19, 0.9); 
+  background-image: url(${wolfgoldGameBoardBackground});
   padding: 25px; 
   border-radius: 20px; 
   margin-top: 40px; 

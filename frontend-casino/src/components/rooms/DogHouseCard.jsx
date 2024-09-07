@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/MainBackground.jpg';
 import doghousebackground from '../../images/slots-backgrounds/dog-house-background.png';
+import doghouseGameBoardBackground from '../../images/slots-backgrounds/dog-house-gameboard-background.png';
 import backgroundMusic from '../../images/doghouse-items/music/doghouse-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
@@ -84,7 +85,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(5, 1fr); 
   grid-template-rows: repeat(3, 1fr); 
   grid-gap: 20px; 
-  background: rgba(139, 69, 19, 0.9); 
+  background-image: url(${doghouseGameBoardBackground});
   padding: 25px; 
   border-radius: 20px; 
   margin-top: 40px; 
@@ -108,7 +109,7 @@ const Symbol = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(139, 69, 19, 0.85); 
+  background: transparent;
   border-radius: 18px; 
   font-size: 34px; 
   color: #fff;
