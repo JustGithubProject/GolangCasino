@@ -108,7 +108,7 @@ const Symbol = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(139, 69, 19, 0.85); 
+  background: transparent;
   border-radius: 18px; 
   font-size: 34px; 
   color: #fff;

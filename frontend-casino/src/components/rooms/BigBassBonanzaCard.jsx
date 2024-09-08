@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components'; 
 import backgroundImage from '../../images/MainBackground.jpg';
 import bigbassbackground from '../../images/slots-backgrounds/big-bass-bonanza-background.png';
+import bigbassGameBoardBackground from '../../images/slots-backgrounds/bigbass-bonanza-gameboard-background.png';
 import backgroundMusic from '../../images/bigbassbonanza-items/music/big-bass-bonanza-music.mp3';
 import Header from '../header/Header';
 import * as jwtDecodeModule from 'jwt-decode';
@@ -83,7 +84,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(5, 1fr); 
   grid-template-rows: repeat(3, 1fr); 
   grid-gap: 20px; 
-  background: rgba(0, 191, 255, 0.8); 
+  background-image: url(${bigbassGameBoardBackground});
   padding: 25px; 
   border-radius: 20px; 
   margin-top: 40px; 
@@ -108,7 +109,7 @@ const Symbol = styled.div`
   justify-content: center;
   align-items: center;
   
-  background: rgba(0, 191, 255, 0.8); 
+  background: transparent;
   border-radius: 18px; 
   font-size: 34px; 
   color: #fff;
