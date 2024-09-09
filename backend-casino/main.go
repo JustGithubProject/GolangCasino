@@ -9,6 +9,7 @@ import (
 
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/paypal"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/stripe"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/google-auth"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 )
@@ -107,7 +108,7 @@ func main() {
 	r.POST("/paypal/withdraw/funds/", paypal_handlers.WithdrawFundsPaypal)
 
 	// stripe handlers
-	// ...
+	r.POST("/stripe/create/payment/intent/", stripe_handlers.CreatePaymentIntent)
 
 	// Google auth handlers
 	r.GET("/google/oauth/", google_auth.HandleGoogleLogin)
