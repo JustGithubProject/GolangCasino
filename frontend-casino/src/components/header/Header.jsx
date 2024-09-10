@@ -208,7 +208,14 @@ const Header = ({ username, balance, handleLogout }) => {
                     <Link to="/top-up-balance"
                       style={linkStyle}
                     >
-                      Пополнить баланс
+                      Пополнить баланс Paypal 
+                    </Link>
+                  </li>
+                  <li style={liStyle}>
+                    <Link to="/stripe/top-up-balance"
+                      style={linkStyle}
+                    >
+                      Пополнить баланс Stripe 
                     </Link>
                   </li>
                   <li style={liStyle}>

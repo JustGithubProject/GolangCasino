@@ -11,7 +11,7 @@ import Home from './components/home/Home';
 import SuccessPage from './pages/SucessPage';
 import CancelPage from './pages/CancelPage';
 import TopUpPage from './components/payments/TopUpComponent';
-import StripeTopUpPage from './components/paypal_components/PayPalComponent';
+import StripeWrapper from './components/stripe_components/StripeWrapper';
 
 import PaymentHistoryPage from './components/payments/PaymentsHistory';
 import WithdrawFundsPage from './components/payments/WithdrawFundsPaypal';
@@ -42,7 +42,7 @@ function App() {
               <Route path="/payment-history" element={<PaymentHistoryPage/>} />
               <Route path="/withdraw-funds" element={<WithdrawFundsPage/>} />
 
-              <Route path="/stripe/top-up-balance" element={<StripeTopUpPage/>}/>
+              <Route path="/stripe/top-up-balance" element={<StripeWrapper/>}/>
           </Routes>
       </Router>
   );
