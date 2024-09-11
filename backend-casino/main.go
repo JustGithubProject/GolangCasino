@@ -12,6 +12,9 @@ import (
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/stripe"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/google-auth"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
+
+	"github.com/gin-contrib/sessions"
+    "github.com/gin-contrib/sessions/cookie"
 )
 
 func LogResponseHeaders() gin.HandlerFunc {
@@ -72,6 +75,19 @@ func main() {
 		c.Set("DB", db)
 		c.Next()
 	})
+
+
+	store := cookie.NewStore([]byte("randomString"))
+
+	store.Options(sessions.Options{
+		MaxAge: 86400 * 30,
+		Path: "/",
+		HttpOnly: true,
+		Secure: false,
+	})
+
+	r.Use(sessions.Sessions("casino-session", store))
+
 
 	// Routes for management(admin)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)

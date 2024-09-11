@@ -21,21 +21,23 @@ function App() {
   return (
       <Router>
           <Routes>
+              <Route path="/" element={<Home/>} />
+            
               <Route path="/room/roulette/1" element={<RouletteCardV3/>} />
               <Route path="/room/roulette/2" element={<RouletteCardV3/>} />
               <Route path="/room/roulette/3" element={<RouletteCardV3/>} />
               <Route path="/room/roulette/4" element={<RouletteCardV3/>} />
+              <Route path="/room/roulette/6" element={<RouletteCardV3/>} />
+
               <Route path="/room/slot/sweetbonanza" element={<SweetBonanza/>} />
               <Route path="/room/slot/doghouse" element={<DogHouseCard/>} />
               <Route path="/room/slot/wolfgold" element={<WolfGoldCard/>} />
               <Route path="/room/slot/bigbassbonanza" element={<BigBassBonanzaCard/>} />
               <Route path="/room/slot/diamondstrike" element={<DiamondStrikeCard/>} />
-              <Route path="/room/roulette/6" element={<RouletteCardV3/>} />
-
 
               <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register/>} />
-              <Route path="/" element={<Home/>} />
+
               <Route path="/sucess-payment" element={<SuccessPage/>} />
               <Route path="/cancel-payment" element={<CancelPage/>} />
               <Route path="/top-up-balance" element={<TopUpPage/>} />

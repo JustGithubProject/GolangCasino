@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/markbates/goth/gothic"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -117,4 +118,28 @@ func HandleGoogleCallback(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully", "user": user, "token": token})
+}
+
+// Second way to do auth
+
+const (
+	key = "randomString"
+	maxAge = 86400 * 30
+	isProd = false;
+)
+
+func GoogleGetAuthCallbackFunction(c *gin.Context) {
+	// Getting param from URL
+	provider := c.Param("provider")
+	goth.UseProviders(
+		google.New(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, "http://localhost:8081/google/auth/callback/")
+	)
+
+	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	if err != nil {
+		fmt.Fprintln(res, err)
+		return
+	}
+
+	// TODO: https://www.youtube.com/watch?v=iHFQyd__2A0
 }
