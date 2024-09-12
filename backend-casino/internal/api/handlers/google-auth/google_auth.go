@@ -7,15 +7,16 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
+	"github.com/markbates/goth/providers/google"
 
-	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
 )
 
 var googleOauthConfig *oauth2.Config
@@ -130,16 +131,82 @@ const (
 
 func GoogleGetAuthCallbackFunction(c *gin.Context) {
 	// Getting param from URL
-	provider := c.Param("provider")
-	goth.UseProviders(
-		google.New(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, "http://localhost:8081/google/auth/callback/")
-	)
-
-	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	err := godotenv.Load()
 	if err != nil {
-		fmt.Fprintln(res, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load .env file"})
+		log.Fatal("Failed to load .env file")
+	}
+
+	GOOGLE_CLIENT_ID := os.Getenv("GOOGLE_CLIENT_ID")
+	GOOGLE_CLIENT_SECRET := os.Getenv("GOOGLE_CLIENT_SECRET")
+	
+	if GOOGLE_CLIENT_ID == "" || GOOGLE_CLIENT_SECRET == "" {
+		log.Fatal("Google client ID or secret is not set")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Google client ID or secret is not set"})
 		return
 	}
 
-	// TODO: https://www.youtube.com/watch?v=iHFQyd__2A0
+	goth.UseProviders(
+		google.New(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, "http://localhost:8081/google/auth/callback/"),
+	)
+
+
+	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	if err != nil {
+		log.Fatal("Failed to complte user auth")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Failed to complete user authentication"})
+		return
+	}
+
+	// RawData           map[string]interface{}
+	// Provider          string
+	// Email             string
+	// Name              string
+	// FirstName         string
+	// LastName          string
+	// NickName          string
+	// Description       string
+	// UserID            string
+	// AvatarURL         string
+	// Location          string
+	// AccessToken       string
+	// AccessTokenSecret string
+	// RefreshToken      string
+	// ExpiresAt         time.Time
+	// IDToken           string
+
+	userRepository, err := services.InitializeUserRepository()
+	if err != nil {
+		log.Printf("Failed to initialize user repository: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize user repository"})
+		return
+	}
+
+	isUserExist, err := userRepository.FindByGoogleID(user.UserID)
+	if err == nil && isUserExist.ID != 0 {
+		// User already exists
+		c.JSON(http.StatusOK, gin.H{"message": "User already exists", "user": isUserExist})
+		return
+	}
+
+	// User does not exist, create new one
+	newUser := models.User{
+		Name:        user.Name,
+		Email:       user.Email,
+		Password:    services.GeneratePasswordForGoogleUser(),
+		Balance:     0.0,
+		GoogleID:    user.UserID,
+		Picture:     user.AvatarURL,
+		GivenName:   user.FirstName,
+		FamilyName:  user.LastName,
+		Locale:      "en-EN",
+	}
+
+	if err := userRepository.CreateGoogleUser(&newUser); err != nil {
+		log.Println("Failed to create Google user: ", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create Google user"})
+		return
+	}
+
+	c.Redirect(302, "http://localhost:5173")
 }

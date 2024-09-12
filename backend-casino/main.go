@@ -129,6 +129,7 @@ func main() {
 	// Google auth handlers
 	r.GET("/google/oauth/", google_auth.HandleGoogleLogin)
     r.POST("/google/auth/callback/", google_auth.HandleGoogleCallback)
+	r.POST("/google/v2/auth/callback/", google_auth.GoogleGetAuthCallbackFunction)
 	
 	// Start the web server
 	r.Run(":8081")
