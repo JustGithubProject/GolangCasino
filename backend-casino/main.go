@@ -1,20 +1,24 @@
 package main
 
 import (
-	"time"
 	"log"
+	"os"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/gothic"
+	"github.com/markbates/goth/providers/google"
 
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers"
+	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/google-auth"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/paypal"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/stripe"
-	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/api/handlers/google-auth"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 
-	"github.com/gin-contrib/sessions"
-    "github.com/gin-contrib/sessions/cookie"
+	"github.com/gorilla/sessions"
 )
 
 func LogResponseHeaders() gin.HandlerFunc {
@@ -41,6 +45,7 @@ func LogResponseHeaders() gin.HandlerFunc {
 
 
 func main() {
+
 	db := database.InitDB()
 	sqlDB, err := db.DB()
     if err != nil{
@@ -76,18 +81,31 @@ func main() {
 		c.Next()
 	})
 
+	err = godotenv.Load()
+    if err != nil {
+        log.Fatal("Failed to load .env file")
+    }
 
-	store := cookie.NewStore([]byte("randomString"))
 
-	store.Options(sessions.Options{
-		MaxAge: 86400 * 30,
-		Path: "/",
-		HttpOnly: true,
-		Secure: false,
-	})
+	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
+	store.MaxAge(86400 * 30)
+	store.Options.Path = "/"
+	store.Options.HttpOnly = true
+	store.Options.Secure = false
 
-	r.Use(sessions.Sessions("casino-session", store))
+	gothic.Store = store
 
+    // Получение переменных окружения
+    GOOGLE_CLIENT_ID := os.Getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET := os.Getenv("GOOGLE_CLIENT_SECRET")
+    if GOOGLE_CLIENT_ID == "" || GOOGLE_CLIENT_SECRET == "" {
+        log.Fatal("Google client ID or secret is not set")
+    }
+
+    // Инициализация провайдеров Goth
+    goth.UseProviders(
+        google.New(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, "http://localhost:8081/google/v2/auth/callback/?provider=google"),
+    )
 
 	// Routes for management(admin)
 	r.GET("/user/:id", handlers.GetUserByIdHandler)

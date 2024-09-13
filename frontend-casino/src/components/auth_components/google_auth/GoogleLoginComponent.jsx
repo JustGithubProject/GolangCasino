@@ -12,7 +12,7 @@ function LoginGo() {
             const { tokenId } = res;
             console.log("TokenID: ", tokenId);
             const response = await axios.post(
-                "http://localhost:8081/google/v2/auth/callback/",
+                "http://localhost:8081/google/v2/auth/callback/?provider=google",
                 { id_token: tokenId },
                 {
                     withCredentials: true,
