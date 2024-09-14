@@ -31,7 +31,8 @@ func (ur *UserRepository) GetUserById(id uint) (*models.User, error){
 
 func (ur *UserRepository) FindByGoogleID(googleID string) (*models.User, error) {
 	var user models.User
-	err := ur.Db.First(&user, "GoogleID = ?", googleID).Error
+	// err := ur.Db.First(&user, "GoogleID = ?", googleID).Error
+	err := ur.Db.First(&user, "google_id = ?", googleID).Error
 	if err != nil {
 		return nil, err 
 	}

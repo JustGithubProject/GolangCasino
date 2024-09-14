@@ -5,25 +5,31 @@ const clientID = "609582150163-ejcmmse6ut85n5iv2sm6s7k4nauirlk8.apps.googleuserc
 
 
 function LoginGo() {
-
     const onSuccess = async (res) => {
         console.log("Current user: ", res.profileObj);
         try {
             const { tokenId } = res;
             console.log("TokenID: ", tokenId);
             const response = await axios.post(
-                "http://localhost:8081/google/v2/auth/callback/?provider=google",
-                { id_token: tokenId },
+                "http://localhost:8081/google/v2/auth/callback/",
+                { 
+                    googleId: res.profileObj.googleId,
+                    email: res.profileObj.email,
+                    name: res.profileObj.name,
+                    givenName: res.profileObj.givenName,
+                    familyName: res.profileObj.familyName,
+                    imageUrl: res.profileObj.imageUrl
+                },
                 {
-                    withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 }
             );
     
-            const { token } = response.data;
-            localStorage.setItem("google_token", token);
+            const token = response.data.token;
+            localStorage.setItem("token", token);
+            window.location.href = "/";
     
             console.log("LOGIN SUCCESS! Token: ", token);
         } catch (error) {
@@ -42,8 +48,6 @@ function LoginGo() {
             clientId={clientID}
             onSuccess={onSuccess}
             onFailure={onFailure}
-            cookiePolicy={'single_host_origin'}
-            isSignedIn={true}
         />
     );
 }

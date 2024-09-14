@@ -3,16 +3,16 @@ package google_auth
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/markbates/goth/gothic"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"golang.org/x/oauth2"
 	"github.com/markbates/goth/providers/google"
+	"golang.org/x/oauth2"
+	"gorm.io/gorm"
 
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/models"
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/services"
@@ -125,10 +125,10 @@ func HandleGoogleCallback(c *gin.Context) {
 
 
 func GoogleGetAuthCallbackFunction(c *gin.Context) {
-    user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
-    if err != nil {
-        log.Println("Failed to complete user auth: ", err)
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Failed to complete user authentication"})
+    var googleAuthInput services.GoogleAuthInput
+    if err := c.BindJSON(&googleAuthInput); err != nil {
+        log.Println("Failed to bind (Google) JSON data")
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to bind (Google) JSON data"})
         return
     }
 
@@ -139,31 +139,41 @@ func GoogleGetAuthCallbackFunction(c *gin.Context) {
         return
     }
 
-    isUserExist, err := userRepository.FindByGoogleID(user.UserID)
-    if err == nil && isUserExist.ID != 0 {
-        // Пользователь уже существует
-        c.JSON(http.StatusOK, gin.H{"message": "User already exists", "user": isUserExist})
+    user, err := userRepository.FindByGoogleID(googleAuthInput.ID)
+    if err != nil {
+        // Предположим, что err == NotFoundError, когда пользователь не найден
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+            newUser := models.User{
+                Name:        googleAuthInput.Name,
+                Email:       googleAuthInput.Email,
+                Password:    services.GeneratePasswordForGoogleUser(),
+                Balance:     0.0,
+                GoogleID:    googleAuthInput.ID,
+                Picture:     googleAuthInput.Picture,
+                GivenName:   googleAuthInput.GivenName,
+                FamilyName:  googleAuthInput.FamilyName,
+                Locale:      "en-EN",
+            }
+
+            if err := userRepository.CreateGoogleUser(&newUser); err != nil {
+                log.Println("Failed to create Google user: ", err)
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create Google user"})
+                return
+            }
+
+            user = &newUser 
+        } else {
+            log.Println("Failed to find user by Google ID: ", err)
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find user by Google ID"})
+            return
+        }
+    }
+
+    tokenString, err := services.CreateToken(user.Name)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
         return
     }
 
-    // Пользователя нет, создаем нового
-    newUser := models.User{
-        Name:        user.Name,
-        Email:       user.Email,
-        Password:    services.GeneratePasswordForGoogleUser(),
-        Balance:     0.0,
-        GoogleID:    user.UserID,
-        Picture:     user.AvatarURL,
-        GivenName:   user.FirstName,
-        FamilyName:  user.LastName,
-        Locale:      "en-EN",
-    }
-
-    if err := userRepository.CreateGoogleUser(&newUser); err != nil {
-        log.Println("Failed to create Google user: ", err)
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create Google user"})
-        return
-    }
-
-    c.Redirect(302, "http://localhost:5173")
+    c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
