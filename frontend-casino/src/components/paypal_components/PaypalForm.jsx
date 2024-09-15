@@ -62,6 +62,7 @@ const PayPalComponent = () => {
           'Authorization': `Bearer ${token}`,
         },
       });
+      console.log(response.data.links[1].href);
       window.location.href = response.data.links[1].href
       return response.data.id; 
     } catch (error) {
