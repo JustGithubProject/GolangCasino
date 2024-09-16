@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,15 +9,18 @@ import (
 )
 
 func RegisterHandler(c *gin.Context) {
+	// Handler to register user
 	services.HandleUserRegister(c)
 }
 
 
 func LoginHandler(c *gin.Context) {
-	fmt.Println("Inside of Loginhandler")
+	// Handler to login user
 	services.HandleUserLogin(c)
 }
 
+
 func LogoutHandler(c *gin.Context) {
+	// Handler to logout user
     c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }

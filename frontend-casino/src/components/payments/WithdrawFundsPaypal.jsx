@@ -9,6 +9,11 @@ const WithdrawFundsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (floatTotal < 100) {
+        setError("Минимальная сумма для вывода 100$")
+        window.location.href = "/";
+    }
     try {
         const url = "http://127.0.0.1:8081/paypal/withdraw/funds/";
         const token = localStorage.getItem("token");

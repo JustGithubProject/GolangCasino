@@ -282,6 +282,11 @@ func WithdrawFundsPaypal(c *gin.Context) {
     currency := paypalWithdrawInput.Currency
     receiverEmail := paypalWithdrawInput.ReceiverEmail
 
+    // Minimum withdrawl amount
+    if total < 100.00 {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Minimum withdrawal amount is 100$"})
+    }
+    
     // Converting float64 to string
     totalString := strconv.FormatFloat(total, 'f', -1, 64)
 

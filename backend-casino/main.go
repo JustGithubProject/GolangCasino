@@ -14,31 +14,9 @@ import (
 	"github.com/JustGithubProject/GolangCasino/backend-casino/internal/database"
 )
 
-func LogResponseHeaders() gin.HandlerFunc {
-	log.Println("LogResponseHeader before return func")
-	return func(c *gin.Context) {
-		log.Println("До c.Next()")
-		for key, values := range c.Writer.Header() {
-			for _, value := range values {
-				log.Printf("До c.Next() - %s: %s\n", key, value)
-			}
-		}
-
-		c.Next()
-
-		// Logging headers after c.Next()
-		log.Println("После c.Next()")
-		for key, values := range c.Writer.Header() {
-			for _, value := range values {
-				log.Printf("После c.Next() - %s: %s\n", key, value)
-			}
-		}
-	}
-}
 
 
 func main() {
-
 	db := database.InitDB()
 	sqlDB, err := db.DB()
     if err != nil{
@@ -65,7 +43,6 @@ func main() {
 	log.Println("CORS middleware applied")
 
 	// Adding middleware for logging headers
-	r.Use(LogResponseHeaders())
 	log.Println("LogResponseHeaders is empty?")
 
 	// Passing the database instance to query handlers
@@ -93,6 +70,7 @@ func main() {
 	r.POST("/spin-roulette-v1/", handlers.SpinRouletteHandler)
 	r.POST("/spin-roulette-v2/", handlers.UnfairSpinRouletteHandler) // like rooms(6 different handlers)
 	r.POST("/spin-roulette-v3/", handlers.VeryBadSpinRouletteHandler)
+
 	// slots handlers
 	r.POST("/spin-slot-v1/", handlers.SweetBonanzaSlotHandler)
 	r.POST("/spin-slot-v2/", handlers.DogHouseSlotHandler)

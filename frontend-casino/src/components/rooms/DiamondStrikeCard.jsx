@@ -200,9 +200,6 @@ const MusicButton = styled.button`
   }
 `;
 
-
-
-
 const symbols = [
     { id: 1, name: 'Lemon', image: lemonImage },
     { id: 2, name: 'Plum', image: plumImage },

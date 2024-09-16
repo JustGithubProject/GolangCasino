@@ -8,15 +8,17 @@ import (
 
 
 func SpinRouletteHandler(c *gin.Context) {
+    // Roulette handler
     services.HandleGameRequest(c, true)
 }
 
-
 func UnfairSpinRouletteHandler(c *gin.Context){
+    // Unfair roulette handler
     services.HandleGameRequest(c, false)
 }
 
 func VeryBadSpinRouletteHandler(c *gin.Context){
+    // Very bad spin roulette
     services.HandleVeryBadGameRequest(c)
 }
 
@@ -39,23 +41,32 @@ func DeleteGameHandler(c *gin.Context) {
     services.HandleDeleteGame(c)
 }
 
-// Slots
+
+
+/*
+    Slots
+*/
 func SweetBonanzaSlotHandler(c *gin.Context){
+    // Sweetbonanza handler
     slots.SweetBonanzaHandle(c)
 }
 
 func DogHouseSlotHandler(c *gin.Context) {
+    // Doghouse handler
     slots.DogHouseHandle(c)
 }
 
 func WolfGoldSlotHandler(c *gin.Context){
+    // Wolfgold handler
     slots.WolfGoldHandle(c)
 }
 
 func BigBassBonanzaSlotHandler(c *gin.Context) {
+    // Bigbassbonanza handler
     slots.BigBassBonanzaHandle(c)
 }
 
 func DiamondStrikeSlotHandler(c *gin.Context) {
+    // Diamondstrike handler
     slots.DiamondStrikeHandle(c)
 }

@@ -46,10 +46,13 @@ const Login = () => {
       const data = response.data;
       const token = data.token;
       localStorage.setItem('token', token);
+      if (token) {
+        navigate('/');
+        setSuccess('Вы успешно вошли в систему!');
+        navigate("/");
+        window.location.reload(); // Reload the page
+      }
 
-      setSuccess('Вы успешно вошли в систему!');
-      navigate('/');
-      window.location.reload(); // Reload the page
     } catch (err) {
       setError('Login failed. Please try again.');
     }
