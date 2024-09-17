@@ -43,7 +43,6 @@ const Wrapper = styled.div`
   width: 100vw;
   box-sizing: border-box;
   padding: 60px 20px;
-  border: 2px solid #444;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 `;

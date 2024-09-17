@@ -29,7 +29,6 @@ const Wrapper = styled.div`
   width: 100vw;
   box-sizing: border-box;
   padding: 60px 20px;
-  border: 2px solid rgba(68, 68, 68, 0.8);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   overflow: hidden;
   backdrop-filter: blur(4px);

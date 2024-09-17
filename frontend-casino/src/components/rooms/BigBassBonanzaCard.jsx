@@ -34,7 +34,6 @@ const Wrapper = styled.div`
   width: 100vw;
   box-sizing: border-box;
   padding: 60px 20px;
-  border: 2px solid rgba(68, 68, 68, 0.8);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   overflow: hidden;
   backdrop-filter: blur(4px);
@@ -84,7 +83,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(5, 1fr); 
   grid-template-rows: repeat(3, 1fr); 
   grid-gap: 20px; 
-  background-image: url(${bigbassGameBoardBackground});
+  background-color: #28aced;
   padding: 25px; 
   border-radius: 20px; 
   margin-top: 40px; 
