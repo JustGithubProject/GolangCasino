@@ -97,6 +97,7 @@ const bounceAnimation = keyframes`
 
 // Стили для символов
 const Symbol = styled.div`
+  position: relative;
   width: 90px; 
   height: 90px; 
   display: flex;
@@ -109,7 +110,20 @@ const Symbol = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   animation: ${bounceAnimation} 1s infinite, ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
   animation-delay: ${props => props.delay || '0s'};
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 3px; /* Толщина линии */
+    background: #000; /* Цвет линии */
+    transform: translateY(-50%);
+    display: ${props => props.isMarked ? 'block' : 'none'};
+  }
 `;
+
 
 // Стили для кнопок
 const Button = styled.button`
@@ -211,145 +225,182 @@ const symbols = [
   
 
 const DiamondStrikeCard = () => {
-    let defaultMatrix = [[1, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]]
+  let defaultMatrix = [[1, 7, 6, 4, 1], [4, 6, 5, 4, 6], [3, 1, 3, 3, 4]];
 
-    const [gameBoard, setGameBoard] = useState(defaultMatrix);
-    const [username, setUsername] = useState(null);
-    const [balance, setBalance] = useState(null);
-    const [isSpinning, setIsSpinning] = useState(false);
-    const [bet, setBet] = useState(10);
-    const [isMusicPlaying, setIsMusicPlaying] = useState(true);
-    const audioRef = useRef(null); 
+  const [gameBoard, setGameBoard] = useState(defaultMatrix);
+  const [username, setUsername] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [bet, setBet] = useState(10);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const audioRef = useRef(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-        const decodedToken = jwtDecodeModule.jwtDecode(token);
-        const username = decodedToken.username;
-        setUsername(username);
-        fetchUserBalance(username);
-        }
-
-    // Воспроизведение музыки при монтировании компонента
-    if (audioRef.current) {
-      audioRef.current.loop = true; // Зацикливаем музыку
-      audioRef.current.volume = 0.5; // Устанавливаем громкость
-      if (isMusicPlaying) {
-        audioRef.current.play();
-      } else {
-        audioRef.current.pause();
+  useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+          const decodedToken = jwtDecodeModule.jwtDecode(token);
+          const username = decodedToken.username;
+          setUsername(username);
+          fetchUserBalance(username);
       }
+
+      // Воспроизведение музыки при монтировании компонента
+      if (audioRef.current) {
+          audioRef.current.loop = true; // Зацикливаем музыку
+          audioRef.current.volume = 0.5; // Устанавливаем громкость
+          if (isMusicPlaying) {
+              audioRef.current.play();
+          } else {
+              audioRef.current.pause();
+          }
+      }
+  }, [isMusicPlaying]);
+
+  const fetchUserBalance = async (username) => {
+      try {
+          const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          setBalance(data.Balance);
+      } catch (error) {
+          console.error('Error fetching user balance:', error);
+      }
+  };
+
+  const checkForLine = (line) => {
+    const counts = {};
+    for (let symbol of line) {
+        counts[symbol] = (counts[symbol] || 0) + 1;
     }
-    }, [isMusicPlaying]);
 
-    const fetchUserBalance = async (username) => {
-    try {
-        const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setBalance(data.Balance);
-        } catch (error) {
-        console.error('Error fetching user balance:', error);
-        }
-    };
+    if (Object.values(counts).some(count => count >= 3 && count <= 5)) {
+        let maxCounter = 1;
+        let currentCounter = 1;
 
-    const handleSpin = async () => {
-        if (bet <= 0) {
-        alert('Ставка должна быть больше нуля');
-        return;
-        }
-
-        setIsSpinning(true);
-        setGameBoard(defaultMatrix);
-
-        setTimeout(async () => {
-        try {
-            const url = `http://localhost:8081/spin-slot-v5/?spinBet=${bet}`;
-            const response = await fetchWithAuth(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({}),
-            });
-
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
+        for (let i = 0; i < line.length - 1; i++) {
+            if (line[i] === line[i + 1]) {
+                currentCounter += 1;
+            } else {
+                if (currentCounter > maxCounter) {
+                    maxCounter = currentCounter;
+                }
+                currentCounter = 1;
             }
-
-            let data = await response.json();
-            
-            // Getting a string from json representing a string of numbers
-            let sRow1 = data.sRow1;
-            let sRow2 = data.sRow2;
-            let sRow3 = data.sRow3;
-
-            // ["2", "3", "4", ... "5"]
-            let strRow1Array = sRow1.split(", ");
-            let strRow2Array = sRow2.split(", ");
-            let strRow3Array = sRow3.split(", ");
-
-            let numRow1Array = strRow1Array.map(Number);
-            let numRow2Array = strRow2Array.map(Number);
-            let numRow3Array = strRow3Array.map(Number);
-
-            let matrixArray = [
-                numRow1Array,
-                numRow2Array,
-                numRow3Array,
-            ];
-
-
-            setGameBoard(matrixArray);
-            setBalance(data.balance);
-        } catch (error) {
-            console.error('Error fetching spin data:', error);
-        } finally {
-            setIsSpinning(false);
         }
-        }, 500);
-    };
 
-    const toggleMusic = () => {
-        setIsMusicPlaying(!isMusicPlaying);
-    };
+        if (currentCounter > maxCounter) {
+            maxCounter = currentCounter;
+        }
 
-    return (
-        <Wrapper>
-        <Header username={username} balance={balance} handleLogout={() => {
-            localStorage.removeItem('token');
-            window.location.reload();
+        if (maxCounter >= 3) {
+            return true;
+        }
+    }
+
+    return false;
+  };
+
+  const handleSpin = async () => {
+      if (bet <= 0) {
+          alert('Ставка должна быть больше нуля');
+          return;
+      }
+
+      setIsSpinning(true);
+      setGameBoard(defaultMatrix);
+
+      setTimeout(async () => {
+          try {
+              const url = `http://localhost:8081/spin-slot-v5/?spinBet=${bet}`;
+              const response = await fetchWithAuth(url, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({}),
+              });
+
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+
+              let data = await response.json();
+              
+              let sRow1 = data.sRow1;
+              let sRow2 = data.sRow2;
+              let sRow3 = data.sRow3;
+
+              let strRow1Array = sRow1.split(", ");
+              let strRow2Array = sRow2.split(", ");
+              let strRow3Array = sRow3.split(", ");
+
+              let numRow1Array = strRow1Array.map(Number);
+              let numRow2Array = strRow2Array.map(Number);
+              let numRow3Array = strRow3Array.map(Number);
+
+              let matrixArray = [
+                  numRow1Array,
+                  numRow2Array,
+                  numRow3Array,
+              ];
+
+              setGameBoard(matrixArray);
+              setBalance(data.balance);
+          } catch (error) {
+              console.error('Error fetching spin data:', error);
+          } finally {
+              setIsSpinning(false);
+          }
+      }, 500);
+  };
+
+  const toggleMusic = () => {
+      setIsMusicPlaying(!isMusicPlaying);
+  };
+
+  return (
+      <Wrapper>
+          <Header username={username} balance={balance} handleLogout={() => {
+              localStorage.removeItem('token');
+              window.location.reload();
           }} />
-        <InnerWrapper>
-          <Title>Diamond Strike</Title>
-          <BalanceText>Ваш баланс: {balance} UAH</BalanceText>
-          <BetInput
-            type="number"
-            value={bet}
-            onChange={e => setBet(Number(e.target.value))}
-          />
-          <Button onClick={handleSpin} disabled={isSpinning}>
-            {isSpinning ? 'Spinning...' : 'Крутить'}
-          </Button>
-          <MusicButton onClick={toggleMusic}>
-            {isMusicPlaying ? 'Отключить музыку' : 'Включить музыку'}
-          </MusicButton>
-          <GameBoard isSpinning={isSpinning}>
-            {gameBoard.flat().map((symbolId, index) => {
-              const symbol = symbols.find(s => s.id === symbolId);
-              return (
-                <Symbol key={index} color={symbol.color}>
-                  <img src={symbol.image} alt={symbol.name} style={{ width: '100%', height: '100%' }} />
-                </Symbol>
-              );
-            })}
-          </GameBoard>
-        </InnerWrapper>
-        <audio ref={audioRef} src={backgroundMusic} />
+          <InnerWrapper>
+              <Title>Diamond Strike</Title>
+              <BalanceText>Ваш баланс: {balance} UAH</BalanceText>
+              <BetInput
+                  type="number"
+                  value={bet}
+                  onChange={e => setBet(Number(e.target.value))}
+              />
+              <Button onClick={handleSpin} disabled={isSpinning}>
+                  {isSpinning ? 'Spinning...' : 'Крутить'}
+              </Button>
+              <MusicButton onClick={toggleMusic}>
+                  {isMusicPlaying ? 'Отключить музыку' : 'Включить музыку'}
+              </MusicButton>
+              <GameBoard isSpinning={isSpinning}>
+                  {gameBoard.map((row, rowIndex) => row.map((symbolId, colIndex) => {
+                      const symbol = symbols.find(s => s.id === symbolId);
+                      const isMarked = (
+                        rowIndex === 0 && checkForLine(row)
+                      ) || (
+                        rowIndex === 1 && checkForLine(row) || (
+                        rowIndex === 2 && checkForLine(row)
+                      )
+                      );
+                      return (
+                          <Symbol key={`${rowIndex}-${colIndex}`} isMarked={isMarked}>
+                              <img src={symbol.image} alt={symbol.name} style={{ width: '100%', height: '100%' }} />
+                          </Symbol>
+                      );
+                  }))}
+              </GameBoard>
+          </InnerWrapper>
+          <audio ref={audioRef} src={backgroundMusic} />
       </Wrapper>
-    );
-}
+  );
+};
 
 export default DiamondStrikeCard;

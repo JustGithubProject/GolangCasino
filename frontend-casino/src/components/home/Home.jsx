@@ -46,7 +46,7 @@ const Home = () => {
       setIsAuthenticated(false);
       setUsername('');
       setBalance(0);
-    }, 30 * 60 * 1000); // в миллисекундах
+    }, 30 * 60 * 1000); 
 
     return () => clearInterval(interval);
   }, []);
