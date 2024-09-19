@@ -83,7 +83,7 @@ const GameBoard = styled.div`
   grid-template-columns: repeat(5, 1fr); 
   grid-template-rows: repeat(3, 1fr); 
   grid-gap: 20px; 
-  background-color: #28aced;
+  background: rgba(0, 0, 139, 0.8); 
   padding: 25px; 
   border-radius: 20px; 
   margin-top: 40px; 
@@ -102,19 +102,31 @@ const bounceAnimation = keyframes`
 
 // Стили для символов
 const Symbol = styled.div`
+  position: relative;
   width: 90px; 
   height: 90px; 
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  background: transparent;
+  background: rgba(0, 0, 139, 0.8); 
   border-radius: 18px; 
   font-size: 34px; 
   color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   animation: ${bounceAnimation} 1s infinite, ${props => props.isSpinning ? css`${fallAnimation} 1s cubic-bezier(0.52, 0.04, 0.37, 1) both` : 'none'};
   animation-delay: ${props => props.delay || '0s'};
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 3px; 
+    background: #000; 
+    transform: translateY(-50%);
+    display: ${props => props.isMarked ? 'block' : 'none'};
+  }
 `;
 
 // Стили для кнопок
@@ -285,6 +297,39 @@ const BigBassBonanzaCard = () => {
         }
     };
 
+    const checkForLine = (line) => {
+      const counts = {};
+      for (let symbol of line) {
+          counts[symbol] = (counts[symbol] || 0) + 1;
+      }
+  
+      if (Object.values(counts).some(count => count >= 3 && count <= 5)) {
+          let maxCounter = 1;
+          let currentCounter = 1;
+  
+          for (let i = 0; i < line.length - 1; i++) {
+              if (line[i] === line[i + 1]) {
+                  currentCounter += 1;
+              } else {
+                  if (currentCounter > maxCounter) {
+                      maxCounter = currentCounter;
+                  }
+                  currentCounter = 1;
+              }
+          }
+  
+          if (currentCounter > maxCounter) {
+              maxCounter = currentCounter;
+          }
+  
+          if (maxCounter >= 3) {
+              return true;
+          }
+      }
+  
+      return false;
+    };
+
     const handleSpin = async () => {
         if (bet <= 0) {
         alert('Ставка должна быть больше нуля');
@@ -367,15 +412,22 @@ const BigBassBonanzaCard = () => {
             {isMusicPlaying ? 'Отключить музыку' : 'Включить музыку'}
           </MusicButton>
           <GameBoard isSpinning={isSpinning}>
-            {gameBoard.flat().map((symbolId, index) => {
-              const symbol = symbols.find(s => s.id === symbolId);
-              return (
-                <Symbol key={index} color={symbol.color}>
-                  <img src={symbol.image} alt={symbol.name} style={{ width: '100%', height: '100%' }} />
-                </Symbol>
-              );
-            })}
-          </GameBoard>
+                  {gameBoard.map((row, rowIndex) => row.map((symbolId, colIndex) => {
+                      const symbol = symbols.find(s => s.id === symbolId);
+                      const isMarked = (
+                        rowIndex === 0 && checkForLine(row)
+                      ) || (
+                        rowIndex === 1 && checkForLine(row) || (
+                        rowIndex === 2 && checkForLine(row)
+                      )
+                      );
+                      return (
+                          <Symbol key={`${rowIndex}-${colIndex}`} isMarked={isMarked}>
+                              <img src={symbol.image} alt={symbol.name} style={{ width: '100%', height: '100%' }} />
+                          </Symbol>
+                      );
+                  }))}
+              </GameBoard>
         </InnerWrapper>
         <audio ref={audioRef} src={backgroundMusic} />
       </Wrapper>

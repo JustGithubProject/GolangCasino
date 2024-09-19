@@ -257,12 +257,12 @@ const Home = () => {
   };
 
   const carouselContainerStyle = {
-    marginTop: '80px', // Space below the header
+    marginTop: '90px', // Space below the header
     width: '100%',
   };
 
   const carouselImageStyle = {
-    maxHeight: '250px',
+    maxHeight: '220px',
     objectFit: 'cover',
   };
 

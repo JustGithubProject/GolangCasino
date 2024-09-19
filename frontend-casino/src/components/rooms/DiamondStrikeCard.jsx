@@ -117,8 +117,8 @@ const Symbol = styled.div`
     top: 50%;
     left: 0;
     width: 100%;
-    height: 3px; /* Толщина линии */
-    background: #000; /* Цвет линии */
+    height: 3px; 
+    background: #000; 
     transform: translateY(-50%);
     display: ${props => props.isMarked ? 'block' : 'none'};
   }
@@ -244,10 +244,9 @@ const DiamondStrikeCard = () => {
           fetchUserBalance(username);
       }
 
-      // Воспроизведение музыки при монтировании компонента
       if (audioRef.current) {
-          audioRef.current.loop = true; // Зацикливаем музыку
-          audioRef.current.volume = 0.5; // Устанавливаем громкость
+          audioRef.current.loop = true; 
+          audioRef.current.volume = 0.2; 
           if (isMusicPlaying) {
               audioRef.current.play();
           } else {
