@@ -74,7 +74,7 @@ const Footer = () => {
              onMouseOut={(e) => e.currentTarget.style.color = iconStyle.color}></i>
         </a>
       </div>
-      <p style={footerTextStyle}>© 2024 Casino Royale. All Rights Reserved.</p>
+      <p style={footerTextStyle}>© 2024 Luminous Vault Casino. All Rights Reserved.</p>
     </div>
   );
 };
