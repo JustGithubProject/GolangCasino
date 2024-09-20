@@ -134,7 +134,7 @@ const PaymentHistoryPage = () => {
             if (!token) {
                 throw new Error("No authentication token found");
             }
-            const url = "http://127.0.0.1:8081/paypal/payments/history/";
+            const url = "http://CasinoThatWillKillRussia.pythonanywhere.com/paypal/payments/history/";
 
             const response = await axios.get(url, {
                 headers: {

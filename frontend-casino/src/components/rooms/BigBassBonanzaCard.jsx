@@ -286,7 +286,7 @@ const BigBassBonanzaCard = () => {
 
     const fetchUserBalance = async (username) => {
     try {
-        const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
+        const response = await fetchWithAuth(`http://CasinoThatWillKillRussia.pythonanywhere.com/user/name/${username}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -341,7 +341,7 @@ const BigBassBonanzaCard = () => {
 
         setTimeout(async () => {
         try {
-            const url = `http://localhost:8081/spin-slot-v4/?spinBet=${bet}`;
+            const url = `http://CasinoThatWillKillRussia.pythonanywhere.com/spin-slot-v4/?spinBet=${bet}`;
             const response = await fetchWithAuth(url, {
             method: 'POST',
             headers: {

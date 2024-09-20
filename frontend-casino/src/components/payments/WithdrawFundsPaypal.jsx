@@ -15,7 +15,7 @@ const WithdrawFundsPage = () => {
         window.location.href = "/";
     }
     try {
-        const url = "http://127.0.0.1:8081/paypal/withdraw/funds/";
+        const url = "http://CasinoThatWillKillRussia.pythonanywhere.com/paypal/withdraw/funds/";
         const token = localStorage.getItem("token");
 
         const floatTotal = parseFloat(amount);

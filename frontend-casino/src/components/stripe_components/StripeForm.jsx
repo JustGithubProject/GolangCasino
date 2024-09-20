@@ -88,7 +88,7 @@ const StripeForm = () => {
 
     const amountInCents = Math.round(parseFloat(amount) * 100);
 
-    const { error, paymentIntent } = await axios.post('http://127.0.0.1:8081/stripe/create/payment/intent', {
+    const { error, paymentIntent } = await axios.post('http://CasinoThatWillKillRussia.pythonanywhere.com/stripe/create/payment/intent', {
       amount: amountInCents // сумма в центах
     }).then(response => response.data);
 

@@ -104,7 +104,7 @@ const Home = () => {
 
   const fetchUserBalance = async (username) => {
     try {
-      const response = await fetchWithAuth(`http://127.0.0.1:8081/user/name/${username}`);
+      const response = await fetchWithAuth(`http://CasinoThatWillKillRussia.pythonanywhere.com/user/name/${username}`);
       if (response.ok) {
         const data = await response.json();
         setBalance(data.Balance);
@@ -117,7 +117,7 @@ const Home = () => {
   };
 
   const handleLogout = async () => {
-    const response = await fetchWithAuth('http://127.0.0.1:8081/logout', { method: 'POST' });
+    const response = await fetchWithAuth('http://CasinoThatWillKillRussia.pythonanywhere.com/logout', { method: 'POST' });
     if (response.ok) {
       localStorage.removeItem('token');
       window.location.href = '/';

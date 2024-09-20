@@ -33,7 +33,7 @@ const Login = () => {
     setSuccess('');
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8081/login/user/',
+        'http://CasinoThatWillKillRussia.pythonanywhere.com/login/user/',
         { username, password },
         {
           withCredentials: true,

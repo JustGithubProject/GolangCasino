@@ -52,7 +52,7 @@ const PayPalComponent = () => {
         throw new Error('No authentication token found');
       }
       const floatAmountP = parseFloat(amountP)
-      const url = "http://127.0.0.1:8081/paypal/create/order/";
+      const url = "http://CasinoThatWillKillRussia.pythonanywhere.com/paypal/create/order/";
       const response = await axios.post(url, {
         currency_code: currencyP,
         value: floatAmountP,

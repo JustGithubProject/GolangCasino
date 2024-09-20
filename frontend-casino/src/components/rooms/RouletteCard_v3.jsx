@@ -54,7 +54,7 @@ function RouletteCardV3() {
 
   const fetchUserBalance = async (username) => {
     try {
-      const response = await fetchWithAuth(`http://localhost:8081/user/name/${username}`);
+      const response = await fetchWithAuth(`http://CasinoThatWillKillRussia.pythonanywhere.com/user/name/${username}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -150,7 +150,7 @@ function RouletteCardV3() {
     if (second2To1Bet) params.append('Second2To1', second2To1Bet);
     if (third2To1Bet) params.append('Third2To1', third2To1Bet);
   
-    const url = `http://localhost:8081/spin-roulette-v3/?${params.toString()}`;
+    const url = `http://CasinoThatWillKillRussia.pythonanywhere.com/spin-roulette-v3/?${params.toString()}`;
   
     console.log('URL:', url);
   
