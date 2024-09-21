@@ -141,8 +141,8 @@ const Login = () => {
     googleButton: {
       width: 'auto',
       height: '45px',
-      borderRadius: '10px', // Reduced border-radius for a more square-like appearance
-      padding: '0 20px', // Adjust padding for a more compact look
+      borderRadius: '10px', 
+      padding: '0 20px', 
       backgroundColor: '#4285F4', // Google button color
       color: '#fff',
       fontSize: '14px',

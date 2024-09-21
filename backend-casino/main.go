@@ -15,7 +15,6 @@ import (
 )
 
 
-
 func main() {
 	db := database.InitDB()
 	sqlDB, err := db.DB()

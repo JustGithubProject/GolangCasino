@@ -23,21 +23,25 @@ func VeryBadSpinRouletteHandler(c *gin.Context){
 }
 
 func CreateGameHandler(c *gin.Context) {
+    // Create Game Handler
     services.HandleCreateGame(c)
 }
 
 
 func GetGameByIdHandler(c *gin.Context) {
+    // Handler to get game by id
     services.HandleGetGameByID(c)
 }
 
 
 func UpdateGameHandler(c *gin.Context) {
+    // Handler to update game
     services.HandleUpdateGame(c)
 }
 
 
 func DeleteGameHandler(c *gin.Context) {
+    // Handler to delete game
     services.HandleDeleteGame(c)
 }
 

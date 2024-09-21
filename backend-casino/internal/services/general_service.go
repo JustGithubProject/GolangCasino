@@ -421,10 +421,13 @@ func HandleUserRegister(c *gin.Context){
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    // Удаляем начальные и конечные пробелы из пароля
+
+    // Remove leading and trailing spaces from the password
     input.Password = strings.TrimSpace(input.Password)
     hashedPassword := HashPassword(input.Password)
     input.Password = hashedPassword
+
+    // Creating user
     if err := CreateUser(input); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
         return
