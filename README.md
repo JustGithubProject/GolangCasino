@@ -6,7 +6,7 @@
 ```
 go run backend-casino/casino-api/main.go
 ```
-
+![Казино](https://github.com/JustGithubProject/GolangCasino/blob/main/slots.png)
 
 ```
 cd frontend-casino
