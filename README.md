@@ -8,6 +8,7 @@ go run backend-casino/casino-api/main.go
 ```
 ![Казино](https://github.com/JustGithubProject/GolangCasino/blob/main/slots.png)
 
+![Казино](https://github.com/JustGithubProject/GolangCasino/blob/main/diamondStrike.png)
 ```
 cd frontend-casino
 npm run dev
