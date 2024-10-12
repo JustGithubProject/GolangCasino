@@ -25,7 +25,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        'http://CasinoThatWillKillRussia.pythonanywhere.com/register/user/',
+        'http://127.0.0.1:8081/register/user/',
         { username, password, email },
         {
           withCredentials: true,
